@@ -1,7 +1,7 @@
 <?php
 
 define("KONTR_NG", "/home/xmiklos/HDocs/kontrNG/"); // required to end with forward slash character
-define("PASSWORD", "opadanaomietka");
+define("PASSWORD", "omietka");
 
 define("GPP", "/usr/bin/g++ -ansi -pedantic -Wall -Werror"); // full path to all binaries required
 define("GCC", "/usr/bin/gcc -std=c99 -pedantic -Wall -Werror");

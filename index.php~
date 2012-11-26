@@ -187,14 +187,13 @@ $naostroa;
 $i=0;
 $max = 0;
 echo '<div id="users">';
-$naostroa=array();
-$naostro6=array();
 foreach($userlines as $l)
 {
 $o=0;
 $n=0;
 $user='';
-
+$naostroa=array();
+$naostro6=array();
 		ob_start();
 		echo '<div class="odes" id="'.$students[$i].'">';
 		echo '<p class="ode"><span onclick="showdiff(\''.$predmet.'\', \''.$uloha.'\')">[diff selected]</span></p>';

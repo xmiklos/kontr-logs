@@ -215,7 +215,7 @@ function edit(f)
 {
 	var lay = document.getElementById("code");
 	lay.innerHTML = 'loading...';
-	$.post("loadfile.php", { subor: '/home/xmiklos/public_html/logs/tmp/'+getCookie('PHPSESSID')+'/'+f, strip: '1'},
+	$.post("loadfile.php", { subor: './tmp/'+getCookie('PHPSESSID')+'/'+f, strip: '1'},
   function(data){
 		lay.innerHTML = '<input type="button" id="savebutton" value="save" onclick="savetmpfile(\''+f+'\')" /><span style="float: right">powered by <a href="http://ace.ajax.org/">ace</a></span><div id="editor"></div>';
 		lay.style.overflow = 'hidden';
@@ -235,7 +235,7 @@ function savetmpfile(file)
 {
 	var lay = editor.getValue();
 	document.getElementById("savebutton").value = 'saving...';
-	$.post("savefile.php", { subor: '/home/xmiklos/public_html/logs/tmp/'+getCookie('PHPSESSID')+'/'+file, data: lay},
+	$.post("savefile.php", { subor: './tmp/'+getCookie('PHPSESSID')+'/'+file, data: lay},
   function(data){
 		document.getElementById("savebutton").value = 'saved';
 		if(data != '') alert(data);
@@ -245,7 +245,7 @@ function savetmpfile(file)
 function newfile()
 {
 	var file = document.getElementById("newfilename").value;
-	$.post("savefile.php", { subor: '/home/xmiklos/public_html/logs/tmp/'+getCookie('PHPSESSID')+'/'+file, data: ''},
+	$.post("savefile.php", { subor: './tmp/'+getCookie('PHPSESSID')+'/'+file, data: ''},
   function(data){
 		if(data != '') alert(data);
 		else

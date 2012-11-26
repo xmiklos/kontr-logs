@@ -1,5 +1,6 @@
 #!/packages/run/php/bin/php
 <?php
+include "config.php";
 session_start(); 
 
 if ((!isset($_SESSION['my'])) || (!$_SESSION['my']))
@@ -8,7 +9,7 @@ echo 'logged out';
 exit;
 }
 
-function recDir($path, &$fnames, &$fpaths)
+function recDir($path, &$fnames, &$fpaths, &$sha)
 {
 	$hand=opendir($path);
 
@@ -19,15 +20,17 @@ function recDir($path, &$fnames, &$fpaths)
 		}
 		if(is_dir($path.$fil))
 		{
-			recDir($path.$fil.'/', $fnames, $fpaths);
+			recDir($path.$fil.'/', $fnames, $fpaths, $sha);
 			continue;
 		}
 		if(((strstr($fil, '.h') !== false) || (strstr($fil, '.c') !== false)) && (strstr($fil, '.html') === false)) 
 		{
-			if(!in_array($fil, $fnames))
+			$sh = sha1_file($path.$fil);
+			if(!in_array($sh, $sha))
 			{
 				$fnames[] = $fil;
 				$fpaths[] = $path.$fil;
+				$sha[] = $sh;
 			}
 		}
 	}
@@ -36,7 +39,7 @@ function recDir($path, &$fnames, &$fpaths)
 }
 
 $s = "/";
-$f = "/home/xtoth1/kontrNG/_tmp_/";
+$f = KONTR_NG."_tmp_/";
 $begin = $f.$_SESSION['predmet'].$s.$_SESSION['uloha'].$s.$_REQUEST['odevzdani'].$s;
 
 $mena;

@@ -1,6 +1,6 @@
 #!/packages/run/php/bin/php
 <?php
-
+include "config.php";
 session_start(); 
 
 if ((!isset($_SESSION['my'])) || (!$_SESSION['my']))
@@ -81,7 +81,7 @@ $sub = $predmet.' '.$uloha;
 $ruser = $_REQUEST['user'];
 
 ob_start();
-system("grep -G '".$ruser.".*".$sub."' /home/xtoth1/kontrNG/_logs_/report.log");
+system("grep -G '".$ruser.".*".$sub."' ".KONTR_NG."_logs_/report.log");
 $contents = ob_get_contents();
 ob_end_clean();
 

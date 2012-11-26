@@ -1,5 +1,6 @@
 #!/packages/run/php/bin/php
 <?php
+include "config.php";
 session_start(); 
 
 if ((!isset($_SESSION['my'])) || (!$_SESSION['my']))
@@ -9,7 +10,7 @@ exit;
 }
 
 $s = "/";
-$f = "/home/xtoth1/kontrNG/_tmp_/";
+$f = KONTR_NG."_tmp_/";
 
 $fo = $f.$_REQUEST['predmet'].$s.$_REQUEST['uloha'].$s.$_REQUEST['odevzdani'].$s;
 

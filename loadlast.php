@@ -1,6 +1,6 @@
 #!/packages/run/php/bin/php
 <?php
-
+include "config.php";
 session_start(); 
 
 if ((!isset($_SESSION['my'])) || (!$_SESSION['my']))
@@ -14,8 +14,6 @@ if ((!isset($_SESSION['uloha'])) || (!isset($_SESSION['predmet'])))
 echo 'uloha and predmet not set, exit';
 exit;
 }
-
-system("echo ".$_SERVER['REMOTE_ADDR']." >> access.log");
 
 function get_time($date)
 {
@@ -50,7 +48,7 @@ $predmet = $_SESSION['predmet'];
 $sub = $predmet.' '.$uloha;
 $timesince = $_REQUEST['cas'];
 
-$f = "/home/xtoth1/kontrNG/_logs_/report.log";
+$f = KONTR_NG."_logs_/report.log";
 $f1 = file_get_contents($f);
 $wholelines = explode("\n", $f1);
 

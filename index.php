@@ -1,9 +1,9 @@
 #!/packages/run/php/bin/php
 <?php
-setcookie('lastreload', time());
-session_start(); 
+include "config.php";
 
-include "stats.php";
+setcookie('lastreload', time());
+session_start();
 
 if(isset($_REQUEST['logout']) && $_REQUEST['logout']==1 )
 {
@@ -13,7 +13,7 @@ if(isset($_REQUEST['logout']) && $_REQUEST['logout']==1 )
 	exit;
 }
 
-if(isset($_REQUEST['pass']) && $_REQUEST['pass']=='omietka' )
+if(isset($_REQUEST['pass']) && $_REQUEST['pass']==PASSWORD)
 {
 	$_SESSION['my']=TRUE;
 }
@@ -37,7 +37,7 @@ $_SESSION['uloha']=$uloha;
 $_SESSION['predmet']=$predmet;
 }
 
-system("echo ".$_SERVER['REMOTE_ADDR']." >> access.log");
+//system("echo ".$_SERVER['REMOTE_ADDR']." >> access.log");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -59,6 +59,7 @@ system("echo ".$_SERVER['REMOTE_ADDR']." >> access.log");
 </form>
 <form id="vyber" action="index.php" method="GET">
 <select name="uloha" onchange="poslat()">
+  <option <?php echo ($uloha==""?"selected=\"selected\"":" ") ?> value=""> </option>
   <option <?php echo ($uloha=="hw01"?"selected=\"selected\"":" ") ?> value="hw01">hw01</option>
   <option <?php echo ($uloha=="hw02"?"selected=\"selected\"":" ") ?> value="hw02">hw02</option>
   <option <?php echo ($uloha=="hw03"?"selected=\"selected\"":" ") ?> value="hw03">hw03</option>
@@ -104,7 +105,7 @@ if( !isset($_REQUEST['uloha']) || !isset($_REQUEST['predmet']) )
 	die;
 }
 
-$f = "/home/xtoth1/kontrNG/_logs_/report.log";
+$f = KONTR_NG."_logs_/report.log";
 $f1 = file_get_contents($f);
 $pieces = explode("\n", $f1);
 
@@ -158,6 +159,8 @@ function nice_tests($line)
 return $str;
 }
 
+$students=array();
+
 foreach($pieces as $value)
 {
 	if(strstr($value, $sub))
@@ -188,7 +191,9 @@ foreach($userlines as $l)
 {
 $o=0;
 $n=0;
-$user='';	
+$user='';
+$naostroa=array();
+$naostro6=array();
 		ob_start();
 		echo '<div class="odes" id="'.$students[$i].'">';
 		echo '<p class="ode"><span onclick="showdiff(\''.$predmet.'\', \''.$uloha.'\')">[diff selected]</span></p>';

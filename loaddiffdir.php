@@ -1,5 +1,6 @@
 #!/packages/run/php/bin/php
 <?php
+include "config.php";
 session_start(); 
 
 if ((!isset($_SESSION['my'])) || (!$_SESSION['my']))
@@ -8,7 +9,7 @@ echo 'logged out';
 exit;
 }
 
-function recDir($path, &$fnames, &$fpaths, $relpath, &$relpatharray)
+function recDir($path, &$fnames, &$fpaths, $relpath, &$relpatharray, &$sha)
 {
 	$hand=opendir($path);
 
@@ -19,16 +20,18 @@ function recDir($path, &$fnames, &$fpaths, $relpath, &$relpatharray)
 		}
 		if(is_dir($path.$fil))
 		{
-			recDir($path.$fil.'/', $fnames, $fpaths, $relpath.'/'.$fil, $relpatharray);
+			recDir($path.$fil.'/', $fnames, $fpaths, $relpath.'/'.$fil, $relpatharray, $sha);
 			continue;
 		}
 		if(((strstr($fil, '.h') !== false) || (strstr($fil, '.c') !== false)) && (strstr($fil, '.html') === false)) 
 		{
-			if(!in_array($fil, $fnames))
+			$sh = sha1_file($path.$fil);
+			if(!in_array($sh, $sha))
 			{
 				$fnames[] = $fil;
 				$fpaths[] = $path.$fil;
 				$relpatharray[] = $relpath.'/'.$fil;
+				$sha[] = $sh;
  			}
 		}
 	}
@@ -67,7 +70,7 @@ function findDir($path)
 }
 */
 $s = "/";
-$f = "/home/xtoth1/kontrNG/_tmp_/";
+$f = KONTR_NG."_tmp_/";
 $mena1;
 $cesty1;
 $mena2;
@@ -75,12 +78,14 @@ $cesty2;
 $ra1;
 $ra2;
 $empty="";
+$sha = array();
+$sha2 = array();
 
 $p1 = $f.$_REQUEST['predmet'].$s.$_REQUEST['uloha'].$s.$_REQUEST['odevzdani'].'/';
 $p2 = $f.$_REQUEST['predmet'].$s.$_REQUEST['uloha'].$s.$_REQUEST['odevzdani2'].'/';
 
-recDir($p1, $mena1, $cesty1, $empty, $ra1);
-recDir($p2, $mena2, $cesty2, $empty, $ra2);
+recDir($p1, $mena1, $cesty1, $empty, $ra1, $sha);
+recDir($p2, $mena2, $cesty2, $empty, $ra2, $sha2);
 #$fo = $f.$_REQUEST['predmet'].$s.$_REQUEST['uloha'].$s.$_REQUEST['odevzdani'].$s.$test_folder.'/';
 #$fo2 = $f.$_REQUEST['predmet'].$s.$_REQUEST['uloha'].$s.$_REQUEST['odevzdani2'].$s.$test_folder.'/';
 

@@ -81,14 +81,16 @@ $empty="";
 $sha = array();
 $sha2 = array();
 
-$p1 = $f.$_REQUEST['predmet'].$s.$_REQUEST['uloha'].$s.$_REQUEST['odevzdani'].'/';
-$p2 = $f.$_REQUEST['predmet'].$s.$_REQUEST['uloha'].$s.$_REQUEST['odevzdani2'].'/';
+$p1 = $f.$_REQUEST['predmet'].$s.$_REQUEST['uloha'].$s.$_REQUEST['odevzdani'];
+$p2 = $f.$_REQUEST['predmet'].$s.$_REQUEST['uloha'].$s.$_REQUEST['odevzdani2'];
 
-recDir($p1, $mena1, $cesty1, $empty, $ra1, $sha);
-recDir($p2, $mena2, $cesty2, $empty, $ra2, $sha2);
+recDir($p1.'/', $mena, $cesty, $empty, $ra, $sha);
+//recDir($p2, $mena2, $cesty2, $empty, $ra2, $sha2);
+
+
 #$fo = $f.$_REQUEST['predmet'].$s.$_REQUEST['uloha'].$s.$_REQUEST['odevzdani'].$s.$test_folder.'/';
 #$fo2 = $f.$_REQUEST['predmet'].$s.$_REQUEST['uloha'].$s.$_REQUEST['odevzdani2'].$s.$test_folder.'/';
-
+/*
 if(count($mena1) < count($mena2))
 {
 	$mena = $mena1;
@@ -105,7 +107,7 @@ else
 	$other2 = $mena1;
 	$ra = $ra2;
 }
-
+*/
 echo "<div style='margin-left: 30px; font-size: 15px;'>";
 #$hand=opendir($fo);
 $projectContents = '';
@@ -113,13 +115,13 @@ $projectContents = '';
 	for($i=0; $i < count($mena); $i++)
 	{
 			ob_start();
-			system("diff ".$cesty[$i]." ".$other[get_index($mena[$i], $other2)], $ret);
+			system("diff ".$cesty[$i]." ".$p2.$ra[$i], $ret);
 			ob_end_clean();
 			$relat = strstr($ra[$i], '/');
 			$projectContents .= '<li  onclick="showdiffout(\''.$_REQUEST['predmet'].'\',\''.$_REQUEST['uloha'].'\',\''.$relat.'\')"><span class="cp">'.$mena[$i].' '.(($ret!=0)?"(difference)":"").'</span></li>';
 	}
 
-if(count($mena1) == 0) echo 'Directory is empty, no source files found!';
+if(count($mena) == 0) echo 'Directory is empty, no source files found!';
 
 echo $projectContents;
 echo "</div>";

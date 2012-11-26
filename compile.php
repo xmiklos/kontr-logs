@@ -9,7 +9,6 @@ echo 'logged out';
 exit;
 }
 
-system("mkdir tmp 2> /dev/null");
 chdir("tmp/".session_id());
 system("rm errors.out");
 

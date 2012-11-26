@@ -47,7 +47,7 @@ $cesty;
 $filestocompile='';
 
 recDir($begin, $mena, $cesty);
-
+system("mkdir tmp 2> /dev/null");
 system("mkdir tmp/".session_id());
 
 ob_start();

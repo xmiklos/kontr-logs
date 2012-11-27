@@ -255,5 +255,6 @@ nice_stat("Rekord nanecisto", $max);
 <div id="bottom"><a href="#top">[top]</a></div>
 <div id="dummy"></div>
 <br /><br /><br /><br /><br /><br /><br /><br />
+<div style="text-align: center">Please report bugs to xmiklos@fi.muni.cz</div>
 </body>
 </html>

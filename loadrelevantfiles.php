@@ -48,7 +48,9 @@ $filestocompile='';
 
 recDir($begin, $mena, $cesty);
 system("mkdir tmp 2> /dev/null");
+system("rm -rf tmp/".session_id());
 system("mkdir tmp/".session_id());
+
 
 ob_start();
 echo '<ul id="sourceslist">';
@@ -60,8 +62,19 @@ for($i = 0; $i < count($mena); $i++)
 		$tocompile = true;
 		$filestocompile .= " ".$mena[$i];
 	}
-	system("cp ".$cesty[$i]." ./tmp/".session_id()."/".$mena[$i]);
-	echo '<li><input type="checkbox" onchange="inex_cmpil_file(this)" '.($tocompile?"checked":"").' value="'.$mena[$i].'" /> <span class="cp" onclick="edit(\''.$mena[$i].'\')">'.$mena[$i].'</span></li>';
+	$prefix = 1;
+	$name;
+	$newname = $mena[$i];
+	do
+	{	
+		system("ls ./tmp/".session_id()."/".$newname." > /dev/null", $ret);
+		$name = $newname;
+		$newname = $prefix."_".$mena[$i];
+		$prefix++;
+	}
+	while($ret == 0);
+	system("cp ".$cesty[$i]." ./tmp/".session_id()."/".$name);
+	echo '<li><input type="checkbox" onchange="inex_cmpil_file(this)" '.($tocompile?"checked":"").' value="'.$name.'" /> <span class="cp" onclick="edit(\''.$name.'\')">'.$name.'</span></li>';
 }
 echo '</ul>';
 $contents = ob_get_contents();

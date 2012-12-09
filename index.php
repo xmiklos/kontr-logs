@@ -48,7 +48,20 @@ $_SESSION['predmet']=$predmet;
 	<script src="jquery.scrollTo-1.4.2-min.js" type="text/javascript" ></script>
 	<script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
 	<script src="src/mode-c_cpp.js" type="text/javascript" charset="utf-8"></script>
-	<script src="site.js" type="text/javascript" ></script>	
+	<script src="site.js" type="text/javascript" ></script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36929473-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 <title>_logs_</title>
 </head>
 <body onload='med_init()'>
@@ -77,21 +90,21 @@ $_SESSION['predmet']=$predmet;
 </form>
 
 
-<div class='user'>
+<div class='opt'>
 farby:
 <span class='green'>nanecisto</span>
 <span class='yellow'>naostro</span>
 <span class='blue'>ok</span>
 <span class='red'>errors</span>
 </div>
-<div class='user'>
+<div class='opt'>
 filtre:
 <span onclick='filter("nanecisto")' class='green'>[nanecisto only]</span>
 <span onclick='filter("naostro")' class='yellow'>[naostro points < 6]</span>
 <span onclick='filter("naostro6b")' class='yellow'>[naostro points=6]</span>
 <span onclick='filterNone()' >[all]</span>
 </div>
-<div class='user'>
+<div class='opt'>
 nastavenia:
 <span ><input type="button" onclick="enable_notif(this)" value="zapnut notifikacie"/></span>
 <span ><input type="button" onclick="show_all(this)" value="rozbalit vsetko" /></span>
@@ -136,7 +149,7 @@ function nice_date($date)
 
 function nice_stat($p, $poc)
 {
-	echo "<strong>".$p."</strong> - ".$poc."<br/>";
+	echo "<div class=\"nofloat\"><strong>".$p."</strong> - ".$poc."<br/></div>";
 }
 
 function nice_tests($line)

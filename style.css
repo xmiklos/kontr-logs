@@ -4,13 +4,36 @@ CSS style created by walker for walkers.phorum.cz
 /* main */
 body {
 	margin: 0;
-	padding: 0;
-	font-family: sans-serif, Arial, Helvetica;
+	padding: 15px;
+	padding-top: 0;
+	font-family:"Times New Roman", Times, serif;
+	min-height: 100%;
 }
 
-.user {
-	border: 1px solid black;
-	margin: 5px;
+#head{
+	position: fixed;
+	background-color: white;
+	margin: 0;
+	padding-top: 10px;
+	height: 180px;
+}
+
+#users{
+	
+}
+
+#panel_enabler{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 20px;
+	height: 190px;
+	background-color: silver;
+}
+
+.user, .opt {
+	border: 1px solid gray;
+	margin-top: 2px;
 	padding: 2px;
 	width: 800px;
 }
@@ -27,11 +50,10 @@ body {
 	padding: 2px;
 }
 
-
 .ode{
 	border-bottom: 1px dashed black;
-	margin: 5px;
-	padding: 2px;
+	margin: 2px;
+	padding: 1px;
 }
 
 .yellow{
@@ -51,10 +73,10 @@ body {
 }
 
 .vpravo{
-text-align: right;
-float: right;
-margin: 0;
-padding: 0;
+	text-align: right;
+	float: right;
+	margin: 0;
+	padding: 0;
 }
 
 .logout{
@@ -163,3 +185,13 @@ padding: 0;
         bottom: 0;
         left: 0;
     }
+    
+.stat {
+	
+}
+
+.stat_table{
+	margin-top: 10px;
+	width: 230px;
+	padding: 2px;
+}

@@ -5,36 +5,34 @@ include "config.php";
 setcookie('lastreload', time());
 session_start();
 
-if(isset($_REQUEST['logout']) && $_REQUEST['logout']==1 )
+if(isset($_SERVER['REMOTE_USER']))
 {
-	unset($_SESSION['my']);
-	echo 'logged out';
-	header("Location: index.php");
-	exit;
+	$userat = $_SERVER['REMOTE_USER'];
+	$pieces = explode("@", $userat);
+	$login = $pieces[0];
 }
 
-if(isset($_REQUEST['pass']) && $_REQUEST['pass']==PASSWORD)
+if(in_array($login, get_authorized_users()))
 {
-	$_SESSION['my']=TRUE;
+	$_SESSION['my']=true;
+}
+else
+{
+	$_SESSION['my']=false;
 }
 
 if ((!isset($_SESSION['my'])) || (!$_SESSION['my']))
 {
-?>
-<form id="vyber" action="index.php" method="POST">
- Heslo: <input type="password" name="pass" />
-<button type="submit">GO</button>
-</form>
-<?php
-exit;
+	echo 'Unauthorized access!';
+	exit;
 }
 
 if( isset($_REQUEST['uloha']) && isset($_REQUEST['predmet']) )
 {
-$uloha = $_REQUEST['uloha'];
-$predmet = $_REQUEST['predmet'];
-$_SESSION['uloha']=$uloha;
-$_SESSION['predmet']=$predmet;
+	$uloha = $_REQUEST['uloha'];
+	$predmet = $_REQUEST['predmet'];
+	$_SESSION['uloha']=$uloha;
+	$_SESSION['predmet']=$predmet;
 }
 
 //system("echo ".$_SERVER['REMOTE_ADDR']." >> access.log");
@@ -64,15 +62,21 @@ $_SESSION['predmet']=$predmet;
 </script>
 <title>_logs_</title>
 </head>
-<body onload='med_init()'>
-<div id="top"></div>
+<body id="top" onload='med_init()' onscroll="bodyscroll()" >
+<div id="panel_enabler" onmouseover='$("#head").slideDown();'></div>
+<div id="head">
+(<?php echo $login ?>)
+<!--
 <form action="index.php" method="GET">
 <input type="hidden" name="logout" value="1"/>
 <input type="submit" value="Logout"/>
 </form>
+-->
+<div class='opt' style="border: 0">
 <form id="vyber" action="index.php" method="GET">
+<span>Choose task and subject:</span>
 <select name="uloha" onchange="poslat()">
-  <option <?php echo ($uloha==""?"selected=\"selected\"":" ") ?> value=""> </option>
+  <option <?php echo ($uloha==""?"selected=\"selected\"":" ") ?> value=""></option>
   <option <?php echo ($uloha=="hw01"?"selected=\"selected\"":" ") ?> value="hw01">hw01</option>
   <option <?php echo ($uloha=="hw02"?"selected=\"selected\"":" ") ?> value="hw02">hw02</option>
   <option <?php echo ($uloha=="hw03"?"selected=\"selected\"":" ") ?> value="hw03">hw03</option>
@@ -82,41 +86,54 @@ $_SESSION['predmet']=$predmet;
 </select>
 
 <select name="predmet" onchange="poslat()">
-  <option <?php echo ($predmet=="pb161"?"selected=\"selected\"":" ") ?> value="pb161">PB161</option>
   <option <?php echo ($predmet=="pb071"?"selected=\"selected\"":" ") ?> value="pb071">PB071</option>
+  <option <?php echo ($predmet=="pb161"?"selected=\"selected\"":" ") ?> value="pb161">PB161</option>
 </select>
+<?php
 
-<a href="#bottom">[bottom]</a>
+if(isset($_REQUEST['uloha']) && isset($_REQUEST['predmet']) )
+{
+	echo '<a class="vpravo" href="#bottom">[bottom]</a>';
+}
+else
+{
+	echo '</form></div></body></html>';
+	exit;
+}
+?>
 </form>
+</div>
 
 
 <div class='opt'>
-farby:
+Show students with:
+<span onclick='filter("nanecisto")' class='green cp'>[nanecisto only submissions]</span>
+<span onclick='filter("naostro")' class='yellow cp'>[naostro submissions points < 6]</span>
+<span onclick='filter("naostro6b")' class='yellow cp'>[naostro submissions points=6]</span>
+<span onclick='filterNone()' class="cp" >[all]</span>
+</div>
+<div class='opt'>
+Show submissions:
+<span onclick='filter_sub("nanecisto")' class='green cp'>[nanecisto only]</span>
+<span onclick='filter_sub("naostro")' class='yellow cp'>[naostro only]</span>
+<span onclick='filter_sub("all")' class='yellow cp'>[all]</span>
+</div>
+<div class='opt'>
+Options:
+<span class="cp" onclick="enable_notif(this)"/>[Enable notifications]</span>
+<span class="cp" onclick="show_all(this)"/>[Expand all]</span>
+</div>
+<div></div>
+<div class='opt'>
+Legend:
 <span class='green'>nanecisto</span>
 <span class='yellow'>naostro</span>
 <span class='blue'>ok</span>
 <span class='red'>errors</span>
 </div>
-<div class='opt'>
-filtre:
-<span onclick='filter("nanecisto")' class='green'>[nanecisto only]</span>
-<span onclick='filter("naostro")' class='yellow'>[naostro points < 6]</span>
-<span onclick='filter("naostro6b")' class='yellow'>[naostro points=6]</span>
-<span onclick='filterNone()' >[all]</span>
 </div>
-<div class='opt'>
-nastavenia:
-<span ><input type="button" onclick="enable_notif(this)" value="zapnut notifikacie"/></span>
-<span ><input type="button" onclick="show_all(this)" value="rozbalit vsetko" /></span>
-</div>
-
+<div style=" height: 200px;"></div>
 <?php
-
-if( !isset($_REQUEST['uloha']) || !isset($_REQUEST['predmet']) )
-{
-	echo "<p>Vyberte úlohu a predmet!</p>";
-	die;
-}
 
 $f = KONTR_NG."_logs_/report.log";
 $f1 = file_get_contents($f);
@@ -149,7 +166,7 @@ function nice_date($date)
 
 function nice_stat($p, $poc)
 {
-	echo "<div class=\"nofloat\"><strong>".$p."</strong> - ".$poc."<br/></div>";
+	echo "<tr class=\"user\"><td ><strong>".$p."</strong></td><td style='text-align: right'>".$poc."</td></tr>";
 }
 
 function nice_tests($line)
@@ -210,7 +227,7 @@ $user='';
 
 		ob_start();
 		echo '<div class="odes" id="'.$students[$i].'">';
-		echo '<p class="ode"><span onclick="showdiff(\''.$predmet.'\', \''.$uloha.'\')">[diff selected]</span></p>';
+		echo '<p class="ode cp"><span onclick="showdiff(\''.$predmet.'\', \''.$uloha.'\')">[diff selected]</span></p>';
 		foreach($l as $k)
 		{
 			$naostro = true;
@@ -242,7 +259,7 @@ $user='';
 				}
 			}
 			$folder = $students[$i]."_".$datum[0];
-			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".((strstr($sum, 'ok;') != false)?"blue":"red")."' onmouseout='med_closeDescription()' onmousemove='med_mouseMoveHandler(event,\"".$results."\")'>".$sum."</span>";
+			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".((strstr($sum, 'ok;') != false)?"blue":"red")."' onmouseout='med_closeDescription()' onmouseover='med_mouseMoveHandler(event,\"".$results."\")'>".$sum."</span>";
 			echo '<span class="cp" onclick=\'showcode("'.$predmet.'","'.$uloha.'","'.$folder.'")\'> [sources]</span></p>';
 		}
 		$o = count($l) - $n;
@@ -256,18 +273,21 @@ $user='';
 		echo '</div>';
 $i++;
 }
-echo '</div>';
-
-nice_stat("Studentov", count($students));
-nice_stat("Odovzdani naostro", count($naostroa));
-nice_stat("Naostro points=6", count($naostro6));
-nice_stat("Rekord nanecisto", $max);
+?>
+</div>
+<div class="opt" id="bottom" style="border: 0"><a class="vpravo" href="#top">[top]</a></div>
+<table class="stat_table">
+<?php
+nice_stat("Studentov:", count($students));
+nice_stat("Naostro:", count($naostroa));
+nice_stat("Naostro (points==6):", count($naostro6));
+nice_stat("Max. nanecisto:", $max);
 
 ?>
+</table>
 <div id="notifbox"></div>
-<div id="bottom"><a href="#top">[top]</a></div>
+
 <div id="dummy"></div>
-<br /><br /><br /><br /><br /><br /><br /><br />
 <div style="text-align: center">Please report bugs to xmiklos@fi.muni.cz</div>
 </body>
 </html>

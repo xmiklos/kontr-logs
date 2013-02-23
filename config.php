@@ -1,14 +1,24 @@
 <?php
 
-define("KONTR_NG", "/home/xmiklos/HDocs/kontrNG/"); // required to end with forward slash character
-define("PASSWORD", "opadanaomietka");
+define("KONTR_NG", "/home/xmiklos/public_html/logs/kontrNG/"); // required to end with forward slash character
 
 define("GPP", "/usr/bin/g++ -ansi -pedantic -Wall -Werror"); // full path to all binaries required
 define("GCC", "/usr/bin/gcc -std=c99 -pedantic -Wall -Werror");
 
-/*
-$ini_array = parse_ini_file(KONTR_INI);
-print_r($ini_array);
-*/
+function get_authorized_users()
+{
+	$output = `getent group pb161 pb071`;
+	$pieces = explode("\n", $output);
+	$return_array=array();
+
+	foreach($pieces as $group)
+	{
+		$users = substr(strrchr($group, ":"), 1);
+		$users_array = explode(",", $users);
+		$return_array = array_merge($return_array, $users_array);
+	}
+	
+	return $return_array;
+}
 
 ?>

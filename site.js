@@ -54,7 +54,7 @@ function getMouseCoords(e) {
 	function med_init(){
 		layer = document.createElement("div");
 		//layer.style.width = 300 + "px";
-		layer.style.position = "absolute";
+		layer.style.position = "fixed";
 		layer.style.zIndex = 999;
 		layer.style.display = "none";
 		layer.style.backgroundColor = "#ffffff";
@@ -62,14 +62,16 @@ function getMouseCoords(e) {
 		layer.style.borderTopWidth = "6px";
 		layer.style.color = "#000000";
 		layer.style.padding = "6px";
+		layer.style.wordWrap="break-word";
 		layer.id = "description";
 		document.body.appendChild(layer);
 	}
 	
 	function med_showDescription(coords, desc_string){
 		var layer = document.getElementById("description");
-		layer.style.top = (coords.y + 25)+ "px";
-		layer.style.left = (coords.x - 20) + "px";
+		layer.style.top = 28 + "px";//(coords.y + 25)+ "px";
+		layer.style.left = 850 + "px";//(coords.x - 20) + "px";
+		layer.style.maxWidth = ($(window).width() - 900) + "px";
 		//$(layer).show("fast");
 		layer.style.display = "block";
 		layer.innerHTML = desc_string;
@@ -323,6 +325,28 @@ alert();
 
 });
 
+function filter_sub(show)
+{
+	var items=new Array("nanecisto","naostro","naostro6b");
+	
+	$('.ode').hide();
+	$('.cp').show();
+	if(show == "nanecisto")
+	{
+		$('.green').show();
+	}
+	if(show == "naostro")
+	{
+		$('.yellow').show();
+	}
+	if(show == "all")
+	{
+		$('.green').show();
+		$('.yellow').show();
+	}
+}
+
+
 function filter(show)
 {
 	var items=new Array("nanecisto","naostro","naostro6b");
@@ -488,12 +512,12 @@ var intId=0;
 
 function enable_notif(el)
 {
-	if(el.value == 'zapnut notifikacie')
+	if(el.innerHTML == '[Enable notifications]')
 	{
 		$('#notifbox').show();
 		get_notif();
 		intId=self.setInterval("get_notif()",10000);
-		el.value = 'vypnut notifikacie';
+		el.innerHTML = '[Disable notifications]';
 	}
 	else
 	{
@@ -501,7 +525,7 @@ function enable_notif(el)
 		window.clearInterval(intId);
 		document.getElementById("notifbox").innerHTML = '';
 		intId=0;
-		el.value = 'zapnut notifikacie';
+		el.innerHTML = '[Enable notifications]';
 	}
 }
 
@@ -532,15 +556,27 @@ function update_user(user)
 
 function show_all(el)
 {
-	if(el.value == 'rozbalit vsetko')
+	if(el.innerHTML == '[Expand all]')
 	{
 		showe('.odes');
-		el.value = 'zbalit vsetko';
+		el.innerHTML = '[Collapse all]';
 	}
 	else
 	{
 		hidee('.odes');
-		el.value = 'rozbalit vsetko';
+		el.innerHTML = '[Expand all]';
+	}
+}
+
+function bodyscroll()
+{
+	if($(document).scrollTop() > 0)
+	{
+		$("#head").slideUp();
+	}
+	else
+	{
+		$("#head").slideDown();
 	}
 }
 

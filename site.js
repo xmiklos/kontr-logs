@@ -305,7 +305,7 @@ $("#editor").width(($(lay).width()-4));
 $("#editor").height(($(lay).height()-25));
 
 });
-
+/*
 $(window).onbeforeunload(function() {
 alert();
   if (getCookie('compile_mode') == '1')
@@ -322,7 +322,7 @@ alert();
 	    });
 	}
 });
-
+*/
 });
 
 function filter_sub(show)
@@ -347,8 +347,36 @@ function filter_sub(show)
 }
 
 
-function filter(show)
+function filter()
 {
+	var studf = document.getElementById("studfilter").value;
+	var tutorf = document.getElementById("tutorfilter").value;
+	
+	if(studf == "all" && tutorf=="all")
+	{
+		filterNone();
+		return;
+	}
+	if(studf == "all")
+	{
+		studf="";
+	}
+	else
+	{
+		studf="."+studf;
+	}
+	if(tutorf == "all")
+	{
+		tutorf="";
+	}
+	else
+	{
+		tutorf="."+tutorf;
+	}
+	
+	$('.user').hide();
+	$(studf+tutorf).slideDown();
+/*
 	var items=new Array("nanecisto","naostro","naostro6b");
 	
 	for(i = 0; i < 3; i++)
@@ -362,6 +390,10 @@ function filter(show)
 			$('.'+items[i]).slideUp();
 		}
 	}
+*/	
+	$( ".user" ).promise().done(function() {
+    		number_users();
+  	});
 }
 
 function filterNone()
@@ -372,6 +404,10 @@ function filterNone()
 	{
 		$('.'+items[i]).show();
 	}
+	
+	$( ".user" ).promise().done(function() {
+    		number_users();
+  	});
 }
 
 function getCookie(c_name)
@@ -499,6 +535,7 @@ $.post("loadlast.php", {cas: c},
 		if(data != '')
 		{
 			$('#notifbox').scrollTo('max', 800);
+			
 			var id = $("#notifbox div:last-child").attr("title");
 			$.post("setcookie.php", {datum: id},function(data){});
 			var audioElement = document.createElement('audio');
@@ -547,8 +584,11 @@ function update_user(user)
 	}
 	$.post("loaduserlines.php", {user: user},function(data){
 		userlayer.innerHTML = data;
-		$("#"+user).slideDown();
 		$.scrollTo("#u_"+user, 800);
+		$("#"+user).slideDown('fast', function() {
+    			$.scrollTo("#u_"+user, 50);
+  		});
+		
 	});
 	
 	
@@ -578,5 +618,24 @@ function bodyscroll()
 	{
 		$("#head").slideDown();
 	}
+}
+
+function number_users()
+{
+	var i = 1;
+	$( ".user" ).each(function( index ) {
+		if($(this).css("display") == "block")
+		{
+			var str = i+"";
+			var l = str.length;
+			str="";
+			for(var j = 0; j < (5-l); j++)
+				str= str+"&nbsp;";
+	  		$(this).children(".number").html(str+i+" ");
+	  		i++;
+	  	}
+	});
+	
+	
 }
 

@@ -1,6 +1,7 @@
 <?php
 
-define("KONTR_NG", "/home/xmiklos/public_html/logs/kontrNG/"); // required to end with forward slash character
+define("KONTR_NG", "/home/xtoth1/kontrNG/"); // required to end with forward slash character
+define("KONTR_STUDENTS", "/home/xtoth1/students.dat"); // required to end with forward slash character
 
 define("GPP", "/usr/bin/g++ -ansi -pedantic -Wall -Werror"); // full path to all binaries required
 define("GCC", "/usr/bin/gcc -std=c99 -pedantic -Wall -Werror");

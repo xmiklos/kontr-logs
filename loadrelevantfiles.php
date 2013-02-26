@@ -48,8 +48,8 @@ $filestocompile='';
 
 recDir($begin, $mena, $cesty);
 system("mkdir tmp 2> /dev/null");
-system("rm -rf tmp/".session_id());
-system("mkdir tmp/".session_id());
+system("rm -rf tmp/".sha1(session_id()));
+system("mkdir tmp/".sha1(session_id()));
 
 
 ob_start();
@@ -67,13 +67,13 @@ for($i = 0; $i < count($mena); $i++)
 	$newname = $mena[$i];
 	do
 	{	
-		system("ls ./tmp/".session_id()."/".$newname." > /dev/null", $ret);
+		system("ls ./tmp/".sha1(session_id())."/".$newname." > /dev/null", $ret);
 		$name = $newname;
 		$newname = $prefix."_".$mena[$i];
 		$prefix++;
 	}
 	while($ret == 0);
-	system("cp ".$cesty[$i]." ./tmp/".session_id()."/".$name);
+	system("cp ".$cesty[$i]." ./tmp/".sha1(session_id())."/".$name);
 	echo '<li><input type="checkbox" onchange="inex_cmpil_file(this)" '.($tocompile?"checked":"").' value="'.$name.'" /> <span class="cp" onclick="edit(\''.$name.'\')">'.$name.'</span></li>';
 }
 echo '</ul>';

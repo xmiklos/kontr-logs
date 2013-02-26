@@ -15,7 +15,7 @@ $f1 = file_get_contents($file);
 
 $name = strrchr($file, '/');
 
-if($name == '/student_email' || $name == '/teacher_email')
+if($name == '/student_email' || $name == '/teacher_email' || $name == '/kontr.pl')
 {
 	$f1 = str_replace("\n", '<br />', $f1);
 }

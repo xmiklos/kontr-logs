@@ -9,7 +9,7 @@ echo 'logged out';
 exit;
 }
 
-chdir("tmp/".session_id());
+chdir("tmp/".sha1(session_id()));
 system("rm errors.out");
 
 $input = $_REQUEST['inputfile'];

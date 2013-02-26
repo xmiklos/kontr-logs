@@ -217,7 +217,7 @@ function edit(f)
 {
 	var lay = document.getElementById("code");
 	lay.innerHTML = 'loading...';
-	$.post("loadfile.php", { subor: './tmp/'+getCookie('PHPSESSID')+'/'+f, strip: '1'},
+	$.post("loadfile.php", { subor: './tmp/'+getCookie('PHPSESSIDSHA')+'/'+f, strip: '1'},
   function(data){
 		lay.innerHTML = '<input type="button" id="savebutton" value="save" onclick="savetmpfile(\''+f+'\')" /><span style="float: right">powered by <a href="http://ace.ajax.org/">ace</a></span><div id="editor"></div>';
 		lay.style.overflow = 'hidden';
@@ -237,7 +237,7 @@ function savetmpfile(file)
 {
 	var lay = editor.getValue();
 	document.getElementById("savebutton").value = 'saving...';
-	$.post("savefile.php", { subor: './tmp/'+getCookie('PHPSESSID')+'/'+file, data: lay},
+	$.post("savefile.php", { subor: './tmp/'+getCookie('PHPSESSIDSHA')+'/'+file, data: lay},
   function(data){
 		document.getElementById("savebutton").value = 'saved';
 		if(data != '') alert(data);
@@ -247,7 +247,7 @@ function savetmpfile(file)
 function newfile()
 {
 	var file = document.getElementById("newfilename").value;
-	$.post("savefile.php", { subor: './tmp/'+getCookie('PHPSESSID')+'/'+file, data: ''},
+	$.post("savefile.php", { subor: './tmp/'+getCookie('PHPSESSIDSHA')+'/'+file, data: ''},
   function(data){
 		if(data != '') alert(data);
 		else
@@ -398,6 +398,9 @@ function filter()
 
 function filterNone()
 {
+	var studf = document.getElementById("studfilter").selectedIndex=0;
+	var tutorf = document.getElementById("tutorfilter").selectedIndex=0;
+
 	var items=new Array("nanecisto","naostro","naostro6b");
 	
 	for(i = 0; i < 3; i++)
@@ -571,27 +574,23 @@ function update_user(user)
 	filterNone();
 	var userlayer = null;
 	var userlayer = document.getElementById(user);
+	var all = 0;
 	if (userlayer == null)
 	{
-		var layer = document.createElement("div");
-		layer.style.display = "none";
-		layer.id = "u_"+user;
-		layer.innerHTML = '<span class="std" onclick=\'tooogle("'+user+'")\'>'+user+'</span><div class="odes" id="'+user+'"></div>';
-		document.getElementById("users").appendChild(layer);
-		userlayer = document.getElementById(user);
-		$("#u_"+user).addClass('user');
-		$("#u_"+user).slideDown();
+		all = 1;
 	}
-	$.post("loaduserlines.php", {user: user},function(data){
-		userlayer.innerHTML = data;
+	$.post("loaduserlines.php", {user: user, all: all},function(data){
+		if(all) $('#users').append(data);
+		else $('#'+user).html(data);
 		$.scrollTo("#u_"+user, 800);
 		$("#"+user).slideDown('fast', function() {
     			$.scrollTo("#u_"+user, 50);
+    			number_users();
   		});
+  		
+  		
 		
 	});
-	
-	
 }
 
 function show_all(el)
@@ -637,5 +636,11 @@ function number_users()
 	});
 	
 	
+}
+
+function clear_cookies()
+{
+	setCookie('diff2', '');
+	setCookie('diff1', '');
 }
 

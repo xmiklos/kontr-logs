@@ -79,6 +79,11 @@ $uloha = $_SESSION['uloha'];
 $predmet = $_SESSION['predmet'];
 $sub = $predmet.' '.$uloha;
 $ruser = $_REQUEST['user'];
+$all = $_REQUEST['all'];
+
+include "generator.php";
+$stud_tutor = get_student_tutor();
+$tutor = (array_key_exists($ruser, $stud_tutor)?$stud_tutor[$ruser]:"");
 
 ob_start();
 system("grep -G '".$ruser.".*".$sub."' ".KONTR_NG."_logs_/report.log");
@@ -86,13 +91,15 @@ $contents = ob_get_contents();
 ob_end_clean();
 
 $wholelines = explode("\n", $contents);
+$global_naostro = false;
+$global_naostro6 = false;
 
-
-echo '<p class="ode"><span onclick="showdiff(\''.$predmet.'\', \''.$uloha.'\')">[diff selected]</span></p>';
+ob_start();
+//echo '<p class="ode"><span onclick="showdiff(\''.$predmet.'\', \''.$uloha.'\')">[diff selected]</span></p>';
 foreach($wholelines as $k)
 {
 if($k == '') continue;
-		ob_start();
+		
 		
 		
 			$naostro = true;
@@ -100,6 +107,10 @@ if($k == '') continue;
 			if(strstr($k, 'student') !== false)
 			{
 				$naostro = false;
+			}
+			if(strstr($k, 'teacher') !== false)
+			{
+				$global_naostro6 = true;
 			}
 			$datum = explode(" ", $k, 2);
 			$nice = nice_date($datum[0]);
@@ -110,18 +121,25 @@ if($k == '') continue;
 			if((strstr($sum, 'points=6') !== false))
 					{
 						$naostro6b = true;
+						$global_naostro6 = true;
 					}
 			$folder = $ruser."_".$datum[0];
 			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".((strstr($sum, 'ok;') != false)?"blue":"red")."' onmouseout='med_closeDescription()' onmousemove='med_mouseMoveHandler(event,\"".$results."\")'>".$sum."</span>";
-			echo '<span class="cp" onclick=\'showcode("'.$predmet.'","'.$uloha.'","'.$folder.'")\'> [sources]</span></p>';
+			echo '<span class="cp vpravo" onclick=\'showcode("'.$predmet.'","'.$uloha.'","'.$folder.'")\'> [sources]</span></p>';
 		
-		echo '</div>';
-		$contents = ob_get_contents();
-		ob_end_clean();
-		echo $contents;
+		//echo '</div>';
+		
 
 }
-
-
+$contents = ob_get_contents();
+		ob_end_clean();
+if($all)
+{
+	$filter_class = ($global_naostro6?"naostro6b":(($global_naostro)?"naostro":"nanecisto"));
+	echo '<div class="user '.($tutor==""?"notutor":$tutor).' '.$filter_class.'" id="u_'.$ruser.'">';
+	echo '<span class="number"></span><span class="std" onclick=\'tooogle("'.$ruser.'")\'>'.$ruser.'</span><div class="odes" id="'.$ruser.'">';
+}
+		echo $contents;
+if ($all) echo "</div></div>";
 
 ?>

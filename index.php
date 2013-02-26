@@ -11,6 +11,7 @@ include "config.php";
 
 setcookie('lastreload', time());
 session_start();
+setcookie('PHPSESSIDSHA', sha1(session_id()));
 
 if(isset($_SERVER['REMOTE_USER']))
 {
@@ -82,7 +83,7 @@ if( isset($_REQUEST['uloha']) && isset($_REQUEST['predmet']) )
 </script>
 <title>_logs_</title>
 </head>
-<body id="top" onload='med_init(); number_users()' onscroll="bodyscroll()" >
+<body id="top" onload='med_init(); number_users(); clear_cookies()' onscroll="bodyscroll()" >
 <div id="panel_enabler" onmouseover='$("#head").slideDown();'></div>
 <div id="head">
 (<?php echo $login ?>)
@@ -96,20 +97,21 @@ if( isset($_REQUEST['uloha']) && isset($_REQUEST['predmet']) )
 <form id="vyber" action="index.php" method="GET">
 <span>Choose task and subject:</span>
 <select name="uloha" onchange="poslat()">
-  <option <?php echo (isset($uloha) && $uloha==""?"selected=\"selected\"":" ") ?> value=""></option>
-  <option <?php echo (isset($uloha) && $uloha=="hello"?"selected=\"selected\"":" ") ?> value="hello">hello</option>
-  <option <?php echo (isset($uloha) && $uloha=="hw01"?"selected=\"selected\"":" ") ?> value="hw01">hw01</option>
-  <option <?php echo (isset($uloha) && $uloha=="hw02"?"selected=\"selected\"":" ") ?> value="hw02">hw02</option>
-  <option <?php echo (isset($uloha) && $uloha=="hw03"?"selected=\"selected\"":" ") ?> value="hw03">hw03</option>
-  <option <?php echo (isset($uloha) && $uloha=="hw04"?"selected=\"selected\"":" ") ?> value="hw04">hw04</option>
-  <option <?php echo (isset($uloha) && $uloha=="hw05"?"selected=\"selected\"":" ") ?> value="hw05">hw05</option>
-  <option <?php echo (isset($uloha) && $uloha=="hw06"?"selected=\"selected\"":" ") ?> value="hw06">hw06</option>
+<?php
+	if (!isset($predmet)) $predmet=DEFAULT_SUBJECT;
+	foreach(get_tasks($predmet) as $task)
+	{
+		echo '<option '.(isset($uloha) && $uloha==$task?"selected=\"selected\"":" ").' value="'.$task.'">'.$task.'</option>';
+	}
+
+?>
 </select>
 
 <select name="predmet" onchange="poslat()">
-  <option <?php echo (isset($predment) && $predmet=="pb071"?"selected=\"selected\"":" ") ?> value="pb071">PB071</option>
+  <option <?php echo (isset($predmet) && $predmet=="pb071"?"selected=\"selected\"":" ") ?> value="pb071">PB071</option>
   <option <?php echo (isset($predmet) && $predmet=="pb161"?"selected=\"selected\"":" ") ?> value="pb161">PB161</option>
 </select>
+ <input type="submit" value="GO">
 <?php
 
 if(isset($_REQUEST['uloha']) && isset($_REQUEST['predmet']) )
@@ -174,6 +176,7 @@ Show submissions:
 Options:
 <span class="cp" onclick="enable_notif(this)"/>[Enable notifications]</span>
 <span class="cp" onclick="show_all(this)"/>[Expand all]</span>
+<span class="cp" onclick="showdiff('<?php echo $predmet; ?>', '<?php echo $uloha; ?>')">[diff selected submissions]</span>
 </div>
 <div></div>
 <div class='opt'>
@@ -279,8 +282,7 @@ $user='';
 
 		ob_start();
 		echo '<div class="odes" id="'.$students[$i].'">';
-		if($uloha != "")
-		echo '<p class="ode cp"><span onclick="showdiff(\''.$predmet.'\', \''.$uloha.'\')">[diff selected]</span></p>';
+		
 		foreach($l as $k)
 		{
 			$naostro = true;
@@ -313,7 +315,7 @@ $user='';
 			}
 			$folder = $students[$i]."_".$datum[0];
 			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".((strstr($sum, 'ok;') != false)?"blue":"red")."' onmouseout='med_closeDescription()' onmouseover='med_mouseMoveHandler(event,\"".$results."\")'>".$sum."</span>";
-			echo '<span class="cp" onclick=\'showcode("'.$predmet.'","'.($uloha==""?$datum[4]:$uloha).'","'.$folder.'")\'> [sources]</span></p>';
+			echo '<span class="cp vpravo" onclick=\'showcode("'.$predmet.'","'.($uloha==""?$datum[4]:$uloha).'","'.$folder.'")\'> [sources]</span></p>';
 		}
 		$o = count($l) - $n;
 		echo '</div>';

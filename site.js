@@ -44,18 +44,20 @@ function getMouseCoords(e) {
 		med_showDescription(coords, desc_string);
 	}
 	
-	function med_closeDescription(){
+	var descript = 1;
+	
+	function med_closeDescription(force){
 	
 		var layer = document.getElementById("description");
 		//$(layer).fadeOut("normal");
-		layer.style.display = "none";
+		if(descript || force) layer.style.display = "none";
 	}
 	
 	function med_init(){
 		layer = document.createElement("div");
 		//layer.style.width = 300 + "px";
 		layer.style.position = "fixed";
-		layer.style.zIndex = 999;
+		layer.style.zIndex = 10;
 		layer.style.display = "none";
 		layer.style.backgroundColor = "#ffffff";
 		layer.style.border = "solid 2px #114400";
@@ -63,6 +65,8 @@ function getMouseCoords(e) {
 		layer.style.color = "#000000";
 		layer.style.padding = "6px";
 		layer.style.wordWrap="break-word";
+		layer.style.maxHeight = "80%";
+		layer.style.overflow = "auto";
 		layer.id = "description";
 		document.body.appendChild(layer);
 	}
@@ -77,6 +81,11 @@ function getMouseCoords(e) {
 		layer.innerHTML = desc_string;
 		
 
+	}
+	
+	function med_disable_des_hide()
+	{
+		descript = !descript;
 	}
 
 
@@ -611,11 +620,12 @@ function bodyscroll()
 {
 	if($(document).scrollTop() > 0)
 	{
-		$("#head").slideUp();
+		$("#space_filler").hide();
+		$("#head").css( "position","relative" );
 	}
 	else
 	{
-		$("#head").slideDown();
+		//$("#head").slideDown();
 	}
 }
 

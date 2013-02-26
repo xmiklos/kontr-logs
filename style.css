@@ -11,12 +11,13 @@ body {
 }
 
 #head{
-	position: fixed;
+	//position: relative;
 	background-color: white;
 	margin: 0;
 	padding-top: 10px;
 	height: 180px;
 	border-bottom: 1px solid black;
+	width: 806px;
 }
 
 #users{
@@ -49,7 +50,7 @@ body {
 
 .user span, .cp {
 	cursor: pointer;
-
+	text-decoration: none;
 }
 
 .odes {

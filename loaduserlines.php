@@ -65,7 +65,7 @@ function nice_tests($line)
 	if($prvy)
 	{
 		
-		$str = $str."<span class=\\\"".((strstr($chunk, 'ok') != false)?"blue":"red")."\\\">".$chunk."</span><br />";
+		$str = $str."<span onclick=\\\"med_closeDescription(1)\\\" class=\\\"".((strstr($chunk, 'ok') != false)?"blue":"red")."\\\">".$chunk."</span><br />";
 	}
 	$prvy = true;
 }
@@ -82,7 +82,9 @@ $ruser = $_REQUEST['user'];
 $all = $_REQUEST['all'];
 
 include "generator.php";
-$stud_tutor = get_student_tutor();
+$stud_tutor = array();
+$ucos = array();
+get_student_tutor($stud_tutor, $ucos);
 $tutor = (array_key_exists($ruser, $stud_tutor)?$stud_tutor[$ruser]:"");
 
 ob_start();
@@ -124,7 +126,7 @@ if($k == '') continue;
 						$global_naostro6 = true;
 					}
 			$folder = $ruser."_".$datum[0];
-			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".((strstr($sum, 'ok;') != false)?"blue":"red")."' onmouseout='med_closeDescription()' onmousemove='med_mouseMoveHandler(event,\"".$results."\")'>".$sum."</span>";
+			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".((strstr($sum, 'ok;') != false)?"blue":"red")."' onmouseout='med_closeDescription()' onmousemove='med_mouseMoveHandler(event,\"".$results."\")' onclick='med_disable_des_hide()'>".$sum."</span>";
 			echo '<span class="cp vpravo" onclick=\'showcode("'.$predmet.'","'.$uloha.'","'.$folder.'")\'> [sources]</span></p>';
 		
 		//echo '</div>';
@@ -137,7 +139,7 @@ if($all)
 {
 	$filter_class = ($global_naostro6?"naostro6b":(($global_naostro)?"naostro":"nanecisto"));
 	echo '<div class="user '.($tutor==""?"notutor":$tutor).' '.$filter_class.'" id="u_'.$ruser.'">';
-	echo '<span class="number"></span><span class="std" onclick=\'tooogle("'.$ruser.'")\'>'.$ruser.'</span><div class="odes" id="'.$ruser.'">';
+	echo '<span class="number"></span><span class="std" onclick=\'tooogle("'.$ruser.'")\'>'.$ruser.'</span><span class="cp"><a href="https://is.muni.cz/auth/osoba/'.$ucos[$ruser].'" target="_blank">[IS]</a><div class="odes" id="'.$ruser.'">';
 }
 		echo $contents;
 if ($all) echo "</div></div>";

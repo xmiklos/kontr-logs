@@ -83,8 +83,8 @@ if( isset($_REQUEST['uloha']) && isset($_REQUEST['predmet']) )
 </script>
 <title>_logs_</title>
 </head>
-<body id="top" onload='med_init(); number_users(); clear_cookies()' onscroll="bodyscroll()" >
-<div id="panel_enabler" onmouseover='$("#head").slideDown();'></div>
+<body id="top" onload='med_init(); number_users(); clear_cookies(); ' onscroll="bodyscroll()" >
+<div id="panel_enabler" onmouseover='$("#head").css( "position","fixed" ); $("#space_filler").show();'></div>
 <div id="head">
 (<?php echo $login ?>)
 <!--
@@ -125,8 +125,9 @@ else
 }
 
 include "generator.php";
-
-$stud_tutor = get_student_tutor();
+$stud_tutor = array();
+$ucos = array();
+get_student_tutor($stud_tutor, $ucos);
 
 $tutors = array_unique(array_values($stud_tutor));
 ?>
@@ -187,7 +188,7 @@ Legend:
 <span class='red'>errors</span>
 </div>
 </div>
-<div style=" height: 200px;"></div>
+<div id="space_filler" style=" height: 191px; display: none"></div>
 <?php
 
 $f = KONTR_NG."_logs_/report.log";
@@ -234,7 +235,7 @@ function nice_tests($line)
 	if($prvy)
 	{
 		
-		$str = $str."<span class=\\\"".((strstr($chunk, 'ok') != false)?"blue":"red")."\\\">".$chunk."</span><br />";
+		$str = $str."<span onclick=\\\"med_closeDescription(1)\\\" class=\\\"".((strstr($chunk, 'ok') != false)?"blue":"red")."\\\">".$chunk."</span><br />";
 	}
 	$prvy = true;
 }
@@ -314,7 +315,7 @@ $user='';
 				}
 			}
 			$folder = $students[$i]."_".$datum[0];
-			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".((strstr($sum, 'ok;') != false)?"blue":"red")."' onmouseout='med_closeDescription()' onmouseover='med_mouseMoveHandler(event,\"".$results."\")'>".$sum."</span>";
+			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".((strstr($sum, 'ok;') != false)?"blue":"red")."' onmouseout='med_closeDescription()' onmouseover='med_mouseMoveHandler(event,\"".$results."\")' onclick='med_disable_des_hide()'>".$sum."</span>";
 			echo '<span class="cp vpravo" onclick=\'showcode("'.$predmet.'","'.($uloha==""?$datum[4]:$uloha).'","'.$folder.'")\'> [sources]</span></p>';
 		}
 		$o = count($l) - $n;
@@ -324,7 +325,7 @@ $user='';
 		
 		if($n > $max) $max = $n;
 		$tu = (array_key_exists($students[$i], $stud_tutor)?$stud_tutor[$students[$i]]:"");
-		echo '<div class="user '.($tu==""?"notutor":$tu).' '.(in_array($students[$i], $naostro6)?"naostro6b":(in_array($students[$i], $naostroa)?"naostro":"nanecisto")).'" id="u_'.$students[$i].'" ><span class="number"></span><span class=\'std\' onclick="tooogle(\''.$students[$i].'\')">'.$students[$i]." </span><span class='vpravo'><span class='green'>".$n."</span> / <span class='yellow'>".$o."</span></span>";
+		echo '<div class="user '.($tu==""?"notutor":$tu).' '.(in_array($students[$i], $naostro6)?"naostro6b":(in_array($students[$i], $naostroa)?"naostro":"nanecisto")).'" id="u_'.$students[$i].'" ><span class="number"></span><span class=\'std\' onclick="tooogle(\''.$students[$i].'\')">'.$students[$i]." </span><span class='cp'><a href='https://is.muni.cz/auth/osoba/".$ucos[$students[$i]]."' target='_blank'>[IS]</a></span><span class='vpravo'><span class='green'>".$n."</span> / <span class='yellow'>".$o."</span></span>";
 		echo $contents;
 		echo '</div>';
 $i++;

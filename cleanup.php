@@ -9,6 +9,6 @@ echo 'logged out';
 exit;
 }
 
-system("rm -rf tmp/".session_id());
+system("rm -rf tmp/".sha1(session_id()));
 
 ?>

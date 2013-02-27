@@ -40,7 +40,7 @@ function nice_date($date)
 	$min = substr($p[2], 2, 2);
 	$sec = substr($p[2], -2);
 
-	return $den.".".$mesiac." - ".$hod.":".$min.":".$sec;
+	return $den.".".$mesiac.".".$rok." - ".$hod.":".$min.":".$sec;
 }
 
 function get_user($line)
@@ -55,20 +55,24 @@ function nice_stat($p, $poc)
 	echo "<strong>".$p."</strong> - ".$poc."<br/>";
 }
 
-function nice_tests($line)
+function nice_tests($line, &$bonus_bad)
 {	
 	$str = "<div class=\\\"res\\\" >";
 	$chunks = explode("#", $line);
 	$prvy = false;
+	$bonus_bad = false;
+	$error = false;
 	foreach($chunks as $chunk)
-{
-	if($prvy)
 	{
+		if($prvy)
+		{
 		
-		$str = $str."<span onclick=\\\"med_closeDescription(1)\\\" class=\\\"".((strstr($chunk, 'ok') != false)?"blue":"red")."\\\">".$chunk."</span><br />";
+			$str = $str."<span onclick=\\\"med_closeDescription(1)\\\" class=\\\"".((strstr($chunk, 'ok') != false)?"blue":"red")."\\\">".$chunk."</span><br />";
+			if(strstr($chunk, 'ok') == false && strstr($chunk, 'bonus') == false) $error = true;
+			if((!$error && strstr($chunk, 'ok') == false && strstr($chunk, 'bonus') != false)) $bonus_bad=true;
+		}
+		$prvy = true;
 	}
-	$prvy = true;
-}
 
 	$str = $str."</div>";
 
@@ -119,14 +123,15 @@ if($k == '') continue;
 			$first = explode("#", $k, 2);
 			$head = explode(":", $first[0]);
 			$sum = $head[1];
-			$results = nice_tests($k);
+			$bonus_bad;
+			$results = nice_tests($k, $bonus_bad);
 			if((strstr($sum, 'points=6') !== false))
 					{
 						$naostro6b = true;
 						$global_naostro6 = true;
 					}
 			$folder = $ruser."_".$datum[0];
-			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".((strstr($sum, 'ok;') != false)?"blue":"red")."' onmouseout='med_closeDescription()' onmousemove='med_mouseMoveHandler(event,\"".$results."\")' onclick='med_disable_des_hide()'>".$sum."</span>";
+			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".($bonus_bad?"purple":((strstr($sum, 'ok;') != false)?"blue":"red"))."' onmouseout='med_closeDescription()' onmousemove='med_mouseMoveHandler(event,\"".$results."\")' onclick='med_disable_des_hide()'>".$sum."</span>";
 			echo '<span class="cp vpravo" onclick=\'showcode("'.$predmet.'","'.$uloha.'","'.$folder.'")\'> [sources]</span></p>';
 		
 		//echo '</div>';
@@ -137,9 +142,11 @@ $contents = ob_get_contents();
 		ob_end_clean();
 if($all)
 {
+	$is = "";
+	if(array_key_exists($ruser, $ucos)) $is = "<span class='cp vpravo'><a href='https://is.muni.cz/auth/osoba/".$ucos[$students[$i]]."' target='_blank'>[IS]</a>&nbsp;</span>";
 	$filter_class = ($global_naostro6?"naostro6b":(($global_naostro)?"naostro":"nanecisto"));
 	echo '<div class="user '.($tutor==""?"notutor":$tutor).' '.$filter_class.'" id="u_'.$ruser.'">';
-	echo '<span class="number"></span><span class="std" onclick=\'tooogle("'.$ruser.'")\'>'.$ruser.'</span><span class="cp"><a href="https://is.muni.cz/auth/osoba/'.$ucos[$ruser].'" target="_blank">[IS]</a><div class="odes" id="'.$ruser.'">';
+	echo '<span class="number"></span><span class="std" onclick=\'tooogle("'.$ruser.'")\'>'.$ruser.'</span>'.$is.'<div class="odes" id="'.$ruser.'">';
 }
 		echo $contents;
 if ($all) echo "</div></div>";

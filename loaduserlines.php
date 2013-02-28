@@ -55,7 +55,7 @@ function nice_stat($p, $poc)
 	echo "<strong>".$p."</strong> - ".$poc."<br/>";
 }
 
-function nice_tests($line, &$bonus_bad)
+function nice_tests($line, &$bonus_bad, &$error)
 {	
 	$str = "<div class=\\\"res\\\" >";
 	$chunks = explode("#", $line);
@@ -124,14 +124,15 @@ if($k == '') continue;
 			$head = explode(":", $first[0]);
 			$sum = $head[1];
 			$bonus_bad;
-			$results = nice_tests($k, $bonus_bad);
+			$error;
+			$results = nice_tests($k, $bonus_bad, $error);
 			if((strstr($sum, 'points=6') !== false))
 					{
 						$naostro6b = true;
 						$global_naostro6 = true;
 					}
 			$folder = $ruser."_".$datum[0];
-			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".($bonus_bad?"purple":((strstr($sum, 'ok;') != false)?"blue":"red"))."' onmouseout='med_closeDescription()' onmousemove='med_mouseMoveHandler(event,\"".$results."\")' onclick='med_disable_des_hide()'>".$sum."</span>";
+			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".($bonus_bad?"purple":($error?"blue":"red"))."' onmouseout='med_closeDescription()' onmousemove='med_mouseMoveHandler(event,\"".$results."\")' onclick='med_disable_des_hide()'>".$sum."</span>";
 			echo '<span class="cp vpravo" onclick=\'showcode("'.$predmet.'","'.$uloha.'","'.$folder.'")\'> [sources]</span></p>';
 		
 		//echo '</div>';

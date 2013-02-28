@@ -226,7 +226,7 @@ function nice_stat($p, $poc)
 	echo "<tr><td ><strong>".$p."</strong></td><td style='text-align: right'>".$poc."</td></tr>";
 }
 
-function nice_tests($line, &$bonus_bad)
+function nice_tests($line, &$bonus_bad, &$error)
 {	
 	$str = "<div class=\\\"res\\\" >";
 	$chunks = explode("#", $line);
@@ -303,8 +303,8 @@ $user='';
 			$first = explode("#", $k, 2);
 			$head = explode(":", $first[0]);
 			$sum = $head[1];
-			$bonus_bad;
-			$results = nice_tests($k, $bonus_bad);
+			$bonus_bad; $error;
+			$results = nice_tests($k, $bonus_bad, $error);
 			if($naostro)
 			{
 				if(!in_array($students[$i], $naostroa))
@@ -321,7 +321,7 @@ $user='';
 				}
 			}
 			$folder = $students[$i]."_".$datum[0];
-			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".($bonus_bad?"purple":((strstr($sum, 'ok;') != false)?"blue":"red"))."' onmouseout='med_closeDescription()' onmouseover='med_mouseMoveHandler(event,\"".$results."\")' onclick='med_disable_des_hide()'>".$sum."</span>";
+			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".($bonus_bad?"purple":(!$error?"blue":"red"))."' onmouseout='med_closeDescription()' onmouseover='med_mouseMoveHandler(event,\"".$results."\")' onclick='med_disable_des_hide()'>".$sum."</span>";
 			echo '<span class="cp vpravo" onclick=\'showcode("'.$predmet.'","'.($uloha==""?$datum[4]:$uloha).'","'.$folder.'")\'> [sources]</span></p>';
 		}
 		$o = count($l) - $n;

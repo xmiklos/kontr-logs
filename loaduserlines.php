@@ -144,7 +144,7 @@ $contents = ob_get_contents();
 if($all)
 {
 	$is = "";
-	if(array_key_exists($ruser, $ucos)) $is = "<span class='cp vpravo'><a href='https://is.muni.cz/auth/osoba/".$ucos[$students[$i]]."' target='_blank'>[IS]</a>&nbsp;</span>";
+	if(array_key_exists($ruser, $ucos)) $is = "<span class='cp vpravo'><a href='https://is.muni.cz/auth/osoba/".$ucos[$ruser]."' target='_blank'>[IS]</a>&nbsp;</span>";
 	$filter_class = ($global_naostro6?"naostro6b":(($global_naostro)?"naostro":"nanecisto"));
 	echo '<div class="user '.($tutor==""?"notutor":$tutor).' '.$filter_class.'" id="u_'.$ruser.'">';
 	echo '<span class="number"></span><span class="std" onclick=\'tooogle("'.$ruser.'")\'>'.$ruser.'</span>'.$is.'<div class="odes" id="'.$ruser.'">';

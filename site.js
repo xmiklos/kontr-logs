@@ -147,6 +147,9 @@ var l_close = document.getElementById("cls");
 var l_src = document.getElementById("sources");
 
 $(lay).width(($(window).width()-405));
+
+_gaq.push(['_trackEvent', 'Sources', 'Display sources', folder]);
+
 }
 
 function compile()
@@ -160,6 +163,9 @@ function compile()
   function(data){
 		lay.innerHTML = data;
   });
+  
+  _gaq.push(['_trackEvent', 'Sources', 'Compile']);
+
 }
 
 function run()
@@ -175,6 +181,9 @@ function run()
   function(data){
 		lay.innerHTML = data;
   });
+  
+  _gaq.push(['_trackEvent', 'Sources', 'Run']);
+
 }
 
 function init_compl_mode(folder)
@@ -195,7 +204,7 @@ function init_compl_mode(folder)
 		$("#lefts").height(($('#showcode').height()));
 		layer.innerHTML = '<ul><li>select files and click compile to compile</li><li>click on file to edit and save</li><li>click [edit&compile&run] to cancel your changes and restore files to version from submission</li><li>click [run] to run compiled bin, create and edit new files to redirect them to standard input</li></ul>';
   });
-	
+	  _gaq.push(['_trackEvent', 'Sources', 'Compile mode']);
 }
 
 function inex_cmpil_file(chbox)
@@ -240,6 +249,7 @@ function edit(f)
 		$("#editor").width(($(lay).width()-4));
 		$("#editor").height(($(lay).height()-25));
   });
+  	  _gaq.push(['_trackEvent', 'Sources', 'Editor']);
 }
 
 function savetmpfile(file)
@@ -251,6 +261,7 @@ function savetmpfile(file)
 		document.getElementById("savebutton").value = 'saved';
 		if(data != '') alert(data);
   });
+    _gaq.push(['_trackEvent', 'Sources', 'Editor save']);
 }
 
 function newfile()
@@ -265,6 +276,7 @@ function newfile()
 			$('#sourceslist').append(newfile);
 		}
   });
+    _gaq.push(['_trackEvent', 'Sources', 'New file']);
 }
 
 function editboxchange()
@@ -280,7 +292,7 @@ function showfile(fi)
   function(data){
 		lay.innerHTML = data;
   });
-
+	  _gaq.push(['_trackEvent', 'Sources', 'Display file', fi]);
 }
 
 function closeoptions() {
@@ -353,6 +365,8 @@ function filter_sub(show)
 		$('.green').show();
 		$('.yellow').show();
 	}
+	
+	  _gaq.push(['_trackEvent', 'Filter', 'Submission filter', show]);
 }
 
 
@@ -403,6 +417,8 @@ function filter()
 	$( ".user" ).promise().done(function() {
     		number_users();
   	});
+  	
+	_gaq.push(['_trackEvent', 'Filter', 'User filter', studf+tutorf]);
 }
 
 function filterNone()
@@ -518,6 +534,8 @@ var l_src = document.getElementById("sources");
 
 $(lay).width(($(window).width()-405));
 $("#lefts").height(($(window).height()));
+
+	_gaq.push(['_trackEvent', 'Diff', 'Diff layer']);
 }
 
 function showdiffout(pr, ul, filename)
@@ -528,7 +546,7 @@ function showdiffout(pr, ul, filename)
   function(data){
 		lay.innerHTML = data;
   });
-
+	_gaq.push(['_trackEvent', 'Diff', 'Diff difference']);
 }
 
 function get_notif()
@@ -576,6 +594,7 @@ function enable_notif(el)
 		intId=0;
 		el.innerHTML = '[Enable notifications]';
 	}
+	_gaq.push(['_trackEvent', 'Notifications', 'Notifications enabled']);
 }
 
 function update_user(user)
@@ -600,6 +619,8 @@ function update_user(user)
   		
 		
 	});
+	
+	_gaq.push(['_trackEvent', 'Notifications', 'User updated']);
 }
 
 function show_all(el)
@@ -614,6 +635,8 @@ function show_all(el)
 		hidee('.odes');
 		el.innerHTML = '[Expand all]';
 	}
+	
+	_gaq.push(['_trackEvent', 'Display', 'Expand - Collapse']);
 }
 
 function bodyscroll()
@@ -652,5 +675,13 @@ function clear_cookies()
 {
 	setCookie('diff2', '');
 	setCookie('diff1', '');
+}
+
+function panel_enabler_over()
+{
+	$("#head").css( "position","fixed" );
+	$("#space_filler").show();
+	
+	_gaq.push(['_trackEvent', 'Display', 'Panel enabler used']);
 }
 

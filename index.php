@@ -63,11 +63,6 @@ if( isset($_REQUEST['uloha']) && isset($_REQUEST['predmet']) )
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" href="style.css" type="text/css" />
-	<script src="jquery-1.9.1.min.js" type="text/javascript" ></script>
-	<script src="jquery.scrollTo-1.4.3.1-min.js" type="text/javascript" ></script>
-	<script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
-	<script src="src/mode-c_cpp.js" type="text/javascript" charset="utf-8"></script>
-	<script src="site.js" type="text/javascript" ></script>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -81,10 +76,16 @@ if( isset($_REQUEST['uloha']) && isset($_REQUEST['predmet']) )
   })();
 
 </script>
+	<script src="jquery-1.9.1.min.js" type="text/javascript" ></script>
+	<script src="jquery.scrollTo-1.4.3.1-min.js" type="text/javascript" ></script>
+	<script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
+	<script src="src/mode-c_cpp.js" type="text/javascript" charset="utf-8"></script>
+	<script src="site.js" type="text/javascript" ></script>
+
 <title>_logs_</title>
 </head>
 <body id="top" onload='med_init(); number_users(); clear_cookies(); ' onscroll="bodyscroll()" >
-<div id="panel_enabler" onmouseover='$("#head").css( "position","fixed" ); $("#space_filler").show();'></div>
+<div id="panel_enabler" onmouseover='panel_enabler_over();'></div>
 <div id="head">
 (<?php echo $login ?>)
 <!--

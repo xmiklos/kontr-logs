@@ -101,17 +101,23 @@ $global_naostro = false;
 $global_naostro6 = false;
 
 ob_start();
-//echo '<p class="ode"><span onclick="showdiff(\''.$predmet.'\', \''.$uloha.'\')">[diff selected]</span></p>';
+
+$n=0;
+$o = count($wholelines);
 foreach($wholelines as $k)
 {
-if($k == '') continue;
-		
+if($k == '')
+{
+	$o--;
+	continue;
+}		
 		
 		
 			$naostro = true;
 			$naostro6b = false;
 			if(strstr($k, 'student') !== false)
 			{
+				$n++;
 				$naostro = false;
 			}
 			if(strstr($k, 'teacher') !== false)
@@ -141,13 +147,14 @@ if($k == '') continue;
 }
 $contents = ob_get_contents();
 		ob_end_clean();
+
 if($all)
 {
 	$is = "";
 	if(array_key_exists($ruser, $ucos)) $is = "<span class='cp vpravo'><a href='https://is.muni.cz/auth/osoba/".$ucos[$ruser]."' target='_blank'>[IS]</a>&nbsp;</span>";
 	$filter_class = ($global_naostro6?"naostro6b":(($global_naostro)?"naostro":"nanecisto"));
 	echo '<div class="user '.($tutor==""?"notutor":$tutor).' '.$filter_class.'" id="u_'.$ruser.'">';
-	echo '<span class="number"></span><span class="std" onclick=\'tooogle("'.$ruser.'")\'>'.$ruser.'</span>'.$is.'<div class="odes" id="'.$ruser.'">';
+	echo '<span class="number"></span><span class="std" onclick=\'tooogle("'.$ruser.'")\'>'.$ruser.'</span>'."<span class='vpravo'><span class='green'>".$n."</span> / <span class='yellow'>".($o-$n)."</span></span>".$is.'<div class="odes" id="'.$ruser.'">';
 }
 		echo $contents;
 if ($all) echo "</div></div>";

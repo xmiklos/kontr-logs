@@ -128,11 +128,17 @@ body {
 
 #sources {
 	//float: left;
+	max-height: 100%;
+	overflow: auto;
 }
 
 #lefts {
 	width: 400px;
-	overflow-y: auto;
+	/*overflow-y: auto;*/
+}
+#compl_menu {
+	overflow: auto;
+	border-top: 1px solid white;
 }
 
 #cmplflagss, #stdinfile {
@@ -148,6 +154,7 @@ body {
 	overflow-y: scroll;
 	border: 1px solid white;
 	position: relative;
+	font-family: monospace, "Courier New", Courier;
 }
 #bottom , #top  {
 	margin-left: 5px;

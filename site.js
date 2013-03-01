@@ -129,7 +129,7 @@ function checkchange(el)
 function showcode(predmet, uloha, folder) {
 	element("showcode");
 	var layer = document.getElementById("showcode");
-	var text = '<div id="code">Choose file</div><div id="lefts"><div id="cls" class="cp" onclick="closeoptions()">[close]</div><div id="sources">loading...</div><fieldset><legend class="cp" onclick="init_compl_mode(\''+folder+'\')">[edit&compile&run]</legend><div id="compl"><fieldset><legend><div class="cp" onclick="compile()">[compile]</div></legend>additional flags:<br /><input type="checkbox" id="cmplflags" onchange="checkchange(this)"/><input type="text" id="cmplflagss" disabled /></fieldset><fieldset><legend><div class="cp" onclick="run()">[run]</div></legend>with valgrind: <input type="checkbox" id="rungrind" /><br />std input file:<br /><input type="checkbox" id="stdin" onchange="checkchange(this)" /><input type="text" id="stdinfile" disabled /><br />arguments:<br /><input type="text" id="params" /></fieldset><fieldset><legend><div class="cp" onclick="newfile()">[create new file]</div></legend>new file filename:<br /><input type="text" id="newfilename" /></fieldset></div></fieldset></div>';
+	var text = '<div id="code">Choose file</div><div id="lefts"><div id="cls" class="cp" onclick="closeoptions()">[close]</div><div id="sources">loading...</div><div id="compl_menu"><fieldset><legend class="cp" onclick="init_compl_mode(\''+folder+'\')">[edit&compile&run]</legend><div id="compl"><fieldset><legend><div class="cp" onclick="compile()">[compile]</div></legend>additional flags:<br /><input type="checkbox" id="cmplflags" onchange="checkchange(this)"/><input type="text" id="cmplflagss" disabled /></fieldset><fieldset><legend><div class="cp" onclick="run()">[run]</div></legend>with valgrind: <input type="checkbox" id="rungrind" /><br />std input file:<br /><input type="checkbox" id="stdin" onchange="checkchange(this)" /><input type="text" id="stdinfile" disabled /><br />arguments:<br /><input type="text" id="params" /></fieldset><fieldset><legend><div class="cp" onclick="newfile()">[create new file]</div></legend>new file filename:<br /><input type="text" id="newfilename" /></fieldset></div></fieldset></div></div>';
 	layer.innerHTML = text;
 
 	$.post("loaddir.php", { uloha: uloha, predmet: predmet, odevzdani: folder},
@@ -145,8 +145,12 @@ $(lay).height($(window).height()-2);
 
 var l_close = document.getElementById("cls");
 var l_src = document.getElementById("sources");
+var l_cmenu = document.getElementById("compl_menu");
 
 $(lay).width(($(window).width()-405));
+var h = $(window).height()/2 - 10;
+$(l_src).height(h-1);
+$(l_cmenu).height(h);
 
 _gaq.push(['_trackEvent', 'Sources', 'Display sources', folder]);
 
@@ -319,8 +323,12 @@ var lay = document.getElementById("code");
 
 var l_close = document.getElementById("cls");
 var l_src = document.getElementById("sources");
+var l_cmenu = document.getElementById("compl_menu");
 
 $(lay).width(($(window).width()-405));
+var h = $(window).height()/2 - 10;
+$(l_src).height(h-1);
+$(l_cmenu).height(h);
 
 $("#editor").width(($(lay).width()-4));
 $("#editor").height(($(lay).height()-25));

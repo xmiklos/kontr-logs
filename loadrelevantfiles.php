@@ -11,6 +11,8 @@ exit;
 
 function recDir($path, &$fnames, &$fpaths, &$sha)
 {
+$LOAD_FILE_TYPES = array('.c', '.h', '.in', '.out');
+
 	$hand=opendir($path);
 
 	while (($fil = readdir($hand)))
@@ -23,14 +25,18 @@ function recDir($path, &$fnames, &$fpaths, &$sha)
 			recDir($path.$fil.'/', $fnames, $fpaths, $sha);
 			continue;
 		}
-		if(((strstr($fil, '.h') !== false) || (strstr($fil, '.c') !== false)) && (strstr($fil, '.html') === false)) 
+		foreach($LOAD_FILE_TYPES as $type)
 		{
-			$sh = sha1_file($path.$fil);
-			if(!in_array($sh, $sha))
+			if((strstr($fil, $type) !== false) && (strstr($fil, 'grind') === false) && (strstr($fil, '.html') === false)) 
 			{
-				$fnames[] = $fil;
-				$fpaths[] = $path.$fil;
-				$sha[] = $sh;
+				$sh = sha1_file($path.$fil);
+				if(!in_array($sh, $sha) || !in_array($fil, $fnames))
+				{
+					$fnames[] = $fil;
+					$fpaths[] = $path.$fil;
+					$sha[] = $sh;
+				}
+				
 			}
 		}
 	}

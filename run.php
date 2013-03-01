@@ -23,9 +23,9 @@ if($input != '') $inputfile = ' < '.$input;
 
 
 shell_exec($valgrind."./binfile > stdout.out 2> errors.out".$inputfile." ".$args);
-	$stdout = file_get_contents('stdout.out');
+	$stdout = htmlentities(file_get_contents('stdout.out'));
 	$stdout  = str_replace("\n", '<br />', $stdout);
-	$f1 = file_get_contents('errors.out');
+	$f1 = htmlentities(file_get_contents('errors.out'));
 	$output = str_replace("\n", '<br />', $f1);
 	
 	echo $stdout;

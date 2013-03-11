@@ -179,6 +179,7 @@ Options:
 <span class="cp" onclick="enable_notif(this)"/>[Enable notifications]</span>
 <span class="cp" onclick="show_all(this)"/>[Expand all]</span>
 <span class="cp" onclick="showdiff('<?php echo $predmet; ?>', '<?php echo $uloha; ?>')">[diff selected submissions]</span>
+<span class="cp" onclick="sort_users()"/>[Sort alphabetically]</span>
 </div>
 <div></div>
 <div class='opt'>

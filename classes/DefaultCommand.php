@@ -3,23 +3,23 @@
 require_once "classes/Request.php";
 require_once "classes/Command.php";
 require_once "classes/IndexBuilder.php";
-require_once "classes/LogDisplay.php";
+require_once "classes/LogsCommand.php";
 
 class DefaultCommand extends Command
 {
 	function doExecute(Request $request)
 	{
 		
-		$index = new IndexBuilder();
-		$index->start($request);
+		$index = new IndexBuilder($request);
+		$index->start();
 		$index->incl("head.php");
 		$index->incl("panel.php");
 		
-		$d = new LogDisplay($request);
-		$d->show();
+		$log = new LogsCommand();
+		$log->execute($request);
 		
 		$index->incl("footer.php");
-		
+
 		$index->render();
 		
 	}

@@ -37,8 +37,8 @@ class Student
 		$sub = new Submission($report);
 		$this->submissions[] = $sub;
 		
-		if($sub->test_type == "teacher") $has_naostro = true;
-		if(strstr($sub->summary, "points=6") !== false) $has_full_points = true;
+		if($sub->test_type == "teacher") $this->has_naostro = true;
+		if(strstr($sub->summary, "points=6") !== false) $this->has_full_points = true;
 		
 		return $sub->name;
 	}
@@ -62,13 +62,13 @@ class Student
 		
 		if($this->has_naostro)
 		{
-			if($has_full_points)
+			if($this->has_full_points)
 			{
-				$cls.="naostro6b ";
+				$cls.="naostro naostro6b ";
 			}
 			else
 			{
-				$cls.="naostro ";
+				$cls.="naostro naostroe ";
 			}
 		}
 		else

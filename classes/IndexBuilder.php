@@ -61,11 +61,11 @@ class IndexBuilder extends PageBuilder
 		{
 			if($tutor=="")
 			{
-				echo "<option value='notutor'>No tutor</option>";
+				echo "<option value='.notutor'>No tutor</option>";
 			}
 			else
 			{
-				echo "<option value='{$tutor}'>{$tutor}</option>";
+				echo "<option value='.{$tutor}'>{$tutor}</option>";
 			}
 		}
 	}

@@ -1,0 +1,14 @@
+
+.detailed_result{
+	position: fixed;
+	display: none;
+	background-color: #fff;
+	border: 2px solid #114400;
+	border-top-width: 6px;
+	padding: 6px;
+	word-wrap: break-word;
+	overflow: auto;
+	left: 850px;
+	top: 28px;   
+}
+

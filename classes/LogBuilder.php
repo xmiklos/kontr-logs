@@ -3,8 +3,9 @@
 require_once "LogParser.php";
 require_once "File.php";
 require_once "Request.php";
+require_once "classes/PageBuilder.php";
 
-class LogDisplay
+class LogBuilder extends PageBuilder
 {
 
 public $parser;
@@ -13,6 +14,7 @@ private $subject;
 
 function __construct(Request $request)
 {
+	parent::__construct($request);
 	$logfile = Config::instance()->get_setting("report_path");
 	$log = File::load_file($logfile);
 	
@@ -38,7 +40,6 @@ private function request_ok(Request $request)
 function show()
 {
 	if(!$this->parser) return;
-	//ob_start();
 
 	foreach($this->parser->get_students() as $student)
 	{
@@ -59,7 +60,7 @@ function show()
 					echo "<p class='{$sub->get_classes()}' id='{$sub->folder}' >";
 						echo $sub->date;
 						echo "<input class='submission_selector' type='checkbox' />";
-						echo "<span class='{$sub->get_summary_classes()}' >";
+						echo "<span class='summary {$sub->get_summary_classes()}' >";
 						
 							echo "<span style='display: none'>";
 							foreach($sub->unit_tests as $test)
@@ -77,10 +78,6 @@ function show()
 		echo "</div>";
 	}
 
-	
-	//$contents = ob_get_contents();
-	//ob_end_clean();
-	//echo $contents;
 }
 
 }

@@ -1,7 +1,7 @@
 <?php
 require_once "classes/IndexBuilder.php";
 
-$i = PageBuilder::instance();
+$i = $this;
 $login = Auth::get_username();
 
 ?>
@@ -30,26 +30,27 @@ $login = Auth::get_username();
 	<div class='opt'>
 		<form>
 		Show students with:
-		<select id="studfilter" onchange="filter()">
-		  <option  value="all">all</option>
-		  <option  value="nanecisto">nanecisto only submissions</option>
-		  <option  value="naostro">naostro submissions points &lt; 6</option>
-		  <option  value="naostro6b">naostro submissions points=6</option>
+		<select id="studfilter" >
+		  <option  value="">all</option>
+		  <option  value=".nanecisto">nanecisto only submissions</option>
+		  <option  value=".naostroe">naostro submissions points&lt;6</option>
+		  <option  value=".naostro">naostro submissions </option>
+		  <option  value=".naostro6b">naostro submissions points=6</option>
 		</select>
 		Seminar tutor:
-		<select id="tutorfilter" onchange="filter()">
-		<option  value="all">all</option>
-		<?php echo $i->option_tutors(); ?>
+		<select id="tutorfilter" >
+		<option  value="">all</option>
+		<?php $i->option_tutors(); ?>
 		</select>
 		</form>
 	</div>
 	<div class='opt'>
 		<form>
 		Show submissions:
-		<select onchange="filter_sub(this.value)">
-		  <option  value="all">all</option>
-		  <option  value="nanecisto">nanecisto only</option>
-		  <option  value="naostro">naostro only</option>
+		<select id="subfilter" >
+		  <option  value="">all</option>
+		  <option  value=".green">nanecisto only</option>
+		  <option  value=".yellow">naostro only</option>
 		</select>
 		</form>
 	</div>

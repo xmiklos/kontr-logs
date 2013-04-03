@@ -2,25 +2,18 @@
 <?php
 require_once "classes/File.php";
 
-abstract class PageBuilder
+class PageBuilder
 {
-	private static $instance;
 	private $request;
 
-	final function __construct()
+	function __construct($request)
 	{
-		self::$instance = $this;
+		$this->request = $request;
 	}
 	
-	public static function instance()
-	{
-		return self::$instance;
-	}
-	
-	function start($request)
+	function start()
 	{
 		ob_start();
-		$this->request = $request;
 	}
 	
 	function incl($filename)

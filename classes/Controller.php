@@ -35,7 +35,7 @@ class Controller
 			$auth->login();
 		}
 		
-		session_start();
+		//session_start();
 	}
 	
 	function handle_request()

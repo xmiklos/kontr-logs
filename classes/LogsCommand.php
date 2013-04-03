@@ -2,17 +2,15 @@
 <?php
 require_once "classes/Request.php";
 require_once "classes/Command.php";
-require_once "classes/LogDisplay.php";
+require_once "classes/LogBuilder.php";
 
 
 class LogsCommand extends Command
 {
 	function doExecute(Request $request)
 	{
-		//$_SESSION['task'] = $request->getProperty('task');
-		//$_SESSION['subject'] = $request->getProperty('subject');
-		$display = new LogDisplay();
-		$display->showHTML();
+		$log = new LogBuilder($request);
+		$log->show();
 	}
 }
 

@@ -10,9 +10,6 @@ class LogParser
 	private $task;
 	private $student;
 
-	private $students = array();
-	public $studentsV = array();
-
 	private function get_name($line)
 	{
 		$parts = explode(" ", $line, 3);
@@ -27,8 +24,9 @@ class LogParser
 		$this->student = $request->getProperty('student');
 	}
 	
-	function parse()
+	function parse_as_stud()
 	{
+		$students = array();
 		$lines = explode("\n", $this->log_content);
 		
 		$sub = $this->subject." ".$this->task;
@@ -39,23 +37,38 @@ class LogParser
 			{
 				$name = $this->get_name($line);
 
-				if(array_key_exists($name, $this->students))
+				if(array_key_exists($name, $students))
 				{
-					$this->students[$name]->add_sub($line);
+					$students[$name]->add_sub($line);
 				}
 				else
 				{
 					$student = new Student($line);
-					$this->students[$student->name] = $student;
+					$students[$student->name] = $student;
 				}
 			}
 		}
-		$this->studentsV = array_values($this->students);
+		
+		return $students;
 	}
 	
-	function get_students()
+	function parse_as_sub()
 	{
-		return $this->students;
+		$subs = array();
+	
+		$lines = explode("\n", $this->log_content);
+		
+		$sub = $this->subject." ".$this->task;
+		
+		foreach($lines as $line)
+		{
+			if(strstr($line, $sub))
+			{
+				$subs[] = new Submission($line);
+			}
+		}
+		
+		return $subs;
 	}
 }
 

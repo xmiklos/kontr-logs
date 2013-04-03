@@ -1,5 +1,5 @@
 
-.detailed_result{
+.detailed_result {
 	position: fixed;
 	display: none;
 	background-color: #fff;
@@ -9,6 +9,20 @@
 	word-wrap: break-word;
 	overflow: auto;
 	left: 850px;
-	top: 28px;   
+	top: 0;
+	max-height: 100%;
+	z-index: 20;
 }
 
+.notif_box {
+	position: fixed;
+	padding: 5px;
+	top: 0;
+	left: 850px;
+	max-width: 300px;
+	max-height: 95%;
+	border: 1px solid black;
+	overflow-y: scroll;
+	display: none;
+	z-index: 5;
+}

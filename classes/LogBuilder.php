@@ -21,7 +21,6 @@ function __construct(Request $request)
 	if($this->request_ok($request))
 	{
 		$this->parser = new LogParser($log, $request);
-		$this->parser->parse();
 	}
 	else
 	{
@@ -41,12 +40,12 @@ function show()
 {
 	if(!$this->parser) return;
 
-	foreach($this->parser->get_students() as $student)
+	foreach($this->parser->parse_as_stud() as $student)
 	{
 		$count = $student->count_subs();
 		
 		
-		echo "<div class='{$student->get_classes()}' id='u_{$student->name}'>";
+		echo "<div class='{$student->get_classes()} ' id='u_{$student->name}'>";
 		echo "<span class='number'></span>";
 		echo "<span class='std'>{$student->name}</span>";
 		echo "<span class='vpravo'>";
@@ -58,8 +57,9 @@ function show()
 				foreach($student->submissions as $sub)
 				{
 					echo "<p class='{$sub->get_classes()}' id='{$sub->folder}' >";
-						echo $sub->date;
 						echo "<input class='submission_selector' type='checkbox' />";
+						echo $sub->date;
+						echo "&nbsp;";
 						echo "<span class='summary {$sub->get_summary_classes()}' >";
 						
 							echo "<span style='display: none'>";
@@ -78,6 +78,16 @@ function show()
 		echo "</div>";
 	}
 
+}
+
+function show_notif()
+{
+	if(!$this->parser) return;
+
+	foreach($this->parser->parse_as_sub() as $sub)
+	{
+		echo "<div class='' id=''><span class='cp update_student'>{$sub->date} {$sub->name}</span></div>";
+	}
 }
 
 }

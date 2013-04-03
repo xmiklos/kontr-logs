@@ -21,7 +21,7 @@ class CommandResolver
 
 	function getCommand(Request $request)
 	{
-		$cmd = $request->getProperty('cmd');
+		$cmd = $request->getProperty('what');
 		
 		if(!$cmd)
 		{

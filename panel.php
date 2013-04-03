@@ -5,7 +5,7 @@ $i = $this;
 $login = Auth::get_username();
 
 ?>
-<div id="panel_enabler" onmouseover='panel_enabler_over();'></div>
+<div id="panel_enabler" ></div>
 <div id="head">
 	(<?php echo $login; ?>)
 	<div class='opt' style="border: 0">
@@ -56,10 +56,10 @@ $login = Auth::get_username();
 	</div>
 	<div class='opt'>
 		Options:
-		<span class="cp" onclick="enable_notif(this)"/>[Enable notifications]</span>
-		<span class="cp" onclick="show_all(this)"/>[Expand all]</span>
-		<span class="cp" onclick="showdiff('', '')">[diff selected submissions]</span>
-		<span class="cp" onclick="sort_users()"/>[Sort alphabetically]</span>
+		<span class="cp enable-notif" />[Enable notifications]</span>
+		<span class="cp expand-all" />[Expand all]</span>
+		<span class="cp do-diff" >[diff selected submissions]</span>
+		<span class="cp sort-alpha" />[Sort alphabetically]</span>
 	</div>
 	<div></div>
 	<div class='opt'>

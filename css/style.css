@@ -29,9 +29,9 @@ body {
 	top: 0;
 	left: 0;
 	width: 20px;
-	height: 190px;
+	height: 100%;
 	background-color: silver;
-	border-bottom: 1px solid black;
+	//border-bottom: 1px solid black;
 }
 
 .user {
@@ -63,7 +63,7 @@ body {
 }
 
 .ode{
-	border-bottom: 1px dashed black;
+	//border-bottom: 1px dashed black;
 	margin: 2px;
 	padding: 1px;
 }

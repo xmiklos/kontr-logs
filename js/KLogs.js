@@ -24,12 +24,11 @@ ret_obj.detailedResultsOff = function(e)
 
 ret_obj.bind = function()
 {
-	$('.summary')
-	.mouseenter(KLogs.Display.detailedResultsOn)
-	.mouseleave(KLogs.Display.detailedResultsOff)
-	.click(function(){
+	$('body').on("mouseenter", ".summary", KLogs.Display.detailedResultsOn)
+	.on("mouseleave", ".summary", KLogs.Display.detailedResultsOff)
+	.on("click", ".summary", function(){
 		pin=!pin;
-		});
+	});
 	
 }
 
@@ -101,28 +100,65 @@ KLogs.Notif = (function() {
 
 var notifElement = $("<div class='notif_box' ></div>");
 var enabled = 0;
+var id;
+var interval = 120000;
 
 return {
 
 update: function()
 {
+	var uname = $(this).data('user');
+	var id = "#u_"+uname;
 	
+		$.post("index.php", {what: 'LogsCommand', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(), student: uname},function(data)
+		{
+			if($(id).length > 0)
+			{
+				$(id).replaceWith(data);
+			}
+			else
+			{
+				$('#wrapper').append(data);
+			}
+			$(id+" .std").parent().find(".odes").show();
+			$(id+" .std").promise().done(function()
+			{
+				$(document).scrollTo(id, 300);
+				KLogs.Stats.update();
+			});
+	  	});
+	
+	
+},
+get: function()
+{
+	$.post("index.php", {what: 'NotifCommand', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val()},function(data)
+		{
+			$('.notif_box').html(data).scrollTo('max', 800);
+			
+	  	}).fail(function(){
+	  		KLogs.Notif.toggle();
+	  		KLogs.Message.show("Ajax Error! Try again.", 3);
+	  	});
 },
 toggle: function()
 {
 	if(enabled)
 	{
 		enabled = 0;
+		window.clearInterval(id);
 		$('.notif_box').scrollTop(0).hide().html('');
+		$('.enable-notif').html('[Enable notifications]');
 	}
 	else
 	{
 		$('.notif_box').show().html('loading...'); // todo task and subject
-		$.post("index.php", {what: 'NotifCommand', task: 'hw03', subject: 'pb071'},function(data)
-		{
-			$('.notif_box').html(data).scrollTo('max', 800);
-			enabled = 1;
-	  	});
+		KLogs.Notif.get();
+		id=self.setInterval(function(){
+			KLogs.Notif.get();
+		}, interval);
+	  	enabled = 1;
+	  	$('.enable-notif').html('[Disable notifications]');
 	}
 },
 bind: function()
@@ -193,12 +229,30 @@ do_diff: function()
 	if(KLogs.SubSelector.get_count() != 2)
 	{
 		
-		alert("Select exactly 2 submissions!");
+		KLogs.Message.show("You have to select exactly 2 submissions!", 3);
 		KLogs.SubSelector.reset();
 	}
 	else
 	{
 		// todo diff
+		KLogs.FSLayer.show();
+		KLogs.FSLayer.html('loading...');
+		var subs = KLogs.SubSelector.get_selection();
+		$.post("index.php", 
+		{what: 'DiffCommand', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(), subs: subs},
+		function(data)
+		{
+			KLogs.FSLayer.html(data);
+			$("#diff_tabs").tabs({ heightStyle: "fill" });
+			$("#diff_close").button().click(function( event ) 
+			{
+				KLogs.FSLayer.hide();
+				KLogs.SubSelector.reset();
+			});
+	  	}).fail(function(){
+	  		KLogs.FSLayer.hide();
+	  		KLogs.Message.show("Ajax Error! Try again.", 3);
+	  	});
 	}
 }
 
@@ -236,6 +290,51 @@ update: function()
 	$('.std_stat').html(std_count);
 	$('.naostro_stat').html(real);
 	$('.naostro6_stat').html(real6);
+}
+
+};
+
+})();
+
+// full screen layer
+KLogs.FSLayer = (function() {
+
+var layerElement = $("<div class='fs_layer' ></div>");
+
+return {
+show: function()
+{
+	$(layerElement).show();
+	$('body').addClass('stop-scrolling');
+},
+html: function(data)
+{
+	$(layerElement).html(data);
+},
+hide: function()
+{
+	$(layerElement).hide();
+	$('body').removeClass('stop-scrolling');
+},
+init: function()
+{
+	$(layerElement).appendTo('body');
+}
+
+};
+
+})();
+
+KLogs.Message = (function() {
+
+var el = '#f_message';
+var el_text = '#f_message_text';
+
+return {
+show: function(data, time)
+{
+	$(el_text).html(data);
+	$(el).show().delay(time*1000).fadeOut();
 }
 
 };

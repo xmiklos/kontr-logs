@@ -64,6 +64,47 @@ class File
 		
 		return $ret;
 	}
+	
+	public static function get_required_files($subject, $task)
+	{
+		$kp = Config::get_setting("kontr_path");
+		$files = Config::get_setting("files_dir");
+		$req_file = "{$kp}{$files}{$subject}/{$task}/required_files";
+		$contents = self::load_file($req_file);
+		
+		$files = explode("\n", $contents);
+		$ret = array();
+		
+		foreach($files as $file)
+		{
+			$f_name = trim($file);
+			
+			if($f_name!="")
+			{
+				$ret[] = $f_name;
+			}
+		}
+		
+		return $ret;
+	}
+	
+	public static function get_directory_files($dir)
+	{
+
+		$it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));
+		$files = array();
+
+		while($it->valid()) {
+
+		    if (!$it->isDot() && !array_key_exists($it->getFilename(), $files)) {
+			$files[$it->getFilename()]=$it->getSubPathName();
+		    }
+
+		    $it->next();
+		}
+		
+		return $files;
+	}
 }
 
 ?>

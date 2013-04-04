@@ -12,11 +12,11 @@ $login = Auth::get_username();
 		<form id="vyber" action="index.php" method="GET">
 		<span>Choose task and subject:</span>
 
-		<select name="task" onchange="poslat()">
+		<select name="task">
 		<?php $i->option_tasks(); ?>
 		</select>
 
-		<select name="subject" onchange="poslat()">
+		<select name="subject">
 		<?php $i->option_subjects(); ?>
 		</select>
 

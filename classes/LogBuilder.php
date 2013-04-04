@@ -83,10 +83,11 @@ function show()
 function show_notif()
 {
 	if(!$this->parser) return;
-
+	$i=1;
 	foreach($this->parser->parse_as_sub() as $sub)
 	{
-		echo "<div class='' id=''><span class='cp update_student'>{$sub->date} {$sub->name}</span></div>";
+		echo "<div class='' id=''><span class='cp update_student' data-user='{$sub->name}' >{$i}. {$sub->date} {$sub->name}</span></div>";
+		$i++;
 	}
 }
 

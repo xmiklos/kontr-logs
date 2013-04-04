@@ -30,6 +30,7 @@
 <title>_logs_</title>
 </head>
 <body id="top">
+<div id="wrapper">
 <?php
 
 ?>

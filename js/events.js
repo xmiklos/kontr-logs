@@ -6,6 +6,7 @@ KLogs.Filter.init();
 KLogs.Display.init();
 KLogs.Notif.init();
 KLogs.Stats.update();
+KLogs.FSLayer.init();
 
 // event bindings
 
@@ -38,11 +39,12 @@ $(".sort-alpha").click(function(e){
 	    return a.id > b.id ? 1 : -1;
 	});
 	
-	// todo refresh numbers
+	// todo refresh numbers if any
 });
 
 // notifications
 $(".enable-notif").click(KLogs.Notif.toggle);
+$("body").on("click", ".update_student", KLogs.Notif.update);
 
 // submission selector bind
 $("body").on("change", ".submission_selector", KLogs.SubSelector.change_selection);
@@ -56,6 +58,8 @@ $('#panel_enabler').mouseover(function(){
 	$("#head").css( "position","fixed" );
 	$("#space_filler").show();
 });
+
+// hide main panel with on window scroll
 $(window).scroll(function()
 {
 	if($(document).scrollTop() > 0)

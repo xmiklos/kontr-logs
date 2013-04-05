@@ -3,14 +3,13 @@
 	position: fixed;
 	display: none;
 	background-color: #fff;
-	border: 2px solid #114400;
-	border-top-width: 6px;
-	padding: 6px;
+	border: 1px solid #114400;
+	padding: 5px;
 	word-wrap: break-word;
 	overflow: auto;
 	left: 850px;
 	top: 0;
-	max-height: 100%;
+	max-height: 98%;
 	z-index: 20;
 }
 
@@ -47,10 +46,16 @@
 	padding: 0;
 }
 
+/*
+* information in diff_layer
+*/
 .diff_info {
 	padding: 0.4em 1em;
 }
 
+/*
+* general floating message
+*/
 #f_message {
 	position: fixed;
 	top: 64px;

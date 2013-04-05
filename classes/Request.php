@@ -29,7 +29,7 @@ class Request
 	
 	function getProperty($key)
 	{
-		if(isset($this->properties[$key]))
+		if(array_key_exists($key, $this->properties))
 		{
 			return $this->properties[$key];
 		}

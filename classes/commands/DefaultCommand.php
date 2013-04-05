@@ -3,7 +3,7 @@
 require_once "classes/Request.php";
 require_once "classes/Command.php";
 require_once "classes/IndexBuilder.php";
-require_once "classes/LogsCommand.php";
+require_once "LogsCommand.php";
 
 class DefaultCommand extends Command
 {

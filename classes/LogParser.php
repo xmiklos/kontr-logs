@@ -9,6 +9,8 @@ class LogParser
 	private $subject;
 	private $task;
 	private $student;
+	private $tutor;
+	private $tutors;
 
 	private function get_name($line)
 	{
@@ -22,6 +24,7 @@ class LogParser
 		$this->subject = $request->getProperty('subject');
 		$this->task = $request->getProperty('task');
 		$this->student = $request->getProperty('student');
+		$this->tutor = $request->getProperty('tutor');
 	}
 	
 	function parse_as_stud()
@@ -32,11 +35,31 @@ class LogParser
 		$sub = $this->subject." ".$this->task;
 		$stud_login = ($this->student?$this->student:"");
 		
+		$tutor_filter = false;
+		if($this->tutor && $this->tutor != "")
+		{
+			$tutor_filter = true;
+			$ret = File::get_tutors();
+			$this->tutors = $ret['tutor'];
+		}
+		
 		foreach($lines as $line)
 		{
 			if(strstr($line, $sub) && (!$this->student || strstr($line, $this->student." "))) // added space to student filename to avoid nasty bug
 			{
 				$name = $this->get_name($line);
+				
+				if($tutor_filter)
+				{
+					if(!array_key_exists($name, $this->tutors))
+					{
+						continue;
+					}
+					else if($this->tutor!=".{$this->tutors[$name]}")
+					{
+						continue;
+					}
+				}
 
 				if(array_key_exists($name, $students))
 				{

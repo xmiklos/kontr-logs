@@ -5,6 +5,7 @@
 <tr><td ><strong>Naostro:</strong></td><td class='naostro_stat' style='text-align: right'></td></tr>
 <tr><td ><strong>Naostro points=6:</strong></td><td class='naostro6_stat' style='text-align: right'></td></tr>
 </table>
+</div>
 <div id="notifbox"></div>
 
 <div id="dummy"></div>

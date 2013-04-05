@@ -3,14 +3,14 @@ $(document).ready(function() {
 // initializations
 
 KLogs.Filter.init();
-KLogs.Display.init();
+KLogs.DetailedResults.init();
 KLogs.Notif.init();
 KLogs.Stats.update();
 KLogs.FSLayer.init();
 
 // event bindings
 
-$("body").on("click", ".std", function(event){
+$("body").on("click", ".open_std", function(event){
   	$(this).parent().find(".odes").slideToggle('fast');
 });
 
@@ -54,7 +54,9 @@ $("body").on("change", ".submission_selector", KLogs.SubSelector.change_selectio
 $(".do-diff").click(KLogs.Diff.do_diff);
 
 // display main panel with panel enabler
-$('#panel_enabler').mouseover(function(){
+$('#panel_enabler').mouseenter(function(e){
+	if(e.pageX == 0 && e.pageY == $(document).scrollTop()) 
+		return; // to avoid chromium bug on linux - http://goo.gl/tBhBZ
 	$("#head").css( "position","fixed" );
 	$("#space_filler").show();
 });
@@ -68,5 +70,16 @@ $(window).scroll(function()
 		$("#head").css( "position","relative" );
 	}
 })
+
+// ajax request student data
+$('select[name="task"]').change(function()
+{
+	KLogs.Ajax.send();
+});
+
+$('#go_button').click(function()
+{
+	KLogs.Ajax.send();
+});
 
 });

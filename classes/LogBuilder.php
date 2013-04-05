@@ -46,12 +46,12 @@ function show()
 		
 		
 		echo "<div class='{$student->get_classes()} ' id='u_{$student->name}'>";
-		echo "<span class='number'></span>";
+		echo "<div class='open_std cp'><span class='number'></span>";
 		echo "<span class='std'>{$student->name}</span>";
 		echo "<span class='vpravo'>";
 			echo "<span class='green'>{$count[1]}</span> / <span class='yellow'>{$count[0]}</span>";
 		echo "</span>";
-		echo "<span class='cp vpravo'><a href='https://is.muni.cz/auth/osoba/{$student->uco}' target='_blank'>[IS]</a>&nbsp;</span>";
+		echo "<span class='cp vpravo'><a href='https://is.muni.cz/auth/osoba/{$student->uco}' target='_blank'>[IS]</a>&nbsp;</span></div>";
 		
 			echo "<div class='odes' id='{$student->name}'>";
 				foreach($student->submissions as $sub)
@@ -71,7 +71,7 @@ function show()
 						
 						echo $sub->summary;
 						echo "</span>";
-						echo "<span class='opensources cp vpravo' > [sources]</span>";
+						echo "<span class='opensources cp vpravo' > [details]</span>";
 					echo "</p>";
 				}
 			echo "</div>";

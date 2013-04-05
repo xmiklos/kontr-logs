@@ -9,7 +9,6 @@ $login = Auth::get_username();
 <div id="head">
 	(<?php echo $login; ?>)
 	<div class='opt' style="border: 0">
-		<form id="vyber" action="index.php" method="GET">
 		<span>Choose task and subject:</span>
 
 		<select name="task">
@@ -20,10 +19,9 @@ $login = Auth::get_username();
 		<?php $i->option_subjects(); ?>
 		</select>
 
-		<input type="submit" value="GO">
+		<input id="go_button" type="button" value="GO">
 
 		<a class="vpravo" href="#bottom">[bottom]</a><a class="vpravo" href="#top">[top]</a>
-		</form>
 	</div>
 
 
@@ -58,7 +56,7 @@ $login = Auth::get_username();
 		Options:
 		<span class="cp enable-notif" />[Enable notifications]</span>
 		<span class="cp expand-all" />[Expand all]</span>
-		<span class="cp do-diff" >[diff selected submissions]</span>
+		<span class="cp do-diff" >[Diff]</span>
 		<span class="cp sort-alpha" />[Sort alphabetically]</span>
 	</div>
 	<div></div>
@@ -71,4 +69,5 @@ $login = Auth::get_username();
 		<span class='purple'>bonus error only</span>
 	</div>
 </div>
-<div id="space_filler" style=" height: 191px; display: none"></div> 	
+<div id="space_filler" style=" height: 191px; display: none"></div>
+<div id="students_wrapper">	

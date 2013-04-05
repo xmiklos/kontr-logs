@@ -2,8 +2,52 @@
 var KLogs = window.KLogs || {};
 
 
+// Ajax
+KLogs.Ajax = (function() {
+
+var all = false;
+var req_sent = false;
+
+return {
+send: function()
+{
+		var tutor = $('#tutorfilter').val();
+		$('#students_wrapper').html('<h3>loading...</h3>');
+		if($(".expand-all").html() == '[Collapse all]') $(".expand-all").trigger('click');
+		$.post("index.php", {what: 'LogsCommand', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(), tutor: tutor},function(data)
+		{
+			KLogs.Notif.get();
+			if(tutor == "")
+			{
+				all = true;
+			}
+			else
+			{
+				all = false;
+			}
+			req_sent = true;
+			$('#students_wrapper').html(data);
+			KLogs.Stats.update();
+	  	}).fail(function(){
+	  		$('#students_wrapper').html('');
+	  		KLogs.Message.show("Ajax Error! Try again.", 3);
+	  	});
+},
+get_all: function()
+{
+	return all;
+},
+get_sent: function()
+{
+	return req_sent;
+}
+
+};
+
+})();
+
 // Display
-KLogs.Display = (function() {
+KLogs.DetailedResults = (function() {
 
 var detResElement = $("<div class='detailed_result' ></div>");
 var pin = false;
@@ -24,8 +68,8 @@ ret_obj.detailedResultsOff = function(e)
 
 ret_obj.bind = function()
 {
-	$('body').on("mouseenter", ".summary", KLogs.Display.detailedResultsOn)
-	.on("mouseleave", ".summary", KLogs.Display.detailedResultsOff)
+	$('body').on("mouseenter", ".summary", KLogs.DetailedResults.detailedResultsOn)
+	.on("mouseleave", ".summary", KLogs.DetailedResults.detailedResultsOff)
 	.on("click", ".summary", function(){
 		pin=!pin;
 	});
@@ -35,7 +79,7 @@ ret_obj.bind = function()
 ret_obj.init = function()
 {
 	$(detResElement).appendTo('body');
-	KLogs.Display.bind();
+	KLogs.DetailedResults.bind();
 }
 
 return ret_obj;
@@ -54,6 +98,16 @@ return {
 students: function()
 {
 	var filter = $(tutor_filter).val()+$(student_filter).val();
+	
+	var sender = $(this).attr('id');
+	
+	if(sender == "tutorfilter")
+	{
+		if(!KLogs.Ajax.get_all() && KLogs.Ajax.get_sent())
+		{
+			KLogs.Ajax.send();
+		}
+	}
 	
 	if(filter == "")
 	{
@@ -118,9 +172,9 @@ update: function()
 			}
 			else
 			{
-				$('#wrapper').append(data);
+				$('#students_wrapper').append(data);
 			}
-			$(id+" .std").parent().find(".odes").show();
+			$(id+" .open_std").parent().find(".odes").show();
 			$(id+" .std").promise().done(function()
 			{
 				$(document).scrollTo(id, 300);
@@ -159,6 +213,13 @@ toggle: function()
 		}, interval);
 	  	enabled = 1;
 	  	$('.enable-notif').html('[Disable notifications]');
+	}
+},
+disable: function()
+{
+	if(enabled)
+	{
+		KLogs.Notif.toggle();
 	}
 },
 bind: function()

@@ -2,7 +2,7 @@
 <?php
 require_once "classes/Request.php";
 require_once "classes/Command.php";
-require_once "classes/DefaultCommand.php";
+require_once "classes/commands/DefaultCommand.php";
 
 class CommandResolver
 {
@@ -28,7 +28,7 @@ class CommandResolver
 			return self::$default_cmd;
 		}
 		
-		$filepath = "classes/{$cmd}.php";
+		$filepath = "classes/commands/{$cmd}.php";
 		if(file_exists($filepath))
 		{
 			require_once($filepath);

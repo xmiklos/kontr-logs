@@ -28,8 +28,11 @@ class Student
 			self::$student_uco = $ret['uco'];
 		}
 		
-		$this->tutor = self::$student_tutor[$this->name];
-		$this->uco = self::$student_uco[$this->name];
+		if(array_key_exists($this->name, self::$student_tutor))
+		{
+			$this->tutor = self::$student_tutor[$this->name];
+			$this->uco = self::$student_uco[$this->name];
+		}
 	}
 
 	function add_sub($report)	

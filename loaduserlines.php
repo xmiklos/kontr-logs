@@ -68,8 +68,8 @@ function nice_tests($line, &$bonus_bad, &$error)
 		{
 		
 			$str = $str."<span onclick=\\\"med_closeDescription(1)\\\" class=\\\"".((strstr($chunk, 'ok') != false)?"blue":"red")."\\\">".$chunk."</span><br />";
-			if(strstr($chunk, 'ok') == false && strstr($chunk, 'bonus') == false) $error = true;
 			if((!$error && strstr($chunk, 'ok') == false && strstr($chunk, 'bonus') != false)) $bonus_bad=true;
+			else if(strstr($chunk, 'ok') == false) $error = true;
 		}
 		$prvy = true;
 	}
@@ -138,7 +138,7 @@ if($k == '')
 						$global_naostro6 = true;
 					}
 			$folder = $ruser."_".$datum[0];
-			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".($bonus_bad?"purple":(!$error?"blue":"red"))."' onmouseout='med_closeDescription()' onmousemove='med_mouseMoveHandler(event,\"".$results."\")' onclick='med_disable_des_hide()'>".$sum."</span>";
+			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".(!$error?($bonus_bad?"purple":"blue"):"red")."' onmouseout='med_closeDescription()' onmousemove='med_mouseMoveHandler(event,\"".$results."\")' onclick='med_disable_des_hide()'>".$sum."</span>";
 			echo '<span class="cp vpravo" onclick=\'showcode("'.$predmet.'","'.$uloha.'","'.$folder.'")\'> [sources]</span></p>';
 		
 		//echo '</div>';

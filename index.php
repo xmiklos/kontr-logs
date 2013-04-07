@@ -241,8 +241,9 @@ function nice_tests($line, &$bonus_bad, &$error)
 		{
 		
 			$str = $str."<span onclick=\\\"med_closeDescription(1)\\\" class=\\\"".((strstr($chunk, 'ok') != false)?"blue":"red")."\\\">".$chunk."</span><br />";
-			if(strstr($chunk, 'ok') == false && strstr($chunk, 'bonus') == false) $error = true;
 			if((!$error && strstr($chunk, 'ok') == false && strstr($chunk, 'bonus') != false)) $bonus_bad=true;
+			else if(strstr($chunk, 'ok') == false) $error = true;
+			
 		}
 		$prvy = true;
 	}
@@ -323,7 +324,7 @@ $user='';
 				}
 			}
 			$folder = $students[$i]."_".$datum[0];
-			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".($bonus_bad?"purple":(!$error?"blue":"red"))."' onmouseout='med_closeDescription()' onmouseover='med_mouseMoveHandler(event,\"".$results."\")' onclick='med_disable_des_hide()'>".$sum."</span>";
+			echo '<p class="ode '.($naostro?"yellow":"green").'">'.$nice." <input id='".$folder."' onchange='changeTick(this)' type='checkbox' /> <span class='".(!$error?($bonus_bad?"purple":"blue"):"red")."' onmouseout='med_closeDescription()' onmouseover='med_mouseMoveHandler(event,\"".$results."\")' onclick='med_disable_des_hide()'>".$sum."</span>";
 			echo '<span class="cp vpravo" onclick=\'showcode("'.$predmet.'","'.($uloha==""?$datum[4]:$uloha).'","'.$folder.'")\'> [sources]</span></p>';
 		}
 		$o = count($l) - $n;
@@ -335,6 +336,7 @@ $user='';
 		$tu = (array_key_exists($students[$i], $stud_tutor)?$stud_tutor[$students[$i]]:"");
 		$is = "";
 		if(array_key_exists($students[$i], $ucos)) $is = "<span class='cp vpravo'><a href='https://is.muni.cz/auth/osoba/".$ucos[$students[$i]]."' target='_blank'>[IS]</a>&nbsp;</span>";
+		else $is = "<span class='cp vpravo'><img src='blizz.gif' title='WoW players know...' />&nbsp;</span>";
 		echo '<div class="user '.($tu==""?"notutor":$tu).' '.(in_array($students[$i], $naostro6)?"naostro6b":(in_array($students[$i], $naostroa)?"naostro":"nanecisto")).'" id="u_'.$students[$i].'" ><span class="number"></span><span class=\'std\' onclick="tooogle(\''.$students[$i].'\')">'.$students[$i]." </span><span class='vpravo'><span class='green'>".$n."</span> / <span class='yellow'>".$o."</span></span>".$is;
 		echo $contents;
 		echo '</div>';

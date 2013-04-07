@@ -20,10 +20,25 @@ $valgrind='';
 $inputfile='';
 if($grind != 'false') $valgrind = 'valgrind --leak-check=full ';
 if($input != '') $inputfile = ' < '.$input;
+$stdout="";
 
+shell_exec($valgrind."./binfile > stdout.out 2> errors.out".$inputfile." ".$args." & \n echo $! > process.id");
+	$ret=0;
+	$counter=0;
+	while(!$ret)
+	{
+		system("ps -p `cat process.id` &> /dev/null", $ret);
+		sleep(1);
+		$counter++;
+		if($counter > 60)
+		{
+			system("kill -9 `cat process.id`");
+			$stdout="<strong>Beh programu bol nasilne ukonceny. Doba behu prekrocila povoleny limit.</strong><br />";
+			break;
+		}
+	}
 
-shell_exec($valgrind."./binfile > stdout.out 2> errors.out".$inputfile." ".$args);
-	$stdout = htmlentities(file_get_contents('stdout.out'));
+	$stdout .= htmlentities(file_get_contents('stdout.out'));
 	$stdout  = str_replace("\n", '<br />', $stdout);
 	$f1 = htmlentities(file_get_contents('errors.out'));
 	$output = str_replace("\n", '<br />', $f1);

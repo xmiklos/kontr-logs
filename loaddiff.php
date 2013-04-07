@@ -20,7 +20,7 @@ echo $f2.'<br />';
 echo $f1.'<br />';
 
 ob_start();
-system("diff ".$f2." ".$f1, $ret);
+system("diff -u ".$f2." ".$f1, $ret);
 $contents = ob_get_contents();
 ob_end_clean();
 

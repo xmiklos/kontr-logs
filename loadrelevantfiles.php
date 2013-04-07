@@ -11,7 +11,7 @@ exit;
 
 function recDir($path, &$fnames, &$fpaths, &$sha)
 {
-$LOAD_FILE_TYPES = array('.c', '.h', '.in', '.out');
+$LOAD_FILE_TYPES = array('.c', '.h', '.in', '.out', '.html');
 
 	$hand=opendir($path);
 
@@ -27,7 +27,7 @@ $LOAD_FILE_TYPES = array('.c', '.h', '.in', '.out');
 		}
 		foreach($LOAD_FILE_TYPES as $type)
 		{
-			if((strstr($fil, $type) !== false) && (strstr($fil, 'grind') === false) && (strstr($fil, '.html') === false)) 
+			if((strstr($fil, $type) !== false) && (strstr($fil, 'grind') === false) && (strstr($fil, '.c.html') === false) && (strstr($fil, '.h.html') === false) && (strstr($fil, '.cpp.html') === false)) 
 			{
 				$sh = sha1_file($path.$fil);
 				if(!in_array($sh, $sha) || !in_array($fil, $fnames))
@@ -51,8 +51,9 @@ $begin = $f.$_SESSION['predmet'].$s.$_SESSION['uloha'].$s.$_REQUEST['odevzdani']
 $mena;
 $cesty;
 $filestocompile='';
+$sha = array();
 
-recDir($begin, $mena, $cesty);
+recDir($begin, $mena, $cesty, $sha);
 system("mkdir tmp 2> /dev/null");
 system("rm -rf tmp/".sha1(session_id()));
 system("mkdir tmp/".sha1(session_id()));
@@ -71,9 +72,10 @@ for($i = 0; $i < count($mena); $i++)
 	$prefix = 1;
 	$name;
 	$newname = $mena[$i];
+	$ret=1;
 	do
 	{	
-		system("ls ./tmp/".sha1(session_id())."/".$newname." > /dev/null", $ret);
+		system("ls ./tmp/".sha1(session_id())."/".$newname." &> /dev/null", $ret);
 		$name = $newname;
 		$newname = $prefix."_".$mena[$i];
 		$prefix++;

@@ -44,7 +44,7 @@ private function do_diff()
 		$file1 = "{$this->stage_path}{$this->sub1}/{$sub_path}";
 		$file2 = "{$this->stage_path}{$this->sub2}/{$sub_path}";
 		$ret;
-		system("diff -u {$file1} {$file2}", $ret);
+		system("diff -U10000 -b -u -t {$file1} {$file2}", $ret);
 		$this->diff_return[$key] = $ret;
 		if($ret > 1)
 		{
@@ -52,7 +52,7 @@ private function do_diff()
 		}
 		else
 		{
-			$this->diff_content[$key] = ob_get_contents();
+			$this->diff_content[$key] = htmlspecialchars(ob_get_contents());
 		}
 		ob_end_clean();
 	}

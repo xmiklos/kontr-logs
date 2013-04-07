@@ -28,6 +28,8 @@ send: function()
 			req_sent = true;
 			$('#students_wrapper').html(data);
 			KLogs.Stats.update();
+			KLogs.Filter.students();
+			if (KLogs.Cookies.check('logs_settings') && KLogs.Cookies.get('logs_settings').split(",")[1] == "true") $(".sort-alpha").trigger('click');
 	  	}).fail(function(){
 	  		$('#students_wrapper').html('');
 	  		KLogs.Message.show("Ajax Error! Try again.", 3);
@@ -186,6 +188,7 @@ update: function()
 },
 get: function()
 {
+	if(!enabled) return;
 	$.post("index.php", {what: 'NotifCommand', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val()},function(data)
 		{
 			$('.notif_box').html(data).scrollTo('max', 800);
@@ -206,12 +209,12 @@ toggle: function()
 	}
 	else
 	{
+		enabled = 1;
 		$('.notif_box').show().html('loading...'); // todo task and subject
 		KLogs.Notif.get();
 		id=self.setInterval(function(){
 			KLogs.Notif.get();
 		}, interval);
-	  	enabled = 1;
 	  	$('.enable-notif').html('[Disable notifications]');
 	}
 },
@@ -280,6 +283,7 @@ get_selection: function()
 
 })();
 
+// diff
 KLogs.Diff = (function() {
 	
 
@@ -290,12 +294,11 @@ do_diff: function()
 	if(KLogs.SubSelector.get_count() != 2)
 	{
 		
-		KLogs.Message.show("You have to select exactly 2 submissions!", 3);
+		KLogs.Message.show("Please select exactly 2 submissions!", 3);
 		KLogs.SubSelector.reset();
 	}
 	else
 	{
-		// todo diff
 		KLogs.FSLayer.show();
 		KLogs.FSLayer.html('loading...');
 		var subs = KLogs.SubSelector.get_selection();
@@ -310,9 +313,10 @@ do_diff: function()
 				KLogs.FSLayer.hide();
 				KLogs.SubSelector.reset();
 			});
-	  	}).fail(function(){
+	  	}).fail(function(jqXHR, textStatus, errorThrown){
 	  		KLogs.FSLayer.hide();
-	  		KLogs.Message.show("Ajax Error! Try again.", 3);
+	  		KLogs.SubSelector.reset();
+	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
 	  	});
 	}
 }
@@ -386,6 +390,7 @@ init: function()
 
 })();
 
+// message
 KLogs.Message = (function() {
 
 var el = '#f_message';
@@ -396,6 +401,128 @@ show: function(data, time)
 {
 	$(el_text).html(data);
 	$(el).show().delay(time*1000).fadeOut();
+}
+
+};
+
+})();
+
+// cookies
+KLogs.Cookies = (function(){
+
+
+return {
+get: function(c_name)
+{
+	if (document.cookie.length>0)
+	  {
+	  c_start=document.cookie.indexOf(c_name + "=");
+	  if (c_start!=-1)
+	    {
+	    c_start=c_start + c_name.length+1;
+	    c_end=document.cookie.indexOf(";",c_start);
+	    if (c_end==-1) c_end=document.cookie.length;
+	    return unescape(document.cookie.substring(c_start,c_end));
+	    }
+	  }
+	return "";
+},
+set: function(c_name,value,expiredays)
+{
+	var exdate=new Date();
+	exdate.setDate(exdate.getDate()+expiredays);
+	document.cookie=c_name+ "=" +escape(value)+
+	((expiredays==null) ? "" : ";expires="+exdate.toGMTString());
+},
+check: function(c_name)
+{
+	username=KLogs.Cookies.get(c_name);
+	if (username!=null && username!="")
+	  {
+	  	return true;
+	  }
+	else
+	  {
+		return false;
+	  }
+}
+
+}
+
+})();
+
+KLogs.Settings = (function() {
+
+return {
+save: function()
+{
+	var a = [];
+	$('.user_setting').each(function (i) {
+		if($(this).is(':checked')) {
+			a[i]=true;	
+		}
+		else
+		{
+			a[i]=false;
+		}
+	});
+	
+	KLogs.Cookies.set('logs_settings', a.toString(), 365);
+},
+apply: function()
+{
+	if(KLogs.Cookies.check('logs_settings'))
+	{
+		var settings = KLogs.Cookies.get('logs_settings');
+		var a = settings.split(",");
+		$('.user_setting').each(function (i) {
+			if(a[i] == "true") {
+				$(this).prop('checked', true);	
+			}
+			else
+			{
+				$(this).prop('checked', false);	
+			}
+		});
+		
+		var login = $('#login').html();
+		
+		for(i=0; i<a.length; i++)
+		{
+			if(a[i] == "true")
+			{
+				switch(i)
+				{
+					case 0: $("#tutorfilter option[value='."+login+"']").prop('selected', true); break;
+					case 1: $(".sort-alpha").trigger('click'); break;
+					case 2: $("#studfilter").prop("selectedIndex", 3); break;
+					case 3: 
+						var task_i = KLogs.Cookies.get('last_task');
+						var subj_i = KLogs.Cookies.get('last_subject');
+						$('select[name="subject"]').prop("selectedIndex", subj_i);
+						$('select[name="task"]').prop("selectedIndex", task_i).trigger('change');
+						break;
+				}
+			}
+		}
+	}
+}
+
+};
+
+})();
+
+KLogs.SubDetails = (function() {
+
+return {
+show: function()
+{
+	
+		KLogs.FSLayer.show();
+		KLogs.FSLayer.html('loading...');
+	  	KLogs.FSLayer.hide();
+	  	KLogs.Message.show("TO DO!", 3);
+
 }
 
 };

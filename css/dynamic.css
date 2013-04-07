@@ -46,11 +46,44 @@
 	padding: 0;
 }
 
+.diff_diff {
+	font-family: monospace, "Courier New", Courier;
+	font-size: 0.7em;
+	max-height: 90%;
+}
+
+.diff_diff table {
+	border-spacing: 0;
+	border: 1px solid #cccccc;
+	margin-top: 10px;
+}
+
 /*
 * information in diff_layer
 */
 .diff_info {
 	padding: 0.4em 1em;
+}
+
+.diff_plus {
+	background-color: #ddffdd;
+}
+
+.diff_minus {
+	background-color: #ffdddd;
+}
+
+.diff_line {
+	
+}
+
+.diff_ln {
+	text-align: right;
+	border-right: 1px solid #cccccc;
+}
+
+table .diff_head {
+	border-bottom: 1px solid #cccccc;
 }
 
 /*
@@ -63,5 +96,23 @@
 	width: 300px;
 	display: none;
 	z-index: 100;
+}
+
+#settings_dialog {
+	display: none;
+}
+
+.settings_dialog {
+	font-size: 0.7em;
+}
+
+.settings_dialog table,  .settings_dialog tr{
+	border: 1px solid #cccccc;
+	border-collapse: collapse;
+}
+.settings_dialog td
+{
+	border: 1px solid #cccccc;
+	padding: 4px;
 }
 

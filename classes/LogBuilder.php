@@ -71,7 +71,7 @@ function show()
 						
 						echo $sub->summary;
 						echo "</span>";
-						echo "<span class='opensources cp vpravo' > [details]</span>";
+						echo "<span class='open_details cp vpravo' > [details]</span>";
 					echo "</p>";
 				}
 			echo "</div>";

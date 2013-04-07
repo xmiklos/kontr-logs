@@ -7,7 +7,7 @@ $login = Auth::get_username();
 ?>
 <div id="panel_enabler" ></div>
 <div id="head">
-	(<?php echo $login; ?>)
+	(<span id="login"><?php echo $login; ?></span>)
 	<div class='opt' style="border: 0">
 		<span>Choose task and subject:</span>
 
@@ -19,7 +19,7 @@ $login = Auth::get_username();
 		<?php $i->option_subjects(); ?>
 		</select>
 
-		<input id="go_button" type="button" value="GO">
+		<input id="go_button" type="button" value="Send / Refresh">
 
 		<a class="vpravo" href="#bottom">[bottom]</a><a class="vpravo" href="#top">[top]</a>
 	</div>
@@ -58,6 +58,7 @@ $login = Auth::get_username();
 		<span class="cp expand-all" />[Expand all]</span>
 		<span class="cp do-diff" >[Diff]</span>
 		<span class="cp sort-alpha" />[Sort alphabetically]</span>
+		<span class="cp open-settings" />[Settings]</span>
 	</div>
 	<div></div>
 	<div class='opt'>

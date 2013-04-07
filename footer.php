@@ -14,6 +14,29 @@
 <span id="f_message_text"></span>
 </p>
 </div>
+
+<div id="settings_dialog" title="Settings">
+<p>These settings are saved into your browser and automatically applied, when you enter the application.</p>
+<table>
+<tr>
+	<td>Use logged user as tutor filter</td>
+	<td><input class="user_setting" type="checkbox" /></td>
+</tr>
+<tr>
+	<td>Sort alphabetically (applied on every request)</td>
+	<td><input class="user_setting" type="checkbox" /></td>
+</tr>
+<tr>
+	<td>Use filter "naostro submissions"</td>
+	<td><input class="user_setting" type="checkbox" /></td>
+</tr>
+<tr>
+	<td>Open last used task and subject</td>
+	<td><input class="user_setting" type="checkbox" /></td>
+</tr>
+</table>
+</div>
+
 </div>
 <div style="text-align: center">Please send feedback to xmiklos@fi.muni.cz</div>
 </body>

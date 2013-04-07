@@ -75,11 +75,59 @@ $(window).scroll(function()
 $('select[name="task"]').change(function()
 {
 	KLogs.Ajax.send();
+	KLogs.Cookies.set('last_task', $(this).prop("selectedIndex"), 365);
+	KLogs.Cookies.set('last_subject', $('select[name="subject"]').prop("selectedIndex"), 365);
 });
 
 $('#go_button').click(function()
 {
 	KLogs.Ajax.send();
+	KLogs.Cookies.set('last_task', $('select[name="task"]').prop("selectedIndex"), 365);
+	KLogs.Cookies.set('last_subject', $('select[name="subject"]').prop("selectedIndex"), 365);
 });
 
+// settings dialog
+$('.open-settings').click(function(){
+	
+	if(KLogs.Cookies.check('logs_settings'))
+	{
+		var settings = KLogs.Cookies.get('logs_settings');
+		var a = settings.split(",");
+		$('.user_setting').each(function (i) {
+			if(a[i] == "true") {
+				$(this).prop('checked', true);	
+			}
+			else
+			{
+				$(this).prop('checked', false);	
+			}
+		});
+	}
+
+	$('#settings_dialog').dialog({
+	resizable: false,
+	modal: true,
+	width: 500,
+	dialogClass: "settings_dialog",
+	buttons: {
+		"Save": function() {
+			KLogs.Settings.save();
+			$(this).dialog( "destroy" );
+		}
+	},
+	close: function(){
+		$('.user_setting').prop('checked', false);
+	}
+    });
 });
+
+$("body").on("click", ".open_details", function(){
+	KLogs.SubDetails.show();
+});
+
+// apply settings
+KLogs.Settings.apply();
+
+});
+
+

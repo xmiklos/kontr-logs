@@ -15,7 +15,7 @@ private $subject;
 function __construct(Request $request)
 {
 	parent::__construct($request);
-	$logfile = Config::instance()->get_setting("report_path");
+	$logfile = Config::get_setting("report_path");
 	$log = File::load_file($logfile);
 	
 	if($this->request_ok($request))

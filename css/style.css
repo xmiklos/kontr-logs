@@ -61,12 +61,14 @@ body {
 	border: 1px solid silver;
 	margin: 5px;
 	padding: 2px;
+	border-radius: 5px;
 }
 
 .ode{
 	//border-bottom: 1px dashed black;
 	margin: 2px;
 	padding: 1px;
+	border-radius: 5px;
 }
 
 .yellow{

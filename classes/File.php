@@ -11,7 +11,7 @@ class File
 	
 	public static function get_tasks($subject)
 	{
-		$kontr = Config::instance()->get_setting("kontr_path");
+		$kontr = Config::get_setting("kontr_path");
 		$path=$kontr."_tmp_/".$subject."/";
 		$hand=opendir($path);
 		$tasks=array();
@@ -34,7 +34,7 @@ class File
 	
 	public static function get_subjects()
 	{
-		$values = Config::instance()->get_setting('subjects');
+		$values = Config::get_setting('subjects');
 		
 		return explode(" ", $values);
 	}

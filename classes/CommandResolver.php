@@ -22,19 +22,26 @@ class CommandResolver
 	function getCommand(Request $request)
 	{
 		$cmd = $request->getProperty('what');
+		$allowed_commands = Config::get_setting("allowed_commands");
+		$allowed_commands = Config::split($allowed_commands);
 		
 		if(!$cmd)
 		{
 			return self::$default_cmd;
 		}
 		
-		$filepath = "classes/commands/{$cmd}.php";
+		if(!in_array($cmd, $allowed_commands))
+		{
+			return null;
+		}
+	
+		$filepath = "classes/commands/{$cmd}Command.php";
 		if(file_exists($filepath))
 		{
 			require_once($filepath);
-			if (class_exists($cmd))
+			if (class_exists("{$cmd}Command"))
 			{
-				$cmd_class = new ReflectionClass($cmd);
+				$cmd_class = new ReflectionClass("{$cmd}Command");
 				if ($cmd_class->isSubClassOf(self::$base_cmd))
 				{
 					return $cmd_class->newInstance();

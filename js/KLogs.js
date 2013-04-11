@@ -14,7 +14,7 @@ send: function()
 		var tutor = $('#tutorfilter').val();
 		$('#students_wrapper').html('<h3>loading...</h3>');
 		if($(".expand-all").html() == '[Collapse all]') $(".expand-all").trigger('click');
-		$.post("index.php", {what: 'LogsCommand', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(), tutor: tutor},function(data)
+		$.post("index.php", {what: 'Logs', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(), tutor: tutor},function(data)
 		{
 			KLogs.Notif.get();
 			if(tutor == "")
@@ -42,6 +42,20 @@ get_all: function()
 get_sent: function()
 {
 	return req_sent;
+},
+get_tasks: function(fn)
+{
+	$.post("index.php", {what: 'Tasks', subject: $('select[name="subject"]').val()},function(data)
+		{
+			$('select[name="task"]').html(data);
+			$('#students_wrapper').html('');
+			KLogs.Notif.get();
+			KLogs.Stats.update();
+			if (fn) fn();
+	  	}).fail(function(){
+	  		$('#students_wrapper').html('');
+	  		KLogs.Message.show("Ajax Error!", 4);
+	  	});
 }
 
 };
@@ -166,7 +180,7 @@ update: function()
 	var uname = $(this).data('user');
 	var id = "#u_"+uname;
 	
-		$.post("index.php", {what: 'LogsCommand', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(), student: uname},function(data)
+		$.post("index.php", {what: 'Logs', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(), student: uname},function(data)
 		{
 			if($(id).length > 0)
 			{
@@ -189,7 +203,7 @@ update: function()
 get: function()
 {
 	if(!enabled) return;
-	$.post("index.php", {what: 'NotifCommand', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val()},function(data)
+	$.post("index.php", {what: 'Notif', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val()},function(data)
 		{
 			$('.notif_box').html(data).scrollTo('max', 800);
 			
@@ -303,7 +317,7 @@ do_diff: function()
 		KLogs.FSLayer.html('loading...');
 		var subs = KLogs.SubSelector.get_selection();
 		$.post("index.php", 
-		{what: 'DiffCommand', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(), subs: subs},
+		{what: 'Diff', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(), subs: subs},
 		function(data)
 		{
 			KLogs.FSLayer.html(data);
@@ -500,7 +514,9 @@ apply: function()
 						var task_i = KLogs.Cookies.get('last_task');
 						var subj_i = KLogs.Cookies.get('last_subject');
 						$('select[name="subject"]').prop("selectedIndex", subj_i);
-						$('select[name="task"]').prop("selectedIndex", task_i).trigger('change');
+						KLogs.Ajax.get_tasks(function(){
+							$('select[name="task"]').prop("selectedIndex", task_i).trigger('change');
+						});
 						break;
 				}
 			}

@@ -18,7 +18,7 @@ class LogParser
 		return $parts[1];
 	}
 	
-	function __construct($log_content, Request $request) // to do, parse only stud. subs with specified parameters
+	function __construct($log_content, Request $request)
 	{
 		$this->log_content = $log_content;
 		$this->subject = $request->getProperty('subject');

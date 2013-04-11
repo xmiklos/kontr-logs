@@ -8,7 +8,6 @@ require_once "classes/Auth.php";
 class Controller
 {
 
-	private $config;
 	private function __construct() {}
 	
 	static function run()
@@ -20,12 +19,9 @@ class Controller
 	
 	function init()
 	{
-		$this->config = Config::instance();
-		$this->config->init();
+		Config::init();
 		
-		//session_start();
-		
-		$auth_class = $this->config->get_setting("authenticate");
+		$auth_class = Config::get_setting("authentication");
 		
 		if($auth_class)
 		{
@@ -34,8 +30,6 @@ class Controller
 			$auth = $ref->newInstance();
 			$auth->login();
 		}
-		
-		//session_start();
 	}
 	
 	function handle_request()

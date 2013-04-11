@@ -59,6 +59,7 @@ $login = Auth::get_username();
 		<span class="cp do-diff" >[Diff]</span>
 		<span class="cp sort-alpha" />[Sort alphabetically]</span>
 		<span class="cp open-settings" />[Settings]</span>
+		<span class="cp open-system-logs" />[Kontr system logs]</span>
 	</div>
 	<div></div>
 	<div class='opt'>

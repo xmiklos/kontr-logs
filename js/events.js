@@ -125,8 +125,54 @@ $("body").on("click", ".open_details", function(){
 	KLogs.SubDetails.show();
 });
 
+// change subject
+$("select[name='subject']").change(function(){
+	KLogs.Ajax.get_tasks();
+});
+
 // apply settings
 KLogs.Settings.apply();
+
+$(".open-system-logs").click(function()
+{
+	KLogs.FSLayer.show();
+	KLogs.FSLayer.html('loading...');
+	$.post("index.php", 
+	{what: 'SystemLogs'},
+	function(data)
+	{
+		KLogs.FSLayer.html(data);
+		$("#system_logs_close").button().click(function( event ) 
+		{
+			KLogs.FSLayer.html('');
+			KLogs.FSLayer.hide();
+		});
+		$("#system_logs_reload").button().click(function( event ) 
+		{
+			var active = $("#system_logs_tabs").tabs("option", "active");
+			$("#system_logs_tabs").tabs("load", active);
+		});
+		$("#system_logs_tabs").tabs({ heightStyle: "fill", load: function( event, ui ) {
+			$("#system_logs_tabs div").scrollTo('max', 300);
+		}, 
+		beforeLoad: function( event, ui ) {
+			ui.jqXHR.error(function() {
+			  ui.panel.html("Ajax Error!");
+			});
+			$("#system_logs_tabs div").html('loading...')
+		}
+		});
+  	}).fail(function(jqXHR, textStatus, errorThrown){
+  		KLogs.FSLayer.hide();
+  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
+  	});
+});
+
+
+$(window).resize(function() {
+  $("#system_logs_tabs").tabs("refresh");
+  $("#diff_tabs").tabs("refresh");
+});
 
 });
 

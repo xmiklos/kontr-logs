@@ -39,13 +39,14 @@ class File
 		return explode(" ", $values);
 	}
 	
-	public static function get_tutors()
+	public static function get_student_info()
 	{
 		$contents = self::load_file(Config::get_setting("student_info_file"));
 		$pieces = explode("\n", $contents);
 		$ret = array();
 		$student_tutor = array();
 		$student_uco = array();
+		$student_full_name = array();
 		
 		foreach($pieces as $value)
 		{
@@ -57,10 +58,12 @@ class File
 	
 			$student_tutor[$student] = $tutor;
 			$student_uco[$student] = $parts[2];
+			$student_full_name[$student] = $parts[4];
 		}
 		
 		$ret['tutor'] = $student_tutor;
 		$ret['uco'] = $student_uco;
+		$ret['full_name'] = $student_full_name;
 		
 		return $ret;
 	}

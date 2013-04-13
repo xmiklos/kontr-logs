@@ -72,23 +72,23 @@ body {
 }
 
 .yellow{
-	background-color: yellow;
+	background-color: yellow; /*#FFFF4D*/
 }
 
 .purple{
-	background-color: violet;
+	background-color: violet; /*#D699EB*/
 }
 
 .green {
-	background-color: #1f3;
+	background-color: #1f3; /*#99FF66*/
 }
 
 .blue{
-	background-color: #9cf;
+	background-color: #9cf; /*70B8FF*/
 }
 
 .red {
-	background-color: #f40;
+	background-color: #f40; /*FF5C33f40*/
 }
 
 .vpravo{
@@ -238,4 +238,13 @@ body {
 
 html, body {
 	height: 100%;
+}
+
+.new_sub
+{
+	color: red;
+}
+
+.tooltip-styling {
+	max-width: 500px!important;
 }

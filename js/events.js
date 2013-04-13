@@ -10,9 +10,15 @@ KLogs.FSLayer.init();
 
 // event bindings
 
+KLogs.Resubmission.bind();
+
 $("body").on("click", ".open_std", function(event){
   	$(this).parent().find(".odes").slideToggle('fast');
 });
+
+if (window.location.hash) {
+    $(window.location.hash+" .open_std").trigger('click');
+}
 
 // expand/collapse button
 $(".expand-all").click(function(e){
@@ -173,6 +179,10 @@ $(window).resize(function() {
   $("#system_logs_tabs").tabs("refresh");
   $("#diff_tabs").tabs("refresh");
 });
+
+// tooltips
+
+$(document).tooltip({ tooltipClass: "tooltip-styling" });
 
 });
 

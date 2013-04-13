@@ -37,6 +37,8 @@
 </table>
 </div>
 
+<div id="submission_dialog" title="Resubmission tool"></div>
+
 </div>
 <div style="text-align: center">Please send feedback to xmiklos@fi.muni.cz</div>
 </body>

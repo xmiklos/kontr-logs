@@ -281,7 +281,19 @@ reset: function()
 	$(selectors).attr('checked', false);
 	count_selected = 0;
 },
-get_selection: function()
+get_submission_selection: function()
+{
+	var str='';
+	$(selectors).each(function (i) {
+		if($(this).is(':checked')) {
+			str += (str!=''?' ':'')+$(this).parent().data('login')+":"+
+			+$(this).parent().data('revision')+":"+$(this).parent().data('type');
+		}
+	});
+	
+	return str;
+},
+get_folder_selection: function()
 {
 	var str='';
 	$(selectors).each(function (i) {
@@ -315,7 +327,7 @@ do_diff: function()
 	{
 		KLogs.FSLayer.show();
 		KLogs.FSLayer.html('loading...');
-		var subs = KLogs.SubSelector.get_selection();
+		var subs = KLogs.SubSelector.get_folder_selection();
 		$.post("index.php", 
 		{what: 'Diff', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(), subs: subs},
 		function(data)
@@ -507,10 +519,14 @@ apply: function()
 			{
 				switch(i)
 				{
-					case 0: $("#tutorfilter option[value='."+login+"']").prop('selected', true); break;
+					case 0: if($(".user").length != 0) break;
+						$("#tutorfilter option[value='."+login+"']").prop('selected', true); break;
 					case 1: $(".sort-alpha").trigger('click'); break;
-					case 2: $("#studfilter").prop("selectedIndex", 3); break;
+					case 2: if($(".user").length != 0) break;
+						$("#studfilter").prop("selectedIndex", 3); break;
 					case 3: 
+						var b = $(".user");
+						if($(".user").length != 0) break;
 						var task_i = KLogs.Cookies.get('last_task');
 						var subj_i = KLogs.Cookies.get('last_subject');
 						$('select[name="subject"]').prop("selectedIndex", subj_i);
@@ -539,6 +555,81 @@ show: function()
 	  	KLogs.FSLayer.hide();
 	  	KLogs.Message.show("TO DO!", 3);
 
+}
+
+};
+
+})();
+
+KLogs.Resubmission = (function() {
+
+return {
+show_dialog: function()
+{
+	if(KLogs.SubSelector.get_count() <= 0)
+	{
+		KLogs.Message.show("Please select at least 1 submission!", 3);
+	}
+	else
+	{
+		var all_subs = KLogs.SubSelector.get_submission_selection();
+		var t = $('select[name="task"]').val();
+		var s = $('select[name="subject"]').val();
+		var subs = all_subs.split(" ");
+		$('#submission_dialog').html("<p>Following submissions will be resubmitted:</p><div class='resub_list'></div>");
+		var info='<strong>'+s+': '+t+'</strong>';
+
+		for(var i=0; i < subs.length; i++)
+		{
+			var spl = subs[i].split(":");
+			info += '<div>'+spl[0]+' - rev. '+spl[1]+'</div>';
+			
+		}
+		
+		$('.resub_list').html(info);
+		
+		$('#submission_dialog').dialog({
+		resizable: false,
+		modal: true,
+		width: 500,
+		dialogClass: "settings_dialog",
+		buttons: {
+			"Submit": function() {
+				KLogs.Resubmission.submit();
+				KLogs.SubSelector.reset();
+				$(this).dialog("option", "buttons", { "Close": function(){
+					$(this).dialog("destroy");
+					$('#submission_dialog').hide();
+				}});
+			},
+			"Cancel": function()
+			{
+				$(this).dialog("destroy");
+			}
+		}
+		});
+		
+	}
+},
+submit: function()
+{
+	$('.resub_list').html('sending...');
+	$.post("index.php", { what: 'Submit', subject: $('select[name="subject"]').val(),
+				task: $('select[name="task"]').val(),
+				subs: KLogs.SubSelector.get_submission_selection()
+		},
+		function(data)
+		{
+			$('#submission_dialog').html(data);
+			
+	  	}).fail(function(){
+	  		$('.resub_list').html('');
+	  		KLogs.Message.show("Ajax Error!", 4);
+	  	});
+},
+bind: function()
+{
+	$(".open-resub-dialog").click(KLogs.Resubmission.show_dialog);
 }
 
 };

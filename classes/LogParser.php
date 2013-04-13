@@ -33,19 +33,27 @@ class LogParser
 		$lines = explode("\n", $this->log_content);
 		
 		$sub = $this->subject." ".$this->task;
-		$stud_login = ($this->student?$this->student:"");
+		
+		if($this->student)
+		{
+			$stud_login = $this->student;
+		}
+		else
+		{
+			$stud_login = "";
+		}
 		
 		$tutor_filter = false;
 		if($this->tutor && $this->tutor != "")
 		{
 			$tutor_filter = true;
-			$ret = File::get_tutors();
+			$ret = File::get_student_info();
 			$this->tutors = $ret['tutor'];
 		}
 		
 		foreach($lines as $line)
 		{
-			if(strstr($line, $sub) && (!$this->student || strstr($line, $this->student." "))) // added space to student filename to avoid nasty bug
+			if(strstr($line, $sub) && (!$this->student || strstr($line, $stud_login." "))) // added space to student filename to avoid nasty bug
 			{
 				$name = $this->get_name($line);
 				

@@ -54,7 +54,7 @@ class IndexBuilder extends PageBuilder
 	
 	function option_tutors()
 	{
-		$ret = File::get_tutors();
+		$ret = File::get_student_info();
 		$tutors = array_unique(array_values($ret['tutor']));
 		
 		foreach($tutors as $tutor)

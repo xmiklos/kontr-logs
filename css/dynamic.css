@@ -117,6 +117,10 @@ table .diff_head {
 	padding: 4px;
 }
 
+#subbmission_dialog{
+	display: none;
+}
+
 .log_table_line
 {
 	border-left: 1px solid #cccccc;

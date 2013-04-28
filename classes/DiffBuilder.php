@@ -4,6 +4,9 @@ require_once "Request.php";
 require_once "DiffSubmission.php";
 require_once "classes/PageBuilder.php";
 
+require_once 'Text/Highlighter.php';
+require_once 'Text/Highlighter/Renderer/Html.php';
+
 class DiffBuilder extends PageBuilder
 {
 
@@ -54,12 +57,18 @@ function diff_info()
 	echo "Diff: {$this->parse_sub_str($this->diff->sub1)} <strong>vs.</strong> {$this->parse_sub_str($this->diff->sub2)}";
 }
 
-private function nice_diff($diff)
+static function nice_diff($diff, $hl_on = true)
 {
 	$lines = explode("\n", $diff);
 	$ln1 = 0; $ln2 = 0;
 	$first = true;
 	
+	//$options = array('tabsize' => 4);
+	$renderer = new Text_Highlighter_Renderer_HTML();
+	$hl = Text_Highlighter::factory('cpp');
+	$hl->setRenderer($renderer);
+	
+	echo "<pre>";
 	foreach($lines as $line)
 	{	
 		$first3 = substr($line, 0, 3);
@@ -93,7 +102,8 @@ private function nice_diff($diff)
 			continue;
 		}
 		$first1 = substr($line, 0, 1);
-		$line = str_replace(" ", '&nbsp;', $line);
+		if($hl_on) $line = $hl->highlight($line);
+		//$line = str_replace(" ", '&nbsp;', $line);
 		if($first1 == "-")
 		{
 			$ln1++;
@@ -123,7 +133,7 @@ private function nice_diff($diff)
 		}
 	}
 	
-	echo "</table>";
+	echo "</table></pre>";
 }
 
 private function parse_sub_str($str)

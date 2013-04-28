@@ -19,7 +19,6 @@ function __construct(Request $request)
 {
 	$subject = $request->getProperty('subject');
 	$task = $request->getProperty('task');
-	$kp = Config::get_setting("kontr_path");	
 	$stg = Config::get_setting("stage_dir");
 	
 	$subs = explode(" ", $request->getProperty('subs'));
@@ -27,7 +26,7 @@ function __construct(Request $request)
 	$this->sub1 = $subs[0];
 	$this->sub2 = $subs[1];
 	
-	$this->stage_path = "{$kp}{$stg}{$subject}/{$task}/";
+	$this->stage_path = "{$stg}{$subject}/{$task}/";
 	$this->dir_files = File::get_directory_files($this->stage_path.$subs[0]);
 	$this->req_files = File::get_required_files($subject, $task);
 	
@@ -52,7 +51,7 @@ private function do_diff()
 		}
 		else
 		{
-			$this->diff_content[$key] = htmlspecialchars(ob_get_contents());
+			$this->diff_content[$key] = ob_get_contents();
 		}
 		ob_end_clean();
 	}

@@ -1,4 +1,4 @@
-<div class="diff_layer">
+<div class="system_logs_layer">
 <button id="system_logs_close">Close</button>
 <button id="system_logs_reload">Reload current log</button>
 <div id="system_logs_tabs">

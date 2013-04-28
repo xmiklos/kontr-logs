@@ -41,7 +41,7 @@
 	padding: 0;
 }
 
-.diff_layer {
+.diff_layer, .system_logs_layer, .details_layer {
 	height: 100%;
 	margin: 0;
 	padding: 0;
@@ -49,7 +49,7 @@
 
 .diff_diff {
 	font-family: monospace, "Courier New", Courier;
-	font-size: 0.7em;
+	font-size: 0.9em;
 	max-height: 90%;
 }
 
@@ -78,7 +78,7 @@
 	
 }
 
-.diff_ln {
+.diff_ln, .details_ln {
 	text-align: right;
 	border-right: 1px solid #cccccc;
 }
@@ -133,3 +133,117 @@ table .diff_head {
 	border-bottom: 1px solid #cccccc;
 }
 
+.details_layer {
+	word-wrap: break-word;
+	font-size: 0.8em;
+}
+
+.details_action {
+	/*padding: 0!important;*/
+}
+
+.details_info {
+	padding: 0.2em 1em;
+	font-size: 1.2em;
+	margin-top: 10px;
+}
+
+.test_content ul {
+	float: none!important;
+	
+}
+
+.test_content {
+	/*height: 100%;*/
+	border: 1px solid #cccccc!important;
+	padding-bottom: 0!important; 
+}
+
+.test_li a {
+	padding-left: 0.5em!important;
+}
+
+#details_tests {
+	overflow-y: scroll!important;
+}
+
+.wrap {
+	/*word-wrap: break-word;*/
+	max-width: 500px;
+}
+
+.details_summary_table, .details_summary_table td, .details_summary_table tr
+{
+	border-spacing: 0;
+	border: 1px solid #cccccc;
+	border-collapse: collapse;
+	padding: 4px;
+	table-layout: fixed;
+}
+
+.details_summary_table ul
+{
+	margin: 5px;
+}
+
+.details_ajax_data
+{
+	font-size: 1.2em;
+	margin-top: 15px;
+	overflow: none;
+	
+}
+
+.details_file_wrapper
+{
+	overflow-y: none;
+	overflow-x: auto;
+	border: 1px solid #cccccc;
+	padding: 0;
+	width: 100%;
+}
+
+.details_ajax_data table {
+
+	border-collapse: collapse;
+	
+}
+
+.details_ajax_data td {
+	padding: 5px;
+}
+
+.details_file_heading {
+	border-bottom: 1px solid #cccccc;
+	font-weight: normal;
+	padding: 5px;
+}
+
+.details_file_info {
+	padding: 0.4em 1em;
+	width: 400px;
+}
+
+.signals {
+	padding: 0;
+	margin: 8px 1px 6px 1px;
+	float: left;
+	margin-left: 8px;
+}
+
+.square {
+	margin-left: 4px;
+	width: 12px;
+	height: 12px;
+	float: left;
+}
+
+/* vertical tabs */
+
+.ui-tabs-vertical {  }
+.ui-tabs-vertical .ui-tabs-nav { padding: .2em 0em 0em 0em!important; float: left; }
+.ui-tabs-vertical .ui-tabs-nav .test_li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; }
+.ui-tabs-vertical .ui-tabs-nav .test_li a { display:block; }
+.ui-tabs-vertical .ui-tabs-nav .test_li.ui-tabs-active { margin-bottom: 0!important; padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
+.ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; }
+  

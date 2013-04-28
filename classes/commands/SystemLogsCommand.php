@@ -1,4 +1,3 @@
-
 <?php
 require_once "classes/Request.php";
 require_once "classes/Command.php";

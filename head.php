@@ -4,6 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" href="css/style.css" type="text/css" />
 	<link rel="stylesheet" href="css/dynamic.css" type="text/css" />
+	<link rel="stylesheet" href="css/code_highlight.css" type="text/css" />
 	<link rel="stylesheet" href="css/jquery-ui-1.10.2.custom.css" type="text/css" />
 	<script type="text/javascript">
 

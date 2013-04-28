@@ -127,8 +127,13 @@ $('.open-settings').click(function(){
     });
 });
 
-$("body").on("click", ".open_details", function(){
-	KLogs.SubDetails.show();
+// details
+$("body").on("click", ".open_details", function(e){
+	KLogs.SubDetails.show(e);
+});
+
+$("body").on("click", ".details_show_file", function(e){
+	KLogs.SubDetails.show_file(e);
 });
 
 // change subject
@@ -178,11 +183,19 @@ $(".open-system-logs").click(function()
 $(window).resize(function() {
   $("#system_logs_tabs").tabs("refresh");
   $("#diff_tabs").tabs("refresh");
+  $("#details_tabs").tabs("refresh");
+  $("#details_tests").tabs("refresh");
+  
+  var w = $("#details_tests").width();
+  var panel_w = $(".details_tests_list").width();
+  $( "#details_tests .test_content" ).width(w-panel_w-70);
+  $(".details_action .ui-tabs-panel").css({float: "none", clear: "both"});
+  $( ".test_li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
 });
 
 // tooltips
 
-$(document).tooltip({ tooltipClass: "tooltip-styling" });
+$(document).tooltip({ tooltipClass: "tooltip-styling", show: false, hide: false, position: { my: "left+15 center", at: "right center" } });
 
 });
 

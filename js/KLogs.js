@@ -30,9 +30,9 @@ send: function()
 			KLogs.Stats.update();
 			KLogs.Filter.students();
 			if (KLogs.Cookies.check('logs_settings') && KLogs.Cookies.get('logs_settings').split(",")[1] == "true") $(".sort-alpha").trigger('click');
-	  	}).fail(function(){
+	  	}).fail(function(jqXHR, textStatus, errorThrown){
 	  		$('#students_wrapper').html('');
-	  		KLogs.Message.show("Ajax Error! Try again.", 3);
+	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
 	  	});
 },
 get_all: function()
@@ -52,9 +52,9 @@ get_tasks: function(fn)
 			KLogs.Notif.get();
 			KLogs.Stats.update();
 			if (fn) fn();
-	  	}).fail(function(){
+	  	}).fail(function(jqXHR, textStatus, errorThrown){
 	  		$('#students_wrapper').html('');
-	  		KLogs.Message.show("Ajax Error!", 4);
+	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
 	  	});
 }
 
@@ -207,9 +207,9 @@ get: function()
 		{
 			$('.notif_box').html(data).scrollTo('max', 800);
 			
-	  	}).fail(function(){
+	  	}).fail(function(jqXHR, textStatus, errorThrown){
 	  		KLogs.Notif.toggle();
-	  		KLogs.Message.show("Ajax Error! Try again.", 3);
+	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
 	  	});
 },
 toggle: function()
@@ -544,17 +544,68 @@ apply: function()
 
 })();
 
+// Submission details
+
 KLogs.SubDetails = (function() {
 
 return {
-show: function()
+show: function(e)
 {
-	
+		
 		KLogs.FSLayer.show();
 		KLogs.FSLayer.html('loading...');
-	  	KLogs.FSLayer.hide();
-	  	KLogs.Message.show("TO DO!", 3);
+		var sub = $(e.target).parent().attr('id');
+		
+		$.post("index.php", {what: 'Details', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(),
+		sub_folder: sub
+		},function(data)
+		{
+			KLogs.FSLayer.html(data);
+			$("#details_close").button().click(function( event ) 
+			{
+				KLogs.FSLayer.hide();
+				KLogs.FSLayer.html('');
+			});
+			$("#details_tabs").tabs({ heightStyle: "fill", active: 0 });
+			$("#details_tests").tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+    			$( ".test_li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+    			
+    			var w = $("#details_tests").width();
+    			var panel_w = $(".details_tests_list").width();
+    			$( "#details_tests .test_content" ).width(w-panel_w-70);
+    			
+    			$(".details_action").tabs();
+    			$(".details_action .ui-tabs-panel").css({float: "none", clear: "both"});
+    			//$(".details_action li").removeClass("ui-corner-left");
 
+	  	}).fail(function(jqXHR, textStatus, errorThrown){
+	  		KLogs.FSLayer.hide();
+	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
+	  	});
+},
+show_file: function(e)
+{
+	var dir = $(e.target).data('path');
+	if(dir == undefined)
+	{
+		var dir = $(e.target).parents(".details_sum").data('path');
+	}
+	var sub = $(e.target).parents(".details_sum").data('sub');
+	var filename = $(e.target).html();
+	
+	
+	$.post("index.php", {what: 'Details', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(),
+		sub_folder: sub, path: dir, file: filename
+		},function(data)
+		{
+			$(e.target).parents(".details_sum").find(".details_ajax_data").html(data);
+			var pos = $(e.target).parents(".details_sum").find(".details_ajax_data").position().top;
+			$("#details_tests").scrollTo(pos+15, 400, 'y')
+
+	  	}).fail(function(jqXHR, textStatus, errorThrown){
+	  		KLogs.FSLayer.hide();
+	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
+	  	});
 }
 
 };
@@ -622,9 +673,9 @@ submit: function()
 		{
 			$('#submission_dialog').html(data);
 			
-	  	}).fail(function(){
+	  	}).fail(function(jqXHR, textStatus, errorThrown){
 	  		$('.resub_list').html('');
-	  		KLogs.Message.show("Ajax Error!", 4);
+	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
 	  	});
 },
 bind: function()

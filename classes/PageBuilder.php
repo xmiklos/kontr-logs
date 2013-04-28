@@ -1,4 +1,3 @@
-
 <?php
 require_once "classes/File.php";
 
@@ -40,4 +39,3 @@ class PageBuilder
 }
 
 ?>
-

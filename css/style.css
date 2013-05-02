@@ -35,7 +35,7 @@ body {
 	//border-bottom: 1px solid black;
 }
 
-.user {
+.user, .test_stats {
 	border: 1px solid gray;
 	margin-top: 2px;
 	padding: 2px;
@@ -221,6 +221,7 @@ body {
 	width: 230px;
 	padding: 2px;
 }
+
 
 .number {
 	text-align: right;

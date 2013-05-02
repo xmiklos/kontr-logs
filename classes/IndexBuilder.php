@@ -6,6 +6,7 @@ require_once "classes/Auth.php";
 
 class IndexBuilder extends PageBuilder
 {
+
 	function option_tasks()
 	{
 		$subject = $this->get_request()->getProperty("subject");
@@ -67,8 +68,7 @@ class IndexBuilder extends PageBuilder
 				echo "<option value='.{$tutor}'>{$tutor}</option>";
 			}
 		}
-	}
-	
+	}	
 
 }
 

@@ -20,6 +20,10 @@ if (window.location.hash) {
     $(window.location.hash+" .open_std").trigger('click');
 }
 
+$("body").on("click", ".open_test_stats", function(event){
+  	$(this).parent().find(".odes").slideToggle('fast');
+});
+
 // expand/collapse button
 $(".expand-all").click(function(e){
 
@@ -81,6 +85,7 @@ $(window).scroll(function()
 $('select[name="task"]').change(function()
 {
 	KLogs.Ajax.send();
+	KLogs.Ajax.get_tags();
 	KLogs.Cookies.set('last_task', $(this).prop("selectedIndex"), 365);
 	KLogs.Cookies.set('last_subject', $('select[name="subject"]').prop("selectedIndex"), 365);
 });
@@ -88,6 +93,7 @@ $('select[name="task"]').change(function()
 $('#go_button').click(function()
 {
 	KLogs.Ajax.send();
+	KLogs.Ajax.get_tags();
 	KLogs.Cookies.set('last_task', $('select[name="task"]').prop("selectedIndex"), 365);
 	KLogs.Cookies.set('last_subject', $('select[name="subject"]').prop("selectedIndex"), 365);
 });
@@ -139,6 +145,7 @@ $("body").on("click", ".details_show_file", function(e){
 // change subject
 $("select[name='subject']").change(function(){
 	KLogs.Ajax.get_tasks();
+	KLogs.Ajax.get_tags();
 });
 
 // apply settings

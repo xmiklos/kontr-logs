@@ -14,6 +14,9 @@ class Test
 	private $log_student;
 	private $log_teacher;
 	
+	private $teacher_log_files;
+	private $student_log_files;
+	
 	private $actions;
 	
 	private $tags;
@@ -62,6 +65,19 @@ class Test
 			}
 		
 			$this->$property .= $content;
+		}
+	}
+	
+	function add_log_files($property, $content)
+	{
+		if(property_exists($this, $property))
+		{
+			if(!isset($this->$property))
+			{
+				$this->$property = array();
+			}
+			
+			array_push($this->$property, $content);
 		}
 	}
 	

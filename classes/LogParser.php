@@ -102,6 +102,30 @@ class LogParser
 		
 		return $subs;
 	}
+	
+	function parse_as_tags()
+	{
+		$tags = array();
+	
+		$lines = explode("\n", $this->log_content);
+		
+		$sub = $this->subject." ".$this->task;
+		
+		foreach($lines as $line)
+		{
+			if(strstr($line, $sub))
+			{
+				$colon = strpos($line, ':');
+				$semi = strpos($line, ';');
+				$len = $semi - $colon;
+				$tags_str = trim(substr($line, $colon+1, $len-1));
+				$tags_array = explode(" ", $tags_str);
+				$tags = array_merge($tags, $tags_array);
+			}
+		}
+		
+		return array_unique($tags);
+	}
 }
 
 ?>

@@ -72,6 +72,9 @@ class Details
 					$test->add_log('log_student', $sub_test['student_log']);
 					$test->add_log('log_teacher', $sub_test['teacher_log']);
 					
+					$test->teacher_log_files = $sub_test['teacher_log_files'];
+					$test->student_log_files = $sub_test['student_log_files'];
+					
 					$test->tags = $sub_test['tags'];
 					$test->points = $sub_test['points'];
 					

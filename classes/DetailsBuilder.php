@@ -33,6 +33,12 @@ function details_info()
 
 function tests()
 {	
+	if(!is_array($this->details->get_tests()))
+	{
+		echo "There are no tests to display or file detailed.json does not exists!";
+		return;
+	}
+
 	echo "<ul class='details_tests_list' >";
 	
 	foreach($this->details->get_tests() as $test)
@@ -79,11 +85,27 @@ function tests()
 				$this->table_row("Master test", $test->master_test);
 				$this->table_row("Unit test", $this->file_link($test->unit_test, $scripts_path, true));
 				$this->table_row("Sub test", $test->sub_test);
-				$this->table_row("Teacher log", str_replace("\n", "<br />", trim($test->log_teacher)));
+				if(is_array($test->teacher_log_files) && count($test->teacher_log_files) > 0)
+				{
+					$offset = $test->teacher_log_files[0]['offset'];
+					$inserted = 0;
+					foreach($test->teacher_log_files as $entry)
+					{
+						$offset = $entry['offset'];
+						$path_parts = pathinfo($entry['filename']);
+						$base = $path_parts['basename'];
+						$dir = $path_parts['dirname']."/";
+						$link = "Logged file: ".$this->file_link($base, $dir, true);
+						$test->log_teacher = substr_replace($test->log_teacher, $link, ($offset+$inserted), 0);
+						$inserted += strlen($link);
+					}
+				}			
+				$test->log_teacher = str_replace("\n", "<br />", trim($test->log_teacher));
+				$this->table_row("Teacher log", $test->log_teacher);
 				$this->table_row("Tags", implode(" ", $test->tags));
 				$this->table_row("Points", implode(" ", $test->points));
 				$this->table_row("Test files", $this->file_list($test->staged_files, $test->work_path));
-				$this->table_row("Compiled files", $this->file_list($test->compiled_files, $test->work_path));
+				$this->table_row("Test compiled files", $this->file_list($test->compiled_files, $test->work_path));
 				$this->table_row("Student files", $this->file_list($test->staged_student_files, $test->work_path));
 				$this->table_row("Student compiled files", $this->file_list($test->compiled_student_files, $test->work_path));
 			echo "</table><div class='details_ajax_data' ></div></div>";

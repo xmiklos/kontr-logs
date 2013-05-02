@@ -11,6 +11,7 @@ class LogBuilder extends PageBuilder
 public $parser;
 private $task;
 private $subject;
+private $all;
 
 function __construct(Request $request)
 {
@@ -26,6 +27,8 @@ function __construct(Request $request)
 	{
 		$this->parser = false;
 	}
+	
+	$this->all = $request->getProperty('all');
 }
 
 private function request_ok(Request $request)
@@ -79,7 +82,7 @@ function show()
 					$name = ($sub->resubmitted_name?$sub->resubmitted_name:$student->name);
 					echo "<p class='{$sub->get_classes()}' id='{$sub->folder}'".
 					" data-login='{$name}'".
-					" data-revision='{$sub->revision}' data-type='{$sub->test_type}' >";
+					" data-revision='{$sub->revision}' data-type='{$sub->test_type}' data-tags='{$sub->tags}' >";
 						echo "<input class='submission_selector' type='checkbox' />";
 						echo $sub->date;
 						echo "&nbsp;";
@@ -106,7 +109,30 @@ function show()
 			echo "</div>";
 		echo "</div>";
 	}
+	
+	if($this->all !== false && $this->all == "all") $this->test_stats();
+}
 
+private function test_stats()
+{
+	$keys = array_keys(UnitTest::$success_count);
+	
+	echo "</div><div class='test_stats' style='margin-top: 15px;'><div class='open_test_stats cp'>";
+	$title = 'This table is updated only on explicit Refresh, not when filter is applied.';
+	echo "<span class='std' title='{$title}' >Tests success</span></div>";
+	echo "<div class='odes' style='border: 0;'><table class='test_stats_table' >";
+	foreach($keys as $key)
+	{
+		$val = UnitTest::$success_count[$key];
+		
+		echo "<tr><td ><strong style='padding-right: 25px;'>"; 
+		echo $key;
+		echo ":</strong></td><td style='text-align: right'>";
+		echo $val;
+		echo "</td></tr>";
+		
+	}
+	echo "</table></div></div><div class>";
 }
 
 function show_notif()

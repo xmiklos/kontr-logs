@@ -10,6 +10,7 @@ class DefaultCommand extends Command
 	{
 		setcookie("last_update", time());
 		$index = new IndexBuilder($request);
+
 		$index->start();
 		$index->incl("head.php");
 		$index->incl("panel.php");

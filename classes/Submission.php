@@ -10,6 +10,7 @@ class Submission
 	public $unix_date;
 	public $test_type;
 	public $summary;
+	public $tags;
 	public $sub_ok = true;
 	public $bonus_nok = false;
 	public $unit_tests = array();
@@ -58,6 +59,9 @@ class Submission
 		$parts = explode("#", $report);
 		$sum = explode(":", $parts[0]);
 		$this->summary = trim($sum[1]);
+		
+		$semi_pos = strpos($this->summary, ';');
+		$this->tags = substr($this->summary, 0, $semi_pos);
 		
 		for($i = 1; $i < count($parts); $i++)
 		{

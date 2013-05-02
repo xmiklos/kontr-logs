@@ -9,12 +9,12 @@ var all = false;
 var req_sent = false;
 
 return {
-send: function()
+send: function(fn)
 {
 		var tutor = $('#tutorfilter').val();
 		$('#students_wrapper').html('<h3>loading...</h3>');
 		if($(".expand-all").html() == '[Collapse all]') $(".expand-all").trigger('click');
-		$.post("index.php", {what: 'Logs', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(), tutor: tutor},function(data)
+		$.post("index.php", {what: 'Logs', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(), tutor: tutor, all: "all"},function(data)
 		{
 			KLogs.Notif.get();
 			if(tutor == "")
@@ -27,7 +27,8 @@ send: function()
 			}
 			req_sent = true;
 			$('#students_wrapper').html(data);
-			KLogs.Stats.update();
+			$('#subfilter').prop("selectedIndex",0);
+			KLogs.Filter.show_all();
 			KLogs.Filter.students();
 			if (KLogs.Cookies.check('logs_settings') && KLogs.Cookies.get('logs_settings').split(",")[1] == "true") $(".sort-alpha").trigger('click');
 	  	}).fail(function(jqXHR, textStatus, errorThrown){
@@ -54,6 +55,16 @@ get_tasks: function(fn)
 			if (fn) fn();
 	  	}).fail(function(jqXHR, textStatus, errorThrown){
 	  		$('#students_wrapper').html('');
+	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
+	  	});
+},
+get_tags: function(fn)
+{
+	$.post("index.php", {what: 'Tags', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val()},function(data)
+		{
+			$('#tagfilter').html(data);
+	  	}).fail(function(jqXHR, textStatus, errorThrown){
+	  		$('#tagfilter').html('');
 	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
 	  	});
 }
@@ -108,13 +119,13 @@ KLogs.Filter = (function() {
 var tutor_filter = '#tutorfilter';
 var submission_filter = '#subfilter';
 var student_filter = '#studfilter';
+var tag_filter = '#tagfilter';
 
 return {
 
-students: function()
+students: function(all)
 {
 	var filter = $(tutor_filter).val()+$(student_filter).val();
-	
 	var sender = $(this).attr('id');
 	
 	if(sender == "tutorfilter")
@@ -122,39 +133,133 @@ students: function()
 		if(!KLogs.Ajax.get_all() && KLogs.Ajax.get_sent())
 		{
 			KLogs.Ajax.send();
+			return;
 		}
 	}
 	
 	if(filter == "")
 	{
-		$('.user').show();
-		KLogs.Stats.update();
+		$(".user").data("student_filter", true);
+		KLogs.Filter.refresh();
 		return;
 	}
 	
-	$('.user').hide();
-	$(filter).show();
+	$(".user").data("student_filter", false);
+	$(filter).data("student_filter", true);
+	
+	KLogs.Filter.refresh();
+},
+refresh: function()
+{
+	$(".user").each(function(){
+		if($(this).data("student_filter") && ($(this).data("student_tag_filter") || $(this).data("student_tag_filter") == undefined))
+		{
+			$(this).show();
+		}
+		else
+		{
+			$(this).hide();
+		}
+	});
+	
+	$(".ode").each(function(){
+		if($(this).data("sub_filter") && ($(this).data("sub_tag_filter")))
+		{
+			$(this).show();
+		}
+		else
+		{
+			$(this).hide();
+		}
+	});
+	
 	KLogs.Stats.update();
 },
 submissions: function()
-{
+{	
+	// basic filter
 	var filter = $(submission_filter).val();
 	
 	if(filter == "")
 	{
-		$('.ode').show();
-		return;
+		$('.ode').data("sub_filter", true);
 	}
-	$('.ode').hide();
+	else
+	{
+		$('.ode').data("sub_filter", false);
+		$(filter).data("sub_filter", true);
+	}
 	
-	$(filter).show();
+	//tag filter
+	var tfilter = $(tag_filter).val();
 	
+	if(tfilter == "none" || tfilter == "" || tfilter == undefined)
+	{
+		//KLogs.Filter.hide_empty();
+		$('.ode').data("sub_tag_filter", true);
+	}
+	else
+	{
+		$('.ode').data("sub_tag_filter", true);
+		$('.ode').each(function (i) {
+		
+			var tags_str = $(this).data('tags');
+			var tags = tags_str.split(" ");
+		
+			for(var i=0; i < tags.length; i++)
+			{
+				if(tags[i] == tfilter) return;
+			}
+		
+			$(this).data("sub_tag_filter", false);
+		});
+	}
+	
+	KLogs.Filter.hide_empty();
+	KLogs.Filter.refresh();
+},
+hide_empty: function()
+{
+	$(".user").each(function (i) {
+		var hide = true;
+	
+		$(this).find(".ode").each(function(i, value){
+			//ak nie je odovzdanie skryte
+			if($(value).data("sub_tag_filter") == true && $(value).data("sub_filter") == true)
+			{
+				// nie je ani student skryty
+				hide = false;
+				return;
+			}
+		});
+
+		
+		if(hide)
+		{
+			$(this).data("student_tag_filter", false);
+		}
+		else
+		{
+			$(this).data("student_tag_filter", true);
+		}
+
+	});
+	
+	//KLogs.Filter.students(false);
+},
+show_all: function()
+{
+	$(".user").data("student_filter", true);
+	$('.ode').data("sub_filter", true);
+	$('.ode').data("sub_tag_filter", true);
+	$(".user").data("student_tag_filter", true);
 	
 },
 bind: function()
 {
 	$(tutor_filter+','+student_filter).change(KLogs.Filter.students);
 	$(submission_filter).change(KLogs.Filter.submissions);
+	$("body").on("change", tag_filter, KLogs.Filter.submissions);
 },
 init: function()
 {
@@ -180,6 +285,7 @@ update: function()
 	var uname = $(this).data('user');
 	var id = "#u_"+uname;
 	
+	
 		$.post("index.php", {what: 'Logs', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(), student: uname},function(data)
 		{
 			if($(id).length > 0)
@@ -188,6 +294,7 @@ update: function()
 			}
 			else
 			{
+				$('.test_stats').remove();
 				$('#students_wrapper').append(data);
 			}
 			$(id+" .open_std").parent().find(".odes").show();

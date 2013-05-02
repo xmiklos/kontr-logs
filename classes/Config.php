@@ -5,11 +5,11 @@ class Config
 	
 	private function __construct() {}
 	
-	static function init()
+	static function init($config_file = "./config.ini")
 	{
 		if(!isset(self::$conf))
 		{
-			self::$conf = parse_ini_file("./config.ini");
+			self::$conf = parse_ini_file($config_file);
 		}
 	}
 	

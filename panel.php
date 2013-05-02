@@ -46,9 +46,13 @@ $login = Auth::get_username();
 		<form>
 		Show submissions:
 		<select id="subfilter" >
-		  <option  value="">all</option>
+		  <option  value=".ode">all</option>
 		  <option  value=".green">nanecisto only</option>
 		  <option  value=".yellow">naostro only</option>
+		</select>
+		With tag:
+		<select id="tagfilter" >
+		  <option  value="">none</option>
 		</select>
 		</form>
 	</div>

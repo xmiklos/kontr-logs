@@ -4,8 +4,8 @@ require_once "Request.php";
 require_once "DiffSubmission.php";
 require_once "classes/PageBuilder.php";
 
-require_once 'Text/Highlighter.php';
-require_once 'Text/Highlighter/Renderer/Html.php';
+require_once 'highlighter/Highlighter.php';
+require_once 'highlighter/Highlighter/Renderer/Html.php';
 
 class DiffBuilder extends PageBuilder
 {

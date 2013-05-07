@@ -58,11 +58,12 @@ $login = Auth::get_username();
 	</div>
 	<div class='opt'>
 		Options:
-		<span class="cp enable-notif" />[Enable notifications]</span>
 		<span class="cp expand-all" />[Expand all]</span>
-		<span class="cp do-diff" >[Diff]</span>
 		<span class="cp sort-alpha" />[Sort alphabetically]</span>
 		<span class="cp open-settings" />[Settings]</span>
+		Tools:
+		<span class="cp enable-notif" />[Enable notifications]</span>
+		<span class="cp do-diff" >[Diff]</span>	
 		<span class="cp open-system-logs" />[Kontr system logs]</span>
 		<span class="cp open-resub-dialog" />[Resubmission tool]</span>
 	</div>

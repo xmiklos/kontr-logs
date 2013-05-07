@@ -87,6 +87,70 @@ class Details
 		}
 	}
 	
+	function get_student_files()
+	{
+		$files = array();
+	
+		foreach($this->tests as $test)
+		{
+			foreach($test->staged_student_files as $file)
+			{
+				$filepath = "{$test->work_path}/{$file}";
+				$sha = sha1_file($filepath);
+				
+				if($sha !== false && !array_key_exists($sha, $files))
+				{
+					$files[$sha] = $filepath;
+				}
+			}
+			
+			foreach($test->compiled_student_files as $file)
+			{
+				$filepath = "{$test->work_path}/{$file}";
+				$sha = sha1_file($filepath);
+				
+				if($sha !== false && !array_key_exists($sha, $files))
+				{
+					$files[$sha] = $filepath;
+				}
+			}
+		}
+		
+		return $files;
+	}
+	
+	function get_test_files()
+	{
+		$files = array();
+	
+		foreach($this->tests as $test)
+		{
+			foreach($test->staged_files as $file)
+			{
+				$filepath = "{$test->work_path}/{$file}";
+				$sha = sha1_file($filepath);
+				
+				if($sha !== false && !array_key_exists($sha, $files))
+				{
+					$files[$sha] = $filepath;
+				}
+			}
+			
+			foreach($test->compiled_files as $file)
+			{
+				$filepath = "{$test->work_path}/{$file}";
+				$sha = sha1_file($filepath);
+				
+				if($sha !== false && !array_key_exists($sha, $files))
+				{
+					$files[$sha] = $filepath;
+				}
+			}
+		}
+		
+		return $files;
+	}
+	
 	function get_tests()
 	{
 		return $this->tests;

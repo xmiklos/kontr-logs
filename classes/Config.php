@@ -18,9 +18,9 @@ class Config
 		return (array_key_exists($key, self::$conf)?self::$conf[$key]:false);
 	}
 	
-	static function split($str)
+	static function split($str, $delim = ",")
 	{
-		return explode(",", $str);
+		return explode($delim, $str);
 	}
 }
 

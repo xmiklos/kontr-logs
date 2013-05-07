@@ -36,11 +36,19 @@ function show()
 static function simple_show($content)
 {
 	$lines = explode("\n", $content);
+	$i = 0;
+	$nol = count($lines);
+	$limit = 5000;
+	if($nol > $limit)
+	{
+		$i = $nol - $limit;
+	}
+	
 	ob_start();
 	
-	foreach($lines as $line)
+	for( ;$i<$nol; $i++)
 	{
-		echo "<div>{$line}</div>";
+		echo "<div>{$lines[$i]}</div>";
 	}
 	
 	$contents = ob_get_contents();

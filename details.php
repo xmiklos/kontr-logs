@@ -14,10 +14,10 @@
 		<?php $this->tests(); ?>
 	</div>
 	<div id="details_sources" >
-	
+		<?php $this->sources(); ?>
 	</div>
 	<div id="details_misc" >
-	
+		<?php $this->misc(); ?>
 	</div>
 	<div id="details_run" >
 	

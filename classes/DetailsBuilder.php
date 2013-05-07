@@ -172,17 +172,102 @@ private function file_link($name, $path, $explicit_dp = false)
 
 function sources()
 {
+	$student_files = array();
+	$test_files = array();
+	
+	if(!is_array($this->details->get_tests()))
+	{
+		$stg = Config::get_setting("stage_dir");
+		$dir = "{$stg}{$this->subject}/{$this->task}/{$this->sub_folder}/";
+		$all_files = File::get_directory_files($dir);
+		$req_files = File::get_required_files($this->subject, $this->task);
+		
+		if(count($all_files) > 0)
+		{
+			foreach($req_files as $key)
+			{
+				$student_files[] = $dir.$all_files[$key];
+				unset($all_files[$key]);
+			}
+		
+			$exts = Config::split(Config::get_setting('source_files_ext'));
+		
+			$keys = array_keys($all_files);
+			foreach($keys as $key)
+			{
+				$value = $all_files[$key];
+				$ext = pathinfo($key, PATHINFO_EXTENSION);
+				//if(!in_array($ext, $exts)) continue;
+				$test_files[] = $dir.$value;
+			}
+		}
+	}
+	else
+	{
+		$student_files = $this->details->get_student_files();
+		$test_files = $this->details->get_test_files();
+	}
+	
+	
+	$this->sources_tabs($student_files, $test_files);
 	
 }
 
-function sources_tabs()
+private function sources_tabs(&$student_files, &$teacher_files)
 {
+	$keys = array_keys($student_files);
+	
+	if(count($student_files) == 0 && count($teacher_files) == 0)
+	{
+		echo "No files found!";
+		return;
+	}
+	
+	echo "<ul class='details_sources_list' >";
+	foreach($keys as $key)
+	{
+		$value = $student_files[$key];
+		$base = basename($value);
+		$link = "?what=Details&path=&file={$value}";
+		echo "<li class='test_li' >";
+		echo "<div class='signals'><div class='square blue' title='Student file' ></div></div>";
+		echo"<a href='{$link}#{$key}'>{$base}</a></li>";
+	}
+	
+	
+	$exts = Config::split(Config::get_setting('source_files_ext'));
+	
+	$keys = array_keys($teacher_files);
+	
+	foreach($keys as $key)
+	{
+		$value = $teacher_files[$key];
+		$ext = pathinfo($value, PATHINFO_EXTENSION);
+		if(!in_array($ext, $exts)) continue;
+		$base = basename($value);
+		$link = "?what=Details&path=&file={$value}";
+		echo "<li class='test_li' >";
+		echo "<div class='signals'><div class=' square red' title='Test file' ></div></div>";
+		echo "<a href='{$link}#{$key}'>{$base}</a></li>";
+	}
+	echo "</ul>";
 	
 }
 
 function misc()
 {
+	$files = array('teacher_email', 'student_email', 'kontr.pl');
+	
+	$stg = Config::get_setting("stage_dir");
+	$path = "{$stg}{$this->subject}/{$this->task}/{$this->sub_folder}";
 
+	echo "<ul class='details_misc_list' >";
+	foreach($files as $file)
+	{
+		$link = "?what=Details&path={$path}&file={$file}";
+		echo "<li class='test_li' ><a href='{$link}'>{$file}</a></li>";
+	}
+	echo "</ul>";
 }
 
 function run()
@@ -202,41 +287,29 @@ private function ends_with($haystack, $needle)
 
 function show_file($dir, $file)
 {
-	$c_ext = array(".c", ".h", ".cpp", ".cc");
+	$c_ext = Config::split(Config::get_setting('source_files_ext'));
 	$hl = null;
 	$filepath = "{$dir}".($dir!=""?"/":"")."{$file}";
-	
-	// c,c++
-	foreach($c_ext as $ext)
-	{
-		if($this->ends_with($file, $ext))
-		{
-			$hl = Text_Highlighter::factory('cpp');
-			break;
-		}
-	}
+	$ext = pathinfo($filepath, PATHINFO_EXTENSION);
 	
 	//pl
-	if($this->ends_with($file, ".pl"))
+	if($ext == "pl")
 	{
 		$hl = Text_Highlighter::factory('perl');
 	}
-	
-
-	/*
-	$finfo = finfo_open(FILEINFO_MIME);
-	//check to see if the mime-type starts with 'text'
-	$s = substr(finfo_file($finfo, "{$dir}/{$file}"), 0, 4);
-	if($s != 'text')
+	else if(in_array($ext, $c_ext))
 	{
-		echo "<div class='ui-state-highlight ui-corner-all details_file_info'>File <strong>{$file}</strong> is binary.</div>";
-		return;
+		$hl = Text_Highlighter::factory('cpp');
 	}
-	*/
 	
 	File::is_kontr_file($filepath);
 	
 	$contents = File::load_file($filepath);
+	
+	if(basename($filepath) == "teacher_email")
+	{
+		
+	}
 
 	if($contents == "")
 	{
@@ -256,6 +329,10 @@ function show_file($dir, $file)
 		$hl->setRenderer($renderer);
 		$contents = $hl->highlight($contents);
 	}
+	else
+	{
+		$contents = htmlentities($contents);
+	}
 	$lines = explode("\n", $contents);
 
 	echo "<div class='details_file_wrapper'><div class='details_file_heading' >{$file}</div><table ><tr><td class='details_ln' ><pre>";
@@ -270,9 +347,14 @@ function show_file($dir, $file)
 		foreach($lines as $line)
 		{
 			if($line == "" && $i == $c) continue;
-			if($line == "") $line="&nbsp;";
-			//$line=htmlentities($line);
-			echo "<div>{$line}</div>";
+			if($line == "")
+			{
+				echo "<div>&nbsp;</div>";
+			}
+			else
+			{
+				echo "<div>{$line}</div>";
+			}
 			$i++;
 		}
 	echo "</pre></td></tr></table></div>";

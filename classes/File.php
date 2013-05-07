@@ -22,7 +22,7 @@ class File
 	
 		$filesize = filesize($file); 
 		$basename = basename($filename);
-		header("Content-Type: application/octet-stream");
+		header("Content-Type: text/plain");
 		header("Content-Disposition: attachment; filename={$basename}");
 		header("Content-Length: $filesize");
 		readfile($file);
@@ -45,6 +45,12 @@ class File
 	{
 		$kontr = Config::get_setting("kontr_path");
 		$path=$kontr."_tmp_/".$subject."/";
+		
+		if(!file_exists($path))
+		{
+			return array();
+		}
+		
 		$hand=opendir($path);
 		$tasks=array();
 
@@ -124,7 +130,10 @@ class File
 	
 	public static function get_directory_files($dir)
 	{
-
+		if(!file_exists($dir))
+		{
+			return array();
+		}
 		$it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));
 		$files = array();
 

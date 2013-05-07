@@ -432,14 +432,15 @@ do_diff: function()
 	}
 	else
 	{
-		KLogs.FSLayer.show();
-		KLogs.FSLayer.html('loading...');
+		
+		//KLogs.FSLayer.html('loading...');
 		var subs = KLogs.SubSelector.get_folder_selection();
 		$.post("index.php", 
 		{what: 'Diff', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(), subs: subs},
 		function(data)
 		{
 			KLogs.FSLayer.html(data);
+			KLogs.FSLayer.show();
 			$("#diff_tabs").tabs({ heightStyle: "fill" });
 			$("#diff_close").button().click(function( event ) 
 			{
@@ -651,35 +652,31 @@ apply: function()
 
 })();
 
-// Submission details
-
+// Details
 KLogs.SubDetails = (function() {
 
 return {
 show: function(e)
 {
-		
-		KLogs.FSLayer.show();
-		KLogs.FSLayer.html('loading...');
+		//KLogs.FSLayer.html('loading...');
 		var sub = $(e.target).parent().attr('id');
 		
 		$.post("index.php", {what: 'Details', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(),
 		sub_folder: sub
 		},function(data)
 		{
+			KLogs.FSLayer.show();
 			KLogs.FSLayer.html(data);
 			$("#details_close").button().click(function( event ) 
 			{
 				KLogs.FSLayer.hide();
 				KLogs.FSLayer.html('');
 			});
-			$("#details_tabs").tabs({ heightStyle: "fill", active: 0 });
+			$("#details_tabs").tabs({ heightStyle: "fill", active: 0, activate: KLogs.SubDetails.refresh});
 			$("#details_tests").tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+    			$("#details_sources").tabs({load: KLogs.SubDetails.refresh}).addClass( "ui-tabs-vertical ui-helper-clearfix" );
+    			$("#details_misc").tabs({load: KLogs.SubDetails.refresh}).addClass( "ui-tabs-vertical ui-helper-clearfix" );
     			$( ".test_li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-    			
-    			var w = $("#details_tests").width();
-    			var panel_w = $(".details_tests_list").width();
-    			$( "#details_tests .test_content" ).width(w-panel_w-70);
     			
     			$(".details_action").tabs();
     			$(".details_action .ui-tabs-panel").css({float: "none", clear: "both"});
@@ -689,6 +686,30 @@ show: function(e)
 	  		KLogs.FSLayer.hide();
 	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
 	  	});
+},
+refresh: function()
+{
+	KLogs.SubDetails.sources_tab_refresh();
+	KLogs.SubDetails.tests_tab_refresh();
+	KLogs.SubDetails.misc_tab_refresh();
+},
+sources_tab_refresh: function()
+{
+	w = $("#details_sources").width();
+    	panel_w = $(".details_sources_list").width();
+    	$( "#details_sources .details_file_wrapper" ).width(w-panel_w-70);
+},
+misc_tab_refresh: function()
+{
+	w = $("#details_misc").width();
+    	panel_w = $(".details_misc_list").width();
+    	$( "#details_misc .details_file_wrapper" ).width(w-panel_w-70);
+},
+tests_tab_refresh: function()
+{
+	var w = $("#details_tests").width();
+    	var panel_w = $(".details_tests_list").width();
+    	$( "#details_tests .test_content" ).width(w-panel_w-70);
 },
 show_file: function(e)
 {
@@ -719,6 +740,7 @@ show_file: function(e)
 
 })();
 
+// resubmission
 KLogs.Resubmission = (function() {
 
 return {
@@ -788,6 +810,35 @@ submit: function()
 bind: function()
 {
 	$(".open-resub-dialog").click(KLogs.Resubmission.show_dialog);
+}
+
+};
+
+})();
+
+// loading
+KLogs.Loading = (function() {
+
+var loading_element = $("<div class='loading' ></div>");
+var loading = 0;
+
+return {
+init: function()
+{
+	$("body").append(loading_element);
+},
+show: function()
+{
+	loading++;
+	$('.loading').show();
+},
+hide: function()
+{
+	if(loading > 0) loading--;
+	if(loading == 0)
+	{
+		$('.loading').hide();
+	}
 }
 
 };

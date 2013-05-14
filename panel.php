@@ -65,7 +65,8 @@ $login = Auth::get_username();
 		<span class="cp enable-notif" />[Enable notifications]</span>
 		<span class="cp do-diff" >[Diff]</span>	
 		<span class="cp open-system-logs" />[Kontr system logs]</span>
-		<span class="cp open-resub-dialog" />[Resubmission tool]</span>
+		<span class="cp open-resub-dialog" />[Resubmit]</span>
+		<?php $i->manual_submission(); ?>
 	</div>
 	<div></div>
 	<div class='opt'>

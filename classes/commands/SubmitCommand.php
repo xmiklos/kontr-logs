@@ -12,34 +12,58 @@ class SubmitCommand extends Command
 		$subject = $request->getProperty('subject');
 		$task = $request->getProperty('task');
 		$subs = $request->getProperty('subs');
+		$type = $request->getProperty('type');
 		
-		if(!$subject || !$task || !$subs)
+		if(!$subject || !$task || !$subs || !$type)
 		{
 			echo "Incorrect request! - missing properties";
 			exit;
 		}
 		
-		if(!isset($login) || $login == "")
+		$admins = Config::get_array_setting('admins');
+		
+		if($type == "submit" && !in_array($login, $admins))
+		{
+			echo "Only admin can do that!";
+			exit;
+		}
+		
+		/*if(!isset($login) || $login == "")
 		{
 			$login = `whoami`;
-		}
+		}*/
 		
 		$subs = explode(" ", $subs);
 		$filepath = Config::get_setting('submitted_internal');
+		$emails = array();
 		
 		foreach($subs as $sub)
 		{
 			$exp = explode(":", $sub);
 			$source_login = $exp[0];
 			$revision = $exp[1];
-			$type = $exp[2];
+			$subtype = $exp[2];
+
+			if($type == "submit")
+			{
+				$login = $source_login;
+				$email = StudentInfo::get($login, 'email');
+				if($email === false)
+				{
+					$email = TeacherInfo::get($login, 'email');
+				}
+				if(!in_array($email, $emails))
+				{
+					$emails[] = $email;
+				}
+			}
 			
 			$data = "[SVN]\nrevision={$revision}\nsource={$source_login}";
-			$filename = "{$filepath}/{$subject}_{$type}_{$source_login}_{$task}";
+			$filename = "{$filepath}/{$subject}_{$subtype}_{$login}_{$task}";
 			
 			if(file_exists($filename))
 			{
-				echo "<div>Error: submission {$task} of {$source_login} as {$type} exists!</div>";
+				echo "<div>Error: submission {$task} of {$login} as {$subtype} with source from {$source_login} exists!</div>";
 			}
 			else
 			{
@@ -57,8 +81,11 @@ class SubmitCommand extends Command
 			
 		}
 		
-		
-		
+		if($type == "submit")
+		{
+			$std_emails = implode(", ", $emails);
+			echo "<div>Student emails: {$std_emails}</div>";
+		}		
 	}
 }
 

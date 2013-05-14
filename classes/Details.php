@@ -96,9 +96,11 @@ class Details
 			foreach($test->staged_student_files as $file)
 			{
 				$filepath = "{$test->work_path}/{$file}";
-				$sha = sha1_file($filepath);
+				//$file_cont = File::load_file($filepath);
+				//$sha = sha1($file_cont);
+				$sha = basename($filepath);
 				
-				if($sha !== false && !array_key_exists($sha, $files))
+				if(!array_key_exists($sha, $files))
 				{
 					$files[$sha] = $filepath;
 				}
@@ -107,9 +109,11 @@ class Details
 			foreach($test->compiled_student_files as $file)
 			{
 				$filepath = "{$test->work_path}/{$file}";
-				$sha = sha1_file($filepath);
+				//$file_cont = File::load_file($filepath);
+				//$sha = sha1($file_cont);
+				$sha = basename($filepath);
 				
-				if($sha !== false && !array_key_exists($sha, $files))
+				if(!array_key_exists($sha, $files))
 				{
 					$files[$sha] = $filepath;
 				}
@@ -128,9 +132,11 @@ class Details
 			foreach($test->staged_files as $file)
 			{
 				$filepath = "{$test->work_path}/{$file}";
-				$sha = sha1_file($filepath);
+				//$file_cont = File::load_file($filepath);
+				//$sha = sha1($file_cont);
+				$sha = basename($filepath);
 				
-				if($sha !== false && !array_key_exists($sha, $files))
+				if(!array_key_exists($sha, $files))
 				{
 					$files[$sha] = $filepath;
 				}
@@ -139,9 +145,11 @@ class Details
 			foreach($test->compiled_files as $file)
 			{
 				$filepath = "{$test->work_path}/{$file}";
-				$sha = sha1_file($filepath);
+				//$file_cont = File::load_file($filepath);
+				//$sha = sha1($file_cont);
+				$sha = basename($filepath);
 				
-				if($sha !== false && !array_key_exists($sha, $files))
+				if(!array_key_exists($sha, $files))
 				{
 					$files[$sha] = $filepath;
 				}

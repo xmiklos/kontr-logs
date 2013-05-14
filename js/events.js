@@ -12,6 +12,7 @@ KLogs.FSLayer.init();
 // event bindings
 
 KLogs.Resubmission.bind();
+KLogs.ManualSubmission.bind();
 
 $("body").on("click", ".open_std", function(event){
   	$(this).parent().find(".odes").slideToggle('fast');

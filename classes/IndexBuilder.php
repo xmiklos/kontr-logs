@@ -68,6 +68,16 @@ class IndexBuilder extends PageBuilder
 				echo "<option value='.{$tutor}'>{$tutor}</option>";
 			}
 		}
+	}
+	
+	function manual_submission()
+	{
+		$admins = Config::get_array_setting('admins');
+		$login = Auth::get_username();
+		if($admins !== false && in_array($login, $admins))
+		{
+			echo "<span class='cp open-mansub-dialog' />[Submit]</span>";
+		}
 	}	
 
 }

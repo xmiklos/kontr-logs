@@ -19,16 +19,7 @@ class Controller
 	function init()
 	{
 		Config::init();
-		
-		$auth_class = Config::get_setting("authentication");
-		
-		if($auth_class)
-		{
-			require_once "classes/{$auth_class}.php";
-			$ref = new ReflectionClass($auth_class);
-			$auth = $ref->newInstance();
-			$auth->login();
-		}
+		Auth::try_authenticate();
 	}
 	
 	function handle_request()

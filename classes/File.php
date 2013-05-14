@@ -1,11 +1,56 @@
 <?php
 require_once "classes/Config.php";
+require_once "tar/Tar.php";
 
 class File
 {
+	static $tar_cache;
+	static $tar_cache_filename;
+
 	public static function load_file($file_path)
 	{
+		if(!file_exists($file_path))
+		{
+			$stage = Config::get_setting("stage_dir");
+			$pos1 = strpos($file_path, $stage);
+			
+			if($pos1 !== false && $pos1 == 0)
+			{
+				return File::load_archived_stage_file($file_path);
+			}
+			else
+			{
+				return false;
+			}
+		}
+	
 		return file_get_contents($file_path);
+	}
+	
+	public static function load_archived_stage_file($file_path)
+	{
+		$stage = Config::get_setting("stage_dir");
+		$file_stage_path = substr($file_path, strlen($stage));
+		$tree = explode("/", $file_stage_path);
+		$subject = $tree[0];
+		$task = $tree[1];
+		$folder = $tree[2];
+		
+		$archive = "{$stage}{$subject}/{$task}/{$folder}.tar.bz2";
+		if(!file_exists($archive))
+		{
+			return false;
+		}
+		
+		if(!isset(File::$tar_cache) || File::$tar_cache_filename != $archive)
+		{
+			File::$tar_cache = new Archive_Tar($archive);
+			File::$tar_cache_filename = $archive;
+		}		
+		
+		$tar_path = substr($file_path, 1);
+		return File::$tar_cache->extractInString("{$tar_path}");
+		
 	}
 	
 	public static function download_file($path, $filename)
@@ -30,7 +75,7 @@ class File
 	
 	public static function is_kontr_file($file)
 	{
-		$kontr = Config::get_setting("kontr_path");
+		$kontr = realpath(Config::get_setting("kontr_path"));
 		
 		$pos1 = strpos($file, $kontr);
 		$pos2 = strpos($file, "..");

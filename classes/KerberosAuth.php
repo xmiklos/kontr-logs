@@ -5,7 +5,7 @@ class KerberosAuth extends Auth
 {
 	private function get_authorized_users()
 	{
-		$output = `getent group pb161 pb071`; // load command from config.ini
+		$output = `getent group pb161 pb071`;
 		$pieces = explode("\n", $output);
 		$return_array=array();
 
@@ -29,18 +29,19 @@ class KerberosAuth extends Auth
 
 			if(in_array($login, $this->get_authorized_users()))
 			{
+				$this->set_logged(true);
 				$this->set_username($login);
-				//system("echo '$login $ip $date $ua' >> authorized.log"); // to do config
 				return;
 			}
 			else
 			{
-				//system("echo '$login $ip $date $ua' >> unauthorized.log"); // to do config
+				$this->set_logged(false);
 			}
 		}
-		
-		echo 'Unauthorized access!'; // to do better output
-		exit;
+		else
+		{
+			$this->set_logged(false);
+		}
 		
 	}
 	

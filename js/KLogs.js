@@ -746,9 +746,9 @@ KLogs.Resubmission = (function() {
 return {
 show_dialog: function()
 {
-	if(KLogs.SubSelector.get_count() <= 0)
+	if(KLogs.SubSelector.get_count() != 1)
 	{
-		KLogs.Message.show("Please select at least 1 submission!", 3);
+		KLogs.Message.show("Please select exactly 1 submission!", 3);
 	}
 	else
 	{
@@ -784,7 +784,7 @@ show_dialog: function()
 			},
 			"Cancel": function()
 			{
-				$(this).dialog("destroy");
+				$(this).dialog("destroy").hide();
 			}
 		}
 		});
@@ -796,7 +796,8 @@ submit: function()
 	$('.resub_list').html('sending...');
 	$.post("index.php", { what: 'Submit', subject: $('select[name="subject"]').val(),
 				task: $('select[name="task"]').val(),
-				subs: KLogs.SubSelector.get_submission_selection()
+				subs: KLogs.SubSelector.get_submission_selection(),
+				type: "resubmit"
 		},
 		function(data)
 		{
@@ -810,6 +811,84 @@ submit: function()
 bind: function()
 {
 	$(".open-resub-dialog").click(KLogs.Resubmission.show_dialog);
+}
+
+};
+
+})();
+
+// make submission
+KLogs.ManualSubmission = (function() {
+
+return {
+show_dialog: function()
+{
+	if(KLogs.SubSelector.get_count() <= 0)
+	{
+		KLogs.Message.show("Please select at least 1 submission!", 3);
+	}
+	else
+	{
+		var all_subs = KLogs.SubSelector.get_submission_selection();
+		var t = $('select[name="task"]').val();
+		var s = $('select[name="subject"]').val();
+		var subs = all_subs.split(" ");
+		var notice = "<p>You may only submit one submission for each student at a time.</p>";
+		$('#submission_dialog').html(notice+"<p>Following submissions will be submitted:</p><div class='resub_list'></div>");
+		var info='<strong>'+s+': '+t+'</strong>';
+
+		for(var i=0; i < subs.length; i++)
+		{
+			var spl = subs[i].split(":");
+			info += '<div>'+spl[0]+' - rev. '+spl[1]+'</div>';
+			
+		}
+		
+		$('.resub_list').html(info);
+		
+		$('#submission_dialog').dialog({
+		resizable: false,
+		modal: true,
+		width: 500,
+		dialogClass: "settings_dialog",
+		buttons: {
+			"Submit": function() {
+				KLogs.ManualSubmission.submit();
+				KLogs.SubSelector.reset();
+				$(this).dialog("option", "buttons", { "Close": function(){
+					$(this).dialog("destroy");
+					$('#submission_dialog').hide();
+				}});
+			},
+			"Cancel": function()
+			{
+				$(this).dialog("destroy").hide();
+			}
+		}
+		});
+		
+	}
+},
+submit: function()
+{
+	$('.resub_list').html('sending...');
+	$.post("index.php", { what: 'Submit', subject: $('select[name="subject"]').val(),
+				task: $('select[name="task"]').val(),
+				subs: KLogs.SubSelector.get_submission_selection(),
+				type: "submit"
+		},
+		function(data)
+		{
+			$('#submission_dialog').html(data);
+			
+	  	}).fail(function(jqXHR, textStatus, errorThrown){
+	  		$('.resub_list').html('');
+	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
+	  	});
+},
+bind: function()
+{
+	$(".open-mansub-dialog").click(KLogs.ManualSubmission.show_dialog);
 }
 
 };

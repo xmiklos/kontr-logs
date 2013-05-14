@@ -26,6 +26,7 @@ class StudentInfo
 				$student['tutor'] = $parts[5];
 				$student['uco'] = $parts[2];
 				$student['full_name'] = $parts[4];
+				$student['email'] = $parts[3];
 				
 				self::$info[$login] = $student;
 			}

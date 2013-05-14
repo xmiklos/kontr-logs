@@ -24,7 +24,9 @@ class TeacherInfo
 				$teacher = array();
 				$login = $parts[0];
 				$teacher['uco'] = $parts[1];
+				$teacher['email'] = $parts[2];
 				$teacher['full_name'] = $parts[3];
+				$teacher['tutor'] = "No Tutor";
 				
 				self::$info[$login] = $teacher;
 			}

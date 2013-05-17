@@ -1,15 +1,32 @@
 <?php
+/**
+ * KontrPlParser class
+ * @package
+ */
 
 require_once "SystemLogsParser.php";
 
+/**
+ * Class provides means to parse and kontr.pl log file
+ */
 class KontrPlParser extends SystemLogsParser
 {
-
+        /**
+         * Initializes log content
+         * 
+         * @param string $log_content
+         */
 	function __construct($log_content)
 	{
 		parent::__construct($log_content);
 	}
-	
+        
+	/**
+         * Method determines if there are errors in kontr.pl entries
+         * 
+         * @param type $lines
+         * @return boolean false when entry is ok, true when unknown line is present
+         */
 	private function entry_has_errors($lines)
 	{
 		$search = array("[KONTR]", "<user>", "Checked out", "A    ", "Updated to", "At revision", "U    ", "/home/", "D    ", " U   ");
@@ -32,6 +49,11 @@ class KontrPlParser extends SystemLogsParser
 		return false;
 	}
 	
+        /**
+         * Method parses log content 
+         * 
+         * @return array returns errorneous entries as array
+         */
 	function parse()
 	{
 		$log_entries = array();

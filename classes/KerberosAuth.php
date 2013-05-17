@@ -1,8 +1,22 @@
 <?php
+/**
+ * KerberosAuth class
+ * @package
+ */
+
 require_once "Auth.php";
 
+/**
+ * Method implements abstract method of Auth class for autentication and authorization
+ */
 class KerberosAuth extends Auth
 {
+        /**
+         * Method returns array of user login that are authorized to use the application
+         * Uses system call to retreive user list from unix groups
+         * 
+         * @return array
+         */
 	private function get_authorized_users()
 	{
 		$output = `getent group pb161 pb071`;
@@ -18,7 +32,11 @@ class KerberosAuth extends Auth
 	
 		return $return_array;
 	}
-
+        
+        /**
+         * Method gets user login and compares it to list of authorized users
+         * If it matches, than it sets logged attribute in super class to true
+         */
 	function login()
 	{
 		if(isset($_SERVER['REMOTE_USER']))

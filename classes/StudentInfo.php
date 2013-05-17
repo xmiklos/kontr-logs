@@ -1,14 +1,31 @@
 <?php
+/**
+ * StudentInfo class
+ * @package
+ */
+
 require_once "classes/Config.php";
 require_once "classes/File.php";
 
+/**
+ * Class provides means to get information about students
+ */
 class StudentInfo
 {
-
+        /**
+         * Student info array
+         * @var array 
+         */
 	private static $info;
 	
+        /**
+         * Constructor
+         */
 	private function __construct() {}
 	
+        /**
+         * Static method for information parsing from Kontr student list
+         */
 	private static function try_load()
 	{
 		if(!isset(self::$info))
@@ -33,11 +50,18 @@ class StudentInfo
 		}
 	}
 	
+        /**
+         * Method returns information about Student
+         * 
+         * @param string $key student login
+         * @param type $info one of: tutor, uco, full_name, email
+         * @return string on success, false on failure
+         */
 	static function get($key, $info)
 	{
 		self::try_load();
 		
-		if(array_key_exists($key, self::$info))
+		if(array_key_exists($key, self::$info) && array_key_exists($info, self::$info[$key]))
 		{
 			return self::$info[$key][$info];
 		}
@@ -48,6 +72,12 @@ class StudentInfo
 		
 	}
 	
+        /**
+         * Method for determining that student exists in Kontr list
+         * 
+         * @param string $key student login
+         * @return boolean
+         */
 	static function exists($key)
 	{
 		self::try_load();

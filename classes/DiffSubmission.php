@@ -1,20 +1,65 @@
 <?php
+/**
+ * DiffSubmission class
+ * @package
+ */
 
 require_once "File.php";
 require_once "Request.php";
 
+/**
+ * Class gets differences between student files in two submissions
+ */
 class DiffSubmission
 {
 
+/**
+ * first submission identificator
+ * @var string
+ */
 public $sub1;
+
+/**
+ * second submission identificatior
+ * @var string
+ */
 public $sub2;
+
+/**
+ * array of files in one of the submissions directory
+ * @var array
+ */
 private $dir_files;
+
+/**
+ * array of required files specified in required_files file
+ * @var array
+ */
 public $req_files;
+
+/**
+ * kontr stage directory path
+ * @var string
+ */
 private $stage_path;
 
+/**
+ * array of diff return values
+ * @var array
+ */
 public $diff_return;
+
+/**
+ * array of diff outputs
+ * @var array
+ */
 public $diff_content;
 
+/**
+ * Constructor retreives relevant files and executes do_diff() method.
+ * 
+ * @param Request $request
+ */
 function __construct(Request $request)
 {
 	$subject = $request->getProperty('subject');
@@ -33,7 +78,10 @@ function __construct(Request $request)
 	$this->do_diff();
 }
 
-
+/**
+ * Method gets differences between all relevant files
+ * Uses system call to execute unix program diff
+ */
 private function do_diff()
 {
 	foreach($this->req_files as $key)

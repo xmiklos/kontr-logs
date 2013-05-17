@@ -1,13 +1,46 @@
 <?php
+/**
+ * UnitTest class
+ * @package
+ */
 
+/**
+ * Class represents one unit test or subtest in context of submission log
+ */
 class UnitTest
 {
+        /**
+         * States if submission has ok tag
+         * 
+         * @var boolean
+         */
 	public $has_ok = false;
+        
+        /**
+         * States if submission has bonus tag
+         * 
+         * @var boolean
+         */
 	public $has_bonus = false;
+        
+        /**
+         * log entry test line
+         * @var string
+         */
 	public $text;
 	
+        /**
+         * Array of keys (test name) with values (number of succesfull tests)
+         * 
+         * @var assoc. array
+         */
 	public static $success_count;
 	
+        /**
+         * Constructor parses log entry line and accordingly sets class attributes
+         * 
+         * @param string $test_line
+         */
 	function __construct($test_line)
 	{
 		$this->text = trim($test_line);
@@ -45,6 +78,10 @@ class UnitTest
 		
 	}
 	
+        /**
+         * Returns css class names according to test result
+         * @return string
+         */
 	function get_classes()
 	{
 		return ($this->has_ok?"blue":"red");

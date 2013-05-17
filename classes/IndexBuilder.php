@@ -1,12 +1,22 @@
 <?php
+/**
+ * IndexBuilder class
+ * @package
+ */
 
 require_once "classes/PageBuilder.php";
 require_once "classes/File.php";
 require_once "classes/Auth.php";
 
+/**
+ * Class implements methods for generating dynamic index content in html
+ */
 class IndexBuilder extends PageBuilder
 {
 
+        /**
+         * Method gets and generate list of tasks for given subject
+         */
 	function option_tasks()
 	{
 		$subject = $this->get_request()->getProperty("subject");
@@ -31,6 +41,9 @@ class IndexBuilder extends PageBuilder
 		}
 	}
 	
+        /**
+         * Method gets and generates list of subjects
+         */
 	function option_subjects()
 	{
 		$selected_subject = $this->get_request()->getProperty("subject");
@@ -52,6 +65,9 @@ class IndexBuilder extends PageBuilder
 		}
 	}
 	
+        /**
+         * Method gets and generates list of tutors
+         */
 	function option_tutors()
 	{
 		$ret = File::get_student_info();
@@ -70,6 +86,9 @@ class IndexBuilder extends PageBuilder
 		}
 	}
 	
+        /**
+         * Method displays manual submission tool button in case admin is logged
+         */
 	function manual_submission()
 	{
 		$admins = Config::get_array_setting('admins');

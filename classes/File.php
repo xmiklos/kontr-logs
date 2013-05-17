@@ -1,12 +1,35 @@
 <?php
+/**
+ * File class
+ * @package
+ */
+
 require_once "classes/Config.php";
 require_once "tar/Tar.php";
 
+/**
+ * File class provides various methods for directory listing and file manipulation
+ */
 class File
 {
+        /**
+         * Archive_Tar object instance
+         * @var Archive_Tar
+         */
 	static $tar_cache;
+        
+        /**
+         * Filename of tar archive object in tar_cache
+         * @var string
+         */
 	static $tar_cache_filename;
-
+        
+        /**
+         * method gets file contents
+         * 
+         * @param string $file_path
+         * @return string content of loaded file, boolean false on failure
+         */
 	public static function load_file($file_path)
 	{
 		if(!file_exists($file_path))
@@ -27,6 +50,12 @@ class File
 		return file_get_contents($file_path);
 	}
 	
+        /**
+         * method gets file contents from archived file in tar format
+         * 
+         * @param string $file_path
+         * @return string content of loaded file, boolean false on failure
+         */
 	public static function load_archived_stage_file($file_path)
 	{
 		$stage = Config::get_setting("stage_dir");
@@ -53,6 +82,13 @@ class File
 		
 	}
 	
+        /**
+         * Method checks that file is in kontr directory, sets download headers
+         * and sends file content to output
+         * 
+         * @param string $path
+         * @param string $filename
+         */
 	public static function download_file($path, $filename)
 	{
 	
@@ -73,6 +109,12 @@ class File
 		readfile($file);
 	}
 	
+        /**
+         * Method checks whether file is in kontr working directory
+         * if its not, application will exit imediatelly
+         * 
+         * @param string $file
+         */
 	public static function is_kontr_file($file)
 	{
 		$kontr = realpath(Config::get_setting("kontr_path"));
@@ -86,6 +128,12 @@ class File
 		}
 	}
 	
+        /**
+         * Method gets all task code names for given subject
+         * 
+         * @param string $subject
+         * @return array
+         */
 	public static function get_tasks($subject)
 	{
 		$kontr = Config::get_setting("kontr_path");
@@ -115,6 +163,11 @@ class File
 		return $tasks;
 	}
 	
+        /**
+         * Method gets all subjects defined in config.ini
+         * 
+         * @return array
+         */
 	public static function get_subjects()
 	{
 		$values = Config::get_setting('subjects');
@@ -122,6 +175,12 @@ class File
 		return explode(" ", $values);
 	}
 	
+        /**
+         * Method returns assoc. array with three keys: tutor, uco, full_name
+         * values of those keys are assoc. arrays with student login
+         * 
+         * @return array
+         */
 	public static function get_student_info()
 	{
 		$contents = self::load_file(Config::get_setting("student_info_file"));
@@ -151,6 +210,13 @@ class File
 		return $ret;
 	}
 	
+        /**
+         * Method retreives list of required files for given task and subject
+         * 
+         * @param string $subject
+         * @param string $task
+         * @return array
+         */
 	public static function get_required_files($subject, $task)
 	{
 		$files = Config::get_setting("files_dir");
@@ -166,13 +232,28 @@ class File
 			
 			if($f_name!="")
 			{
-				$ret[] = $f_name;
+                                if(substr($f_name, 0, 1) == "?")
+                                {
+                                    $ret[] = substr($f_name, 1);
+                                }
+                                else
+                                {
+                                    $ret[] = $f_name;
+                                }
+				
 			}
 		}
 		
 		return $ret;
 	}
 	
+        /**
+         * Method recursivelly scans hierarchy of directory dir
+         * and returns assoc. array with filenames as keys and filepaths as values
+         * 
+         * @param string $dir
+         * @return array
+         */
 	public static function get_directory_files($dir)
 	{
 		if(!file_exists($dir))

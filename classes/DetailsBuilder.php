@@ -1,4 +1,8 @@
 <?php
+/**
+ * DetailsBuilder class
+ * @package
+ */
 
 require_once "Request.php";
 require_once "Details.php";
@@ -9,14 +13,44 @@ require_once "classes/DiffBuilder.php";
 require_once 'highlighter/Highlighter.php';
 require_once 'highlighter/Highlighter/Renderer/Html.php';
 
+/**
+ * DetailsBuilder class provides metods for html output generation of detailed info.
+ */
 class DetailsBuilder extends PageBuilder
 {
 
+/**
+ * Details object
+ * 
+ * @var Details
+ */
 private $details;
+
+/**
+ * Submission folder identifier
+ * 
+ * @var string 
+ */
 private $sub_folder;
+
+/**
+ * Subject
+ * 
+ * @var string 
+ */
 private $subject;
+
+/**
+ * Task
+ * @var string 
+ */
 private $task;
 
+/**
+ * Constructor
+ * 
+ * @param Request $request
+ */
 function __construct(Request $request)
 {
 	$this->sub_folder = $request->getProperty('sub_folder');
@@ -26,11 +60,18 @@ function __construct(Request $request)
 	$this->details = new Details($request);
 }
 
+/**
+ * echoes information about displayed submission details
+ */
 function details_info()
 {
 	echo "Subbmission: {$this->subject} - {$this->task} - {$this->parse_sub_str($this->sub_folder)}";
 }
 
+/**
+ * generates list of tests as tabs
+ * 
+ */
 function tests()
 {	
 	if(!is_array($this->details->get_tests()))
@@ -139,11 +180,23 @@ function tests()
 	}
 }
 
+/**
+ * echoes two column table row
+ * @param string $a
+ * @param string $b
+ */
 private function table_row($a, $b)
 {
 	echo "<tr><td>{$a}</td><td><div class='wrap' >{$b}</div></td></tr>";
 }
 
+/**
+ * returns html list of files
+ * 
+ * @param array $files
+ * @param string $path
+ * @return string
+ */
 private function file_list($files, $path)
 {
 	$buffer="<div><ul>";
@@ -158,6 +211,14 @@ private function file_list($files, $path)
 	return $buffer;
 }
 
+/**
+ * returns html element contaings link to download or display file
+ * 
+ * @param string $name
+ * @param string $path
+ * @param boolean $explicit_dp whether path is explicit in data attribute
+ * @return string
+ */
 private function file_link($name, $path, $explicit_dp = false)
 {
 	$link = "?what=Details&path={$path}&file={$name}&download=true";
@@ -169,7 +230,9 @@ private function file_link($name, $path, $explicit_dp = false)
 	return "[<span class='details_show_file cp' {$datapath} >{$name}</span>][<a href='{$link}' >download</a>]";
 }
 
-
+/**
+ * generates gets student and test files and generates html list of them
+ */
 function sources()
 {
 	$student_files = array();
@@ -190,7 +253,7 @@ function sources()
 				unset($all_files[$key]);
 			}
 		
-			$exts = Config::split(Config::get_setting('source_files_ext'));
+			$exts = Config::get_array_setting('source_files_ext');
 		
 			$keys = array_keys($all_files);
 			foreach($keys as $key)
@@ -213,6 +276,12 @@ function sources()
 	
 }
 
+/**
+ * generates list of tabs containg links for displaying source files
+ * 
+ * @param array $student_files
+ * @param array $teacher_files
+ */
 private function sources_tabs(&$student_files, &$teacher_files)
 {
 	$keys = array_keys($student_files);
@@ -235,7 +304,7 @@ private function sources_tabs(&$student_files, &$teacher_files)
 	}
 	
 	
-	$exts = Config::split(Config::get_setting('source_files_ext'));
+	$exts = Config::get_array_setting('source_files_ext');
 	
 	$keys = array_keys($teacher_files);
 	
@@ -254,6 +323,9 @@ private function sources_tabs(&$student_files, &$teacher_files)
 	
 }
 
+/**
+ * generates misc tab content
+ */
 function misc()
 {
 	$files = array('teacher_email', 'student_email', 'kontr.pl');
@@ -269,12 +341,20 @@ function misc()
 	}
 	echo "</ul>";
 }
-
+/*
 function run()
 {
 
 }
+*/
 
+/**
+ * Checks whether param haystack ends with needle
+ * 
+ * @param string $haystack
+ * @param string $needle
+ * @return boolean
+ */
 private function ends_with($haystack, $needle)
 {
     $length = strlen($needle);
@@ -285,9 +365,16 @@ private function ends_with($haystack, $needle)
     return (substr($haystack, -$length) === $needle);
 }
 
+/**
+ * Displays contents of file in dir folder
+ * hightlights source files
+ * 
+ * @param string $dir
+ * @param string $file
+ */
 function show_file($dir, $file)
 {
-	$c_ext = Config::split(Config::get_setting('source_files_ext'));
+	$c_ext = Config::get_array_setting('source_files_ext');
 	$hl = null;
 	$filepath = "{$dir}".($dir!=""?"/":"")."{$file}";
 	$ext = pathinfo($filepath, PATHINFO_EXTENSION);
@@ -360,6 +447,12 @@ function show_file($dir, $file)
 	echo "</pre></td></tr></table></div>";
 }
 
+/**
+ * parses submission identifier string and returns human readable form
+ * 
+ * @param string $str
+ * @return string
+ */
 private function parse_sub_str($str)
 {
 	$date = explode("_", $str, 2);

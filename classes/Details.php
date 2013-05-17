@@ -1,15 +1,37 @@
 <?php
+/**
+ * Details class
+ * @package
+ */
 
 require_once "Config.php";
 require_once "File.php";
 require_once "Test.php";
 
+/**
+ * Class parses input .json file and creates instances of Test class
+ */
 class Details
 {
+        /**
+         * array of decoded json string
+         * @var array
+         */
 	private $detailed_array;
 	
+        /**
+         * list of tests
+         * @var array of Test objects
+         */
 	private $tests; 
-
+        
+        /**
+         * Constructor of class parses json file according to request parameters
+         * and creates and stores Test instances
+         * 
+         * @param Request $request
+         * @return null on failure
+         */
 	function __construct($request)
 	{
 		$stage_dir = Config::get_setting('stage_dir');
@@ -31,6 +53,9 @@ class Details
 		
 	}
 	
+        /**
+         * Private method that creates tests from array decoded from json string
+         */
 	private function create_tests()
 	{
 		$properties = array('staged_files', 'compiled_files', 'staged_student_files', 'compiled_student_files');
@@ -87,6 +112,11 @@ class Details
 		}
 	}
 	
+        /**
+         * returns student files used in all tests
+         * 
+         * @return array
+         */
 	function get_student_files()
 	{
 		$files = array();
@@ -123,6 +153,11 @@ class Details
 		return $files;
 	}
 	
+        /**
+         * returns assoc. array of test source files used in all tests,
+         * keys are filenames, values full paths
+         * @return array
+         */
 	function get_test_files()
 	{
 		$files = array();
@@ -159,6 +194,10 @@ class Details
 		return $files;
 	}
 	
+        /**
+         * returns list of Test objects
+         * @return array
+         */
 	function get_tests()
 	{
 		return $this->tests;

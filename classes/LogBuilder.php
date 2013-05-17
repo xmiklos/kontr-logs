@@ -1,18 +1,50 @@
 <?php
+/**
+ * LogBuilder class
+ * @package
+ */
 
 require_once "LogParser.php";
 require_once "File.php";
 require_once "Request.php";
 require_once "classes/PageBuilder.php";
 
+/**
+ * Class implements methods for generating dynamic log content in html
+ */
 class LogBuilder extends PageBuilder
 {
 
+/**
+ * LogParser instance
+ * 
+ * @var LogParser
+ */
 public $parser;
+
+/**
+ * Task
+ * @var string
+ */
 private $task;
+
+/**
+ * Subject
+ * @var string
+ */
 private $subject;
+
+/**
+ * Indicates that all output should be send (including test success)
+ * @var boolean or string
+ */
 private $all;
 
+/**
+ * Constructor initializes instance of LogParser
+ * 
+ * @param Request $request
+ */
 function __construct(Request $request)
 {
 	parent::__construct($request);
@@ -31,6 +63,12 @@ function __construct(Request $request)
 	$this->all = $request->getProperty('all');
 }
 
+/**
+ * Method determines if necessary request parameter are present and set
+ * 
+ * @param Request $request
+ * @return boolean
+ */
 private function request_ok(Request $request)
 {
 	$t = $request->getProperty('task');
@@ -39,6 +77,9 @@ private function request_ok(Request $request)
 	return ($t && $s);
 }
 
+/**
+ * Main method for displaying submissions grouped by students
+ */
 function show()
 {
 	if(!$this->parser) return;
@@ -113,6 +154,9 @@ function show()
 	if($this->all !== false && $this->all == "all") $this->test_stats();
 }
 
+/**
+ * Method for generating kontr test statistics (test success)
+ */
 private function test_stats()
 {
 	$keys = array_keys(UnitTest::$success_count);
@@ -135,6 +179,9 @@ private function test_stats()
 	echo "</table></div></div><div class>";
 }
 
+/**
+ * Method generates list of submissions from parser
+ */
 function show_notif()
 {
 	if(!$this->parser) return;

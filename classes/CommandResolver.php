@@ -1,14 +1,37 @@
 <?php
+/**
+ * CommandResolver class
+ * @package
+ */
+
 require_once "classes/Request.php";
 require_once "classes/Command.php";
 require_once "classes/commands/DefaultCommand.php";
 
+/**
+ * Class provides means for determining which action 
+ * shoud be executed on particular request
+ */
 class CommandResolver
 {
-
+        
+        /**
+         * Command class reflection
+         * 
+         * @var ReflectionClass
+         */
 	private static $base_cmd;
+        
+        /**
+         * DefaultCommand instance
+         * 
+         * @var DefaultCommand
+         */
 	private static $default_cmd;
-
+        
+        /**
+         * Constructor initializes attributes
+         */
 	function __construct()
 	{
 		if(!self::$base_cmd)
@@ -17,7 +40,13 @@ class CommandResolver
 			self::$default_cmd = new DefaultCommand();
 		}
 	}
-
+        
+        /**
+         * Method returns instance of Command class depending on request parameter 
+         * 
+         * @param Request $request
+         * @return Command
+         */
 	function getCommand(Request $request)
 	{
 		$cmd = $request->getProperty('what');

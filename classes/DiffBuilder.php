@@ -1,4 +1,8 @@
 <?php
+/**
+ * DiffBuilder class
+ * @package
+ */
 
 require_once "Request.php";
 require_once "DiffSubmission.php";
@@ -7,16 +11,32 @@ require_once "classes/PageBuilder.php";
 require_once 'highlighter/Highlighter.php';
 require_once 'highlighter/Highlighter/Renderer/Html.php';
 
+/**
+ * Class provides methods for displaying formated differences beetween submissions
+ */
 class DiffBuilder extends PageBuilder
 {
 
+/**
+ * DiffSubmissions instance
+ * @var DiffSubmission
+ */
 private $diff;
 
+/**
+ * Creates DiffSubmission instance
+ * 
+ * @param Request $request
+ */
 function __construct(Request $request)
 {
 	$this->diff = new DiffSubmission($request);
 }
 
+/**
+ * Generates list of changed files
+ * 
+ */
 function file_list()
 {
 	$empty=true;
@@ -33,6 +53,10 @@ function file_list()
 	if($empty) echo "<li ><a href='#error'>diff</a></li>";
 }
 
+/**
+ * generates formated diff output for each changed file
+ * 
+ */
 function diff_output()
 {	
 	$empty=true;
@@ -52,11 +76,20 @@ function diff_output()
 	if($empty) echo "<div id='error'>No files changed!</div>";
 }
 
+/**
+ * displays information about compared submissions
+ */
 function diff_info()
 {
 	echo "Diff: {$this->parse_sub_str($this->diff->sub1)} <strong>vs.</strong> {$this->parse_sub_str($this->diff->sub2)}";
 }
 
+/**
+ * Static method, formates unified diff output
+ * 
+ * @param string $diff input string
+ * @param boolean $hl_on sets whether syntax highlighting is enabled 
+ */
 static function nice_diff($diff, $hl_on = true)
 {
 	$lines = explode("\n", $diff);
@@ -136,6 +169,12 @@ static function nice_diff($diff, $hl_on = true)
 	echo "</table></pre>";
 }
 
+/**
+ * parses submission identifier string and returns human readable form
+ * 
+ * @param string $str
+ * @return string
+ */
 private function parse_sub_str($str)
 {
 	$date = explode("_", $str, 2);

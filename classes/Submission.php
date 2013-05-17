@@ -1,23 +1,99 @@
 <?php
+/**
+ * Submission class
+ * @package
+ */
 
 require "UnitTest.php";
 
+/**
+ * Class represents one student submission
+ */
 class Submission
 {
+        /**
+         * name of student that owns submission
+         * @var string
+         */
 	public $name;
+        
+        /**
+         * submission folder identification
+         * @var string
+         */
 	public $folder;
+        
+        /**
+         * date in string format
+         * @var string
+         */
 	public $date;
+        
+        /**
+         * time since unix epoch
+         * @var integer
+         */
 	public $unix_date;
+        
+        /**
+         * one of: naostro, nenecisto
+         * @var string
+         */
 	public $test_type;
+        
+        /**
+         * Tag summary (tag union)
+         * @var string
+         */
 	public $summary;
+        
+        /**
+         * list of tags
+         * @var string
+         */
 	public $tags;
+        
+        /**
+         * Indicates if submissions has tag ok
+         * @var boolean
+         */
 	public $sub_ok = true;
+        
+        /**
+         * Indicates that submission is ok, but bonus has error
+         * @var boolean
+         */
 	public $bonus_nok = false;
+        
+        /**
+         * Array of UnitTest objects
+         * @var array
+         */
 	public $unit_tests = array();
+        
+        /**
+         * SVN revision of submission
+         * @var string
+         */
 	public $revision;
+        
+        /**
+         * Name of student to whom submission belongs to
+         * @var string
+         */
 	public $resubmitted_name;
+        
+        /**
+         * Indicates that submission is new
+         * @var boolean
+         */
 	public $is_new = false;
 	
+        /**
+         * Constructor parses submission string and initializes class attributes
+         * 
+         * @param string $report log file entry content
+         */
 	function __construct($report)
 	{
 		$parts = explode(" ", $report);
@@ -81,6 +157,12 @@ class Submission
 		}
 	}
 	
+        /**
+         * Method parses date from string and returns human readable format
+         * 
+         * @param string $date
+         * @return string
+         */
 	function get_date($date)
 	{
 		$p = explode("_", $date);
@@ -95,6 +177,12 @@ class Submission
 		return $den.".".$mesiac.".".$rok." - ".$hod.":".$min.":".$sec;
 	}
 	
+        /**
+         * Method parses date in string and returns unix epoch time
+         * 
+         * @param string $date
+         * @return integer unix time
+         */
 	function get_unix_time($date)
 	{
 		$p = explode("_", $date);
@@ -109,6 +197,11 @@ class Submission
 		return mktime($hod, $min, $sec, $mesiac, $den, $rok);
 	}
 	
+        /**
+         * Method returns css classes depending on submission results
+         * 
+         * @return string
+         */
 	function get_summary_classes()
 	{
 		
@@ -129,6 +222,11 @@ class Submission
 		}
 	}
 	
+        /**
+         * Method returns css classes depending on submission type
+         * 
+         * @return string
+         */
 	function get_classes()
 	{
 		return "ode ".($this->test_type=="naostro"?"yellow":"green");

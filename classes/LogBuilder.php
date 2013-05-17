@@ -20,7 +20,7 @@ class LogBuilder extends PageBuilder
  * 
  * @var LogParser
  */
-public $parser;
+private $parser;
 
 /**
  * Task
@@ -190,6 +190,20 @@ function show_notif()
 	{
 		echo "<div class='' id=''><span class='cp update_student' data-user='{$sub->name}' >{$i}. {$sub->date} {$sub->name}</span></div>";
 		$i++;
+	}
+}
+
+/**
+ * Returns property value given that property exists
+ * 
+ * @param string $property
+ * @return may vary
+ */
+public function __get($property)
+{
+	if (property_exists($this, $property))
+	{
+			return $this->$property;
 	}
 }
 

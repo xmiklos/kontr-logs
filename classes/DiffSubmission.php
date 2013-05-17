@@ -17,13 +17,13 @@ class DiffSubmission
  * first submission identificator
  * @var string
  */
-public $sub1;
+private $sub1;
 
 /**
  * second submission identificatior
  * @var string
  */
-public $sub2;
+private $sub2;
 
 /**
  * array of files in one of the submissions directory
@@ -35,7 +35,7 @@ private $dir_files;
  * array of required files specified in required_files file
  * @var array
  */
-public $req_files;
+private $req_files;
 
 /**
  * kontr stage directory path
@@ -47,13 +47,13 @@ private $stage_path;
  * array of diff return values
  * @var array
  */
-public $diff_return;
+private $diff_return;
 
 /**
  * array of diff outputs
  * @var array
  */
-public $diff_content;
+private $diff_content;
 
 /**
  * Constructor retreives relevant files and executes do_diff() method.
@@ -104,6 +104,21 @@ private function do_diff()
 		ob_end_clean();
 	}
 }
+
+/**
+ * Returns property value given that property exists
+ * 
+ * @param string $property
+ * @return may vary
+ */
+public function __get($property)
+{
+	if (property_exists($this, $property))
+	{
+			return $this->$property;
+	}
+}
+
 
 }
 

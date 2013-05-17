@@ -15,79 +15,79 @@ class Submission
          * name of student that owns submission
          * @var string
          */
-	public $name;
+	private $name;
         
         /**
          * submission folder identification
          * @var string
          */
-	public $folder;
+	private $folder;
         
         /**
          * date in string format
          * @var string
          */
-	public $date;
+	private $date;
         
         /**
          * time since unix epoch
          * @var integer
          */
-	public $unix_date;
+	private $unix_date;
         
         /**
          * one of: naostro, nenecisto
          * @var string
          */
-	public $test_type;
+	private $test_type;
         
         /**
          * Tag summary (tag union)
          * @var string
          */
-	public $summary;
+	private $summary;
         
         /**
          * list of tags
          * @var string
          */
-	public $tags;
+	private $tags;
         
         /**
          * Indicates if submissions has tag ok
          * @var boolean
          */
-	public $sub_ok = true;
+	private $sub_ok = true;
         
         /**
          * Indicates that submission is ok, but bonus has error
          * @var boolean
          */
-	public $bonus_nok = false;
+	private $bonus_nok = false;
         
         /**
          * Array of UnitTest objects
          * @var array
          */
-	public $unit_tests = array();
+	private $unit_tests = array();
         
         /**
          * SVN revision of submission
          * @var string
          */
-	public $revision;
+	private $revision;
         
         /**
          * Name of student to whom submission belongs to
          * @var string
          */
-	public $resubmitted_name;
+	private $resubmitted_name;
         
         /**
          * Indicates that submission is new
          * @var boolean
          */
-	public $is_new = false;
+	private $is_new = false;
 	
         /**
          * Constructor parses submission string and initializes class attributes
@@ -230,6 +230,35 @@ class Submission
 	function get_classes()
 	{
 		return "ode ".($this->test_type=="naostro"?"yellow":"green");
+	}
+	
+	/**
+         * Returns property value given that property exists
+         * 
+         * @param string $property
+         * @return may vary
+         */
+	public function __get($property)
+	{
+		if (property_exists($this, $property))
+		{
+			return $this->$property;
+		}
+	}
+        
+        /**
+         * Method sets property to value
+         * 
+         * @param type may vary $property
+         * @param type $value
+         */
+	public function __set($property, $value)
+	{
+		if (property_exists($this, $property))
+		{
+			$this->$property = $value;
+		}
+		else echo "error";
 	}
 
 }

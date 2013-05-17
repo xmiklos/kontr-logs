@@ -14,20 +14,20 @@ class UnitTest
          * 
          * @var boolean
          */
-	public $has_ok = false;
+	private $has_ok = false;
         
         /**
          * States if submission has bonus tag
          * 
          * @var boolean
          */
-	public $has_bonus = false;
+	private $has_bonus = false;
         
         /**
          * log entry test line
          * @var string
          */
-	public $text;
+	private $text;
 	
         /**
          * Array of keys (test name) with values (number of succesfull tests)
@@ -85,6 +85,35 @@ class UnitTest
 	function get_classes()
 	{
 		return ($this->has_ok?"blue":"red");
+	}
+	
+	/**
+         * Returns property value given that property exists
+         * 
+         * @param string $property
+         * @return may vary
+         */
+	public function __get($property)
+	{
+		if (property_exists($this, $property))
+		{
+			return $this->$property;
+		}
+	}
+        
+        /**
+         * Method sets property to value
+         * 
+         * @param type may vary $property
+         * @param type $value
+         */
+	public function __set($property, $value)
+	{
+		if (property_exists($this, $property))
+		{
+			$this->$property = $value;
+		}
+		else echo "error";
 	}
 }
 

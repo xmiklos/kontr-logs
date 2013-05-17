@@ -8,7 +8,7 @@
     		<li><a href="#details_tests">tests</a></li>
     		<li><a href="#details_sources">sources</a></li>
 		<li><a href="#details_misc">misc</a></li>
-		<li><a href="#details_run">run</a></li>
+		<!--<li><a href="#details_run">run</a></li>-->
 	</ul>
 	<div id="details_tests" >
 		<?php $this->tests(); ?>
@@ -19,9 +19,10 @@
 	<div id="details_misc" >
 		<?php $this->misc(); ?>
 	</div>
+	<!--
 	<div id="details_run" >
 	
 	</div>
-	  
+	-->
 	</div>
 </div>

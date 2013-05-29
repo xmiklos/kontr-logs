@@ -35,6 +35,8 @@ class UnitTest
          * @var assoc. array
          */
 	public static $success_count;
+        
+        public static $all_count;
 	
         /**
          * Constructor parses log entry line and accordingly sets class attributes
@@ -61,7 +63,10 @@ class UnitTest
 				if($this->has_ok)
 				{
 					UnitTest::$success_count[$key]++;
+                                        
 				}
+                                
+                                UnitTest::$all_count[$key]++;
 			}
 			else
 			{
@@ -73,6 +78,8 @@ class UnitTest
 				{
 					UnitTest::$success_count[$key]=0;
 				}
+                                
+                                UnitTest::$all_count[$key]=1;
 			}
 		}
 		

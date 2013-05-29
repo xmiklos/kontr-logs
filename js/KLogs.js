@@ -667,10 +667,12 @@ show: function(e)
 		{
 			KLogs.FSLayer.show();
 			KLogs.FSLayer.html(data);
+                        KLogs.Run.set_folder(sub);
 			$("#details_close").button().click(function( event ) 
 			{
 				KLogs.FSLayer.hide();
 				KLogs.FSLayer.html('');
+                                KLogs.Run.unset();
 			});
 			$("#details_tabs").tabs({ heightStyle: "fill", active: 0, activate: KLogs.SubDetails.refresh});
 			$("#details_tests").tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
@@ -918,6 +920,188 @@ hide: function()
 	{
 		$('.loading').hide();
 	}
+}
+
+};
+
+})();
+
+KLogs.Run = (function() {
+
+var params_obj = undefined;
+var sub_folder = undefined;
+
+return {
+set_folder: function(folder)
+{
+	sub_folder = folder;
+},
+load_params: function()
+{
+    if(sub_folder == undefined)
+    {
+        KLogs.FSLayer.hide();
+        KLogs.Message.show("Error: this should not happen!");
+    }
+    $.ajax({
+  type: 'POST',
+  url: "index.php",
+  data: {what: 'Run', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(),
+		sub_folder: sub_folder},
+  success: function(data)
+		{
+                    params_obj = jQuery.parseJSON(data);
+	  	},
+  async:false
+}).fail(function(jqXHR, textStatus, errorThrown){
+	  		KLogs.FSLayer.hide();
+	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
+	  	});
+},
+test_change: function(e)
+{
+    if(params_obj == undefined)
+    {
+        KLogs.Run.load_params();
+    }
+    //alert(params_obj[0].name);
+    var test = $(e.target).data('test');
+    //alert(test);
+    var params=undefined;
+    for(var i = 0; i < params_obj.length; i++)
+    {
+        if(params_obj[i].name == test)
+        {
+            params = params_obj[i];
+            break;
+        }
+    }
+    
+    if(params == undefined)
+    {
+        alert("ERROR: Test not found!");
+        return;
+    }
+    $(".run_file_selector").prop('checked', false);
+    for(var i = 0; i < params.files.length; i++)
+    {
+        var file = params.files[i];
+        $(".run_file_selector").each(function(){
+            var runfile = $(this).data('file');
+            
+            if(file == runfile)
+            {
+                $(this).prop('checked', true);
+            }
+        })
+    }
+    
+    $(".cmpl_flags").val(params.cplt_flags);
+    $(".stdin_file").val(params.stdin);
+    $(".run_args").val(params.run_args);
+},
+unset: function()
+{
+    params_obj = undefined;
+    sub_folder = undefined;
+},
+compile: function()
+{
+    $.ajax({
+  type: 'POST',
+  url: "index.php",
+  data: {what: 'Run', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(),
+		sub_folder: sub_folder, compile: "compile", cmpl_files: KLogs.Run.get_selected(),
+            cmpl_flags: $(".cmpl_flags").val()},
+  success: function(data)
+		{
+                    $(".run_output").html(data);
+	  	},
+  async:true
+}).fail(function(jqXHR, textStatus, errorThrown){
+	  		KLogs.FSLayer.hide();
+	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
+	  	});
+},
+get_selected: function()
+{
+    var buffer="";
+    $(".run_file_selector").each(function(){
+            
+            if($(this).prop('checked'))
+            {
+                buffer += " "+$(this).data('file');
+            }
+        });
+        return buffer.substr(1);
+},
+run: function()
+{
+    var grind = "";
+    if($(".use_grind").is(':checked'))
+    {
+        grind = "valgrind";
+    }
+    $.ajax({
+  type: 'POST',
+  url: "index.php",
+  data: {what: 'Run', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(),
+		sub_folder: sub_folder, run: "run", run_args: $(".run_args").val(),
+            stdin_file: $(".stdin_file").val(), valgrind: grind},
+  success: function(data)
+		{
+                    $(".run_output").html(data);
+	  	},
+  async:true
+}).fail(function(jqXHR, textStatus, errorThrown){
+	  		KLogs.FSLayer.hide();
+	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
+	  	});
+},
+reset: function()
+        {
+            $.ajax({
+  type: 'POST',
+  url: "index.php",
+  data: {what: 'Run', task: $('select[name="task"]').val(), subject: $('select[name="subject"]').val(),
+		sub_folder: sub_folder, reset: "reset"},
+  success: function(data)
+		{
+                    $(".reset_message").html(data);
+	  	},
+  async:true
+}).fail(function(jqXHR, textStatus, errorThrown){
+	  		KLogs.FSLayer.hide();
+	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
+	  	});
+        }
+
+};
+
+})();
+
+
+KLogs.Edit = (function() {
+
+var loading_element = $("<div class='loading' ></div>");
+var loading = 0;
+
+return {
+new_editor: function(e)
+{
+	var key = $(e.target).data('file');
+        /*var id = key.replace(".", "_");
+        var cl = key.replace(".", "_");
+        $("#details_tabs").find( ".ui-tabs-nav:first" ).append("<li class='"+cl+"'><a href='#"+id+"'>"+key+"</a><span class='ui-icon ui-icon-close' data-cl='"+cl+"' role='presentation'>Remove Tab</span></li>");
+        $("#details_tabs").append("<div id='"+id+"'>bla</div>");
+        $("#details_tabs").tabs("refresh");
+        
+        $("#details_tabs").delegate( "span.ui-icon-close", "click", function(e) {
+        var cls = $(e.target).data('cl');
+        $("."+cls).remove();
+        $( "#" + cls ).remove();
+        $("#details_tabs").tabs( "refresh" );
+        });*/
 }
 
 };

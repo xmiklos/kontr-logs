@@ -238,6 +238,21 @@ class Test
 			return "class='square red' title='error'";
 		}
 	}
+        
+        function get_action($action)
+        {
+            $actions = $this->actions;
+
+            foreach($actions as $act)
+            {
+                if(strpos($act['name'], $action) !== false)
+                {
+                    return $act;
+                }
+            }
+
+            return false;
+        }
 
 }
 

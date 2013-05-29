@@ -26,6 +26,12 @@ $("body").on("click", ".open_test_stats", function(event){
   	$(this).parent().find(".odes").slideToggle('fast');
 });
 
+$("body").on("click", ".run_test_list", KLogs.Run.test_change);
+$("body").on("click", ".compile_button", KLogs.Run.compile);
+$("body").on("click", ".run_button", KLogs.Run.run);
+$("body").on("click", ".run_file_edit", KLogs.Edit.new_editor);
+$("body").on('click', '.reset_files', KLogs.Run.reset);
+
 $(document).on({
     ajaxStart: function(e, h) {
     	KLogs.Loading.show();

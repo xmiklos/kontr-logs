@@ -389,7 +389,10 @@ function show_file($dir, $file)
 		$hl = Text_Highlighter::factory('cpp');
 	}
 	
-	File::is_kontr_file($filepath);
+	if(File::is_kontr_file($filepath)===false)
+        {
+            die("File is not in kontr working directory!");
+        }
 	
 	$contents = File::load_file($filepath);
 	
@@ -466,6 +469,87 @@ private function parse_sub_str($str)
 	$sec = substr($p[2], -2);
 	return "{$date[0]} - {$den}.{$mesiac} - {$hod}:{$min}:{$sec}";
 }
+
+function run_student_files()
+{
+    if(!is_array($this->details->get_tests()))
+	{
+		echo "Error: probably details.json file is missing!";
+		return;
+	}
+    
+    $student_files = $this->details->get_student_files();
+    
+    echo "<div class='run_files_scroll'>";
+    foreach ($student_files as $key => $value) {
+        //$base = base64_encode($key);
+        echo "<span class='run_file'>";
+        echo "<input class='run_file_selector' data-file='{$key}' type='checkbox' />";
+        $link = "?what=Editor&load=load&key={$key}&task={$this->task}&subject={$this->subject}&sub_folder={$this->sub_folder}";
+        echo "<span class='run_file_edit cp' ><a href='{$link}' target='_blank'>{$key}</a></span>";
+        echo "</span><br />";
+    }
+    echo "</div>";
+}
+
+function run_test_files()
+{
+    if(!is_array($this->details->get_tests()))
+	{
+		echo "Error: probably details.json file is missing!";
+		return;
+	}
+    
+    $test_files = $this->details->get_test_files();
+    $exts = Config::get_array_setting('source_files_ext');
+    
+    echo "<div class='run_files_scroll'>";
+    foreach ($test_files as $key => $value) {
+        //$ext = pathinfo($value, PATHINFO_EXTENSION);
+	//if(!in_array($ext, $exts)) continue;
+        //$base = base64_encode($key);
+        echo "<span class='run_file'>";
+        echo "<input class='run_file_selector' data-file='{$key}' type='checkbox' />";
+        $link = "?what=Editor&load=load&key={$key}&task={$this->task}&subject={$this->subject}&sub_folder={$this->sub_folder}";
+        echo "<span class='run_file_edit cp' ><a href='{$link}' target='_blank'>{$key}</a></span>";
+        echo "</span><br />";
+    }
+    echo "</div>";
+}
+
+function run_tests()
+{
+    if(!is_array($this->details->get_tests()))
+	{
+		echo "Error: probably details.json file is missing!";
+		return;
+	}
+    
+    $test_files = $this->details->get_tests();
+    
+    echo "<div class='run_files_scroll'>";
+    foreach($test_files as $test)
+    {
+        if($test->get_action("run") === false)
+        {
+            continue;
+        }
+        $test_name = $test->unit_test;
+        if($test->sub_test !== false) $test_name.="/{$test->sub_test}";
+        echo "<span class='run_file'>";
+        echo "<input type='radio' name='test' class='run_test_list' data-test='{$test_name}' value='male'>";
+        echo $test_name;
+        echo "</span><br />";
+    }
+    echo "</div>";
+}
+
+function run_params()
+{
+    echo json_encode($this->details->get_run_params());
+}
+
+
 
 }
 

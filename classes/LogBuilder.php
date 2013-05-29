@@ -165,15 +165,21 @@ private function test_stats()
 	$title = 'This table is updated only on explicit Refresh, not when filter is applied.';
 	echo "<span class='std' title='{$title}' >Tests success</span></div>";
 	echo "<div class='odes' style='border: 0;'><table class='test_stats_table' >";
+        echo "<tr><th>Test</th><th>Passed</th><th>Failed</th><th>Success percentage</th></tr>";
 	foreach($keys as $key)
 	{
 		$val = UnitTest::$success_count[$key];
-		
+		$all = UnitTest::$all_count[$key];
 		echo "<tr><td ><strong style='padding-right: 25px;'>"; 
 		echo $key;
 		echo ":</strong></td><td style='text-align: right'>";
 		echo $val;
-		echo "</td></tr>";
+                echo "</td><td style='text-align: right'>";
+                echo $all-$val;
+		echo "</td><td style='text-align: right'>";
+                $per = number_format(($val*100)/$all, 3);
+                echo "{$per}%";
+                echo "</td></tr>";
 		
 	}
 	echo "</table></div></div><div class>";

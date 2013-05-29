@@ -286,4 +286,26 @@ table .diff_head {
 		    50% 50% 
 		    no-repeat;
 }
+
+.run_table {
+
+}
+
+.run_table td {
+	border: 1px solid gray;
+	
+}
+
+.run_output {
+	padding: 10px;
+}
   
+.run_files_scroll{
+    max-height: 400px;
+    overflow-y: scroll;
+    padding-right: 15px;
+}
+
+.run_file{
+    word-wrap: nowrap;
+}

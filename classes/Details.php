@@ -7,6 +7,7 @@
 require_once "Config.php";
 require_once "File.php";
 require_once "Test.php";
+require_once 'RunParams.php';
 
 /**
  * Class parses input .json file and creates instances of Test class
@@ -39,17 +40,26 @@ class Details
 		$task = $request->getProperty('task');
 		$sub_folder = $request->getProperty('sub_folder');
 		
-		if(!$sub_folder) return null;
+		if(!$sub_folder) return false;
 		
 		$filepath = "{$stage_dir}{$subject}/{$task}/{$sub_folder}/detailed.json";
 		$file_content = File::load_file($filepath);
+                
+                if($file_content === false)
+                {
+                    return false;
+                }
 		
 		$this->detailed_array = json_decode($file_content, true);
 		
-		if($this->detailed_array != null)
+		if($this->detailed_array !== null)
 		{
 			$this->create_tests();
 		}
+                else
+                {
+                    $this->tests = false;
+                }
 		
 	}
 	
@@ -70,7 +80,7 @@ class Details
 					$test->master_test = $master_test['name'];
 					$test->unit_test = $unit_test['name'];
 					
-					if(array_key_exists('name', $sub_test))
+					if(array_key_exists('name', $sub_test) && $sub_test['name'] != "")
 					{
 						$test->sub_test = $sub_test['name'];
 					}
@@ -202,6 +212,99 @@ class Details
 	{
 		return $this->tests;
 	}
+        
+        function get_run_params()
+        {
+            $params_array = array();
+            $last_flags=false;
+            $flags_array;
+            $flags;
+            $args;
+            $stdin;
+            $name;
+            
+            foreach($this->tests as $test)
+            {
+                
+                $run = $test->get_action('run');
+                $cplt = $test->get_action('compilation');
+                if($run === false)
+                {
+                    if($cplt !== false)
+                    {
+                        $last_flags = $cplt['args'];
+                    }
+                    
+                    continue;
+                }
+                else
+                {
+                    if($cplt === false)
+                    {
+                        if($last_flags !== false)
+                        {
+                            $flags_array = $last_flags;
+                        }
+                    }
+                    else
+                    {
+                        $flags_array = $cplt['args'];
+                    }
+                    $flags = array();
+                    
+                    foreach($flags_array as $flag)
+                    {
+                        if($flag[0] == '-' && $flag != "-o")
+                        {
+                            $flags[] =  $flag;
+                        }
+                    }
+                    $bin = $test->work_path."/".$test->unit_test;
+                    //echo $bin;
+                    if(in_array($bin, $run['args']))
+                    {
+                        $ar = $run['args'];
+                        $i=0;
+                        for(; $i < count($ar); $i++)
+                        {
+                            if($ar[$i] == $bin)
+                            {
+                                break;
+                            }
+                        }
+                        
+                        $args = implode(" ", array_slice($ar, $i+1));
+                    }
+                    else
+                    {
+                        $args = implode(" ", $run['args']);
+                    }
+                    $stdin = $run['stdin'];
+                    $name = $test->unit_test;
+                    if($test->sub_test !== false) $name.="/{$test->sub_test}";
+                    
+                    $params = new RunParams();
+                    $params->name = $name;
+                    $params->run_args = $args;
+                    $params->stdin = $stdin;
+                    $params->cplt_flags = implode(" ", $flags);
+                    
+                    foreach($test->compiled_student_files as $file)
+                    {
+                        $params->files[] = $file;
+                    }
+                    
+                    foreach($test->compiled_files as $file)
+                    {
+                        $params->files[] = $file;
+                    }
+                    
+                    $params_array[] = $params;
+                }
+            }
+            
+            return $params_array;
+        }
 
 }
 

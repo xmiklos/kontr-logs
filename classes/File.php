@@ -34,17 +34,7 @@ class File
 	{
 		if(!file_exists($file_path))
 		{
-			$stage = Config::get_setting("stage_dir");
-			$pos1 = strpos($file_path, $stage);
-			
-			if($pos1 !== false && $pos1 == 0)
-			{
-				return File::load_archived_stage_file($file_path);
-			}
-			else
-			{
-				return false;
-			}
+			return File::load_archived_stage_file($file_path);
 		}
 	
 		return file_get_contents($file_path);
@@ -58,16 +48,35 @@ class File
          */
 	public static function load_archived_stage_file($file_path)
 	{
+                if(file_exists($file_path) === false)
+                {
+                    return false;
+                }
+                
 		$stage = Config::get_setting("stage_dir");
+                
+		$pos1 = strpos($file_path, $stage);
+                
+                if($pos1 === false || $pos1 != 0)
+                {
+                    return false;
+                }
+                
 		$file_stage_path = substr($file_path, strlen($stage));
 		$tree = explode("/", $file_stage_path);
+                
+                if(count($tree) < 3)
+                {
+                    return false;
+                }
+                
 		$subject = $tree[0];
 		$task = $tree[1];
 		$folder = $tree[2];
 		
 		$archive = "{$stage}{$subject}/{$task}/{$folder}.tar.bz2";
-		if(!file_exists($archive))
-		{
+                if(File::is_kontr_file($archive) === false)
+		{   
 			return false;
 		}
 		
@@ -78,7 +87,16 @@ class File
 		}		
 		
 		$tar_path = substr($file_path, 1);
-		return File::$tar_cache->extractInString("{$tar_path}");
+                $ret = File::$tar_cache->extractInString("{$tar_path}");
+                
+		if($ret === null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return $ret;
+                }
 		
 	}
 	
@@ -98,34 +116,59 @@ class File
 		}
 		$file = "{$path}{$filename}";
 		
-		// security checks
-		File::is_kontr_file($file);
-	
-		$filesize = filesize($file); 
-		$basename = basename($filename);
-		header("Content-Type: text/plain");
-		header("Content-Disposition: attachment; filename={$basename}");
-		header("Content-Length: $filesize");
-		readfile($file);
+		// security check
+		if(File::is_kontr_file($file))
+                {	
+                    $filesize = filesize($file); 
+                    $basename = basename($filename);
+                    header("Content-Type: text/plain");
+                    header("Content-Disposition: attachment; filename={$basename}");
+                    header("Content-Length: $filesize");
+                    //readfile($file);
+                    echo File::load_file($file);
+                }
+                else
+                {
+                    die("File is not in kontr working directory!");
+                }
 	}
 	
         /**
          * Method checks whether file is in kontr working directory
-         * if its not, application will exit imediatelly
+         * 
          * 
          * @param string $file
+         * @return boolean 
          */
 	public static function is_kontr_file($file)
 	{
 		$kontr = realpath(Config::get_setting("kontr_path"));
+                
+                $real_file = realpath($file);
+                
+                if($real_file === false)
+                {
+                    //try load archived file
+                    $file_content = File::load_archived_stage_file($file);
+                    echo $file;
+                    if($file_content === false)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
 		
-		$pos1 = strpos($file, $kontr);
-		$pos2 = strpos($file, "..");
+		$pos1 = strpos($real_file, $kontr);
 		
-		if($pos1 === false || $pos1 != 0 || $pos2 !== false)
+		if($pos1 === false || $pos1 != 0)
 		{
-			die("File {$file} is outside of Kontr directory or has forbidden path form!");
+			return false;
 		}
+                
+                return true;
 	}
 	
         /**
@@ -274,6 +317,36 @@ class File
 		
 		return $files;
 	}
+        
+        /**
+         * Gets directories in $dir only, not whole hierarchy
+         * @param type $dir
+         */
+        public static function get_directories($dir)
+        {
+                if(file_exists($dir) === false)
+                {
+                    return array();
+                }
+            
+                $hand=opendir($dir);
+		$files=array();
+
+		while (($fil = readdir($hand)))
+		{
+			if($fil == '.' || $fil == '..'){
+				continue;
+			}
+			if(is_dir($dir.$fil))
+			{
+				$files[]=$fil;
+			}
+		}
+
+		closedir($hand);
+                
+                return $files;
+        }
 }
 
 ?>

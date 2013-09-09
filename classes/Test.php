@@ -229,7 +229,17 @@ class Test
          */
 	function class_ok()
 	{
-		if(count($this->tags) == 0 || (count($this->tags) == 1 && $this->tags[0] == "ok"))
+	    $ok = true;
+	    
+	    foreach($this->tags as $tag)
+	    {
+	        if($tag != "ok")
+	        {
+	            $ok = false;
+	        }
+	    }
+	    
+		if(count($this->tags) == 0 || $ok)
 		{
 			return "class='square blue' title='ok'";
 		}

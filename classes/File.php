@@ -48,10 +48,10 @@ class File
          */
 	public static function load_archived_stage_file($file_path)
 	{
-                if(file_exists($file_path) === false)
+                /*if(file_exists($file_path) === false)
                 {
                     return false;
-                }
+                }*/
                 
 		$stage = Config::get_setting("stage_dir");
                 
@@ -75,10 +75,10 @@ class File
 		$folder = $tree[2];
 		
 		$archive = "{$stage}{$subject}/{$task}/{$folder}.tar.bz2";
-                if(File::is_kontr_file($archive) === false)
-		{   
+                /*if(File::is_kontr_file($archive) === false)
+		{
 			return false;
-		}
+		}*/
 		
 		if(!isset(File::$tar_cache) || File::$tar_cache_filename != $archive)
 		{
@@ -150,7 +150,7 @@ class File
                 {
                     //try load archived file
                     $file_content = File::load_archived_stage_file($file);
-                    echo $file;
+                    //echo $file;
                     if($file_content === false)
                     {
                         return false;

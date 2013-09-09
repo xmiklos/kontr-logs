@@ -44,14 +44,14 @@ class Details
 		
 		$filepath = "{$stage_dir}{$subject}/{$task}/{$sub_folder}/detailed.json";
 		$file_content = File::load_file($filepath);
-                
+                //var_dump($file_content);
                 if($file_content === false)
                 {
                     return false;
                 }
 		
 		$this->detailed_array = json_decode($file_content, true);
-		
+		//var_dump($this->detailed_array);
 		if($this->detailed_array !== null)
 		{
 			$this->create_tests();

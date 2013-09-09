@@ -151,7 +151,14 @@ class Submission
 				}
 				else
 				{
-					$this->sub_ok = $u_test->has_ok;
+				    if($u_test->no_tags)
+				    {
+				        continue;
+				    }
+				    else
+				    {
+					    $this->sub_ok = $u_test->has_ok;
+					}
 				}
 			}
 		}

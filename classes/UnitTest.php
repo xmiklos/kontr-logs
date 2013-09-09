@@ -22,6 +22,8 @@ class UnitTest
          * @var boolean
          */
 	private $has_bonus = false;
+	
+	private $no_tags = false;
         
         /**
          * log entry test line
@@ -53,6 +55,13 @@ class UnitTest
 		
 		if($pos !== false && $pos != 0)
 		{
+		    $tags = trim(substr($this->text, $pos+1));
+
+		    if($tags == ";")
+		    {
+		        $this->no_tags = true;
+		    }
+		    
 			$key = substr($this->text, 0, $pos);
 			//$tags = substr($this->text, $pos+1);
 			
@@ -91,7 +100,7 @@ class UnitTest
          */
 	function get_classes()
 	{
-		return ($this->has_ok?"blue":"red");
+		return ($this->has_ok?"blue":($this->no_tags?"":"red"));
 	}
 	
 	/**

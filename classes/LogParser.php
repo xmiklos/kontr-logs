@@ -35,6 +35,8 @@ class LogParser
          * @var string
          */
 	private $student;
+	
+	private $submission;
         
         /**
          * Tutor login
@@ -72,6 +74,7 @@ class LogParser
 		$this->subject = $request->getProperty('subject');
 		$this->task = $request->getProperty('task');
 		$this->student = $request->getProperty('student');
+		$this->submission = $request->getProperty('submission');
 		$this->tutor = $request->getProperty('tutor');
 	}
 	
@@ -87,13 +90,18 @@ class LogParser
 		
 		$sub = $this->subject." ".$this->task;
 		
+		$stud_login = "";
+		$time = "";
+		
 		if($this->student)
 		{
 			$stud_login = $this->student;
 		}
-		else
+		
+		if($this->submission)
 		{
-			$stud_login = "";
+			$exp = explode("_", $this->submission, 2);
+			$time = $exp[1];
 		}
 		
 		$tutor_filter = false;
@@ -106,7 +114,7 @@ class LogParser
 		
 		foreach($lines as $line)
 		{
-			if(strstr($line, $sub) && (!$this->student || strstr($line, $stud_login." "))) // added space to student filename to avoid nasty bug
+			if(strstr($line, $sub) && (!$this->student || strstr($line, $stud_login." ")) && (!$this->submission || strstr($line, $time))) // added space to student filename to avoid nasty bug
 			{
 				$name = $this->get_name($line);
 				

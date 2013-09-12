@@ -7,7 +7,7 @@
 	<ul>
     		<li><a href="#details_tests">tests</a></li>
     		<li><a href="#details_sources">sources</a></li>
-		<li><a href="#details_misc">misc</a></li>
+		<li><a href="#details_misc">emails & other</a></li>
 		<li><a href="#details_run">run</a></li>
 	</ul>
 	<div id="details_tests" >

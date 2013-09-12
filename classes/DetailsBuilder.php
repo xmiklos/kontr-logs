@@ -391,7 +391,7 @@ function show_file($dir, $file)
 	
 	if(File::is_kontr_file($filepath)===false)
         {
-            die("File is not in kontr working directory!");
+            die("File is not in kontr working directory or does not exists!");
         }
 	
 	$contents = File::load_file($filepath);

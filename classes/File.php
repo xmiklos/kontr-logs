@@ -129,7 +129,7 @@ class File
                 }
                 else
                 {
-                    die("File is not in kontr working directory!");
+                    die("File is not in kontr working directory or does not exist!");
                 }
 	}
 	

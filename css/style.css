@@ -91,6 +91,10 @@ body {
 	background-color: #f40; /*FF5C33f40*/
 }
 
+.white {
+	background-color: #fff; /*FF5C33f40*/
+}
+
 .vpravo{
 	text-align: right;
 	float: right;

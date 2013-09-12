@@ -36,6 +36,7 @@ class SubmitCommand extends Command
 		$subs = explode(" ", $subs);
 		$filepath = Config::get_setting('submitted_internal');
 		$emails = array();
+		$teacher_emails = array();
 		
 		foreach($subs as $sub)
 		{
@@ -48,6 +49,7 @@ class SubmitCommand extends Command
 			{
 				$login = $source_login;
 				$email = StudentInfo::get($login, 'email');
+				$tutor = StudentInfo::get($login, 'tutor');
 				if($email === false)
 				{
 					$email = TeacherInfo::get($login, 'email');
@@ -56,6 +58,16 @@ class SubmitCommand extends Command
 				{
 					$emails[] = $email;
 				}
+				
+				if($tutor !== false)
+				{
+				    $teacher_email = TeacherInfo::get($tutor, 'email');
+				    
+				    if(!in_array($teacher_email, $teacher_emails))
+				    {
+				        $teacher_emails[$teacher_email] = $teacher_email;
+				    }
+				}
 			}
 			
 			$data = "[SVN]\nrevision={$revision}\nsource={$source_login}";
@@ -63,7 +75,7 @@ class SubmitCommand extends Command
 			
 			if(file_exists($filename))
 			{
-				echo "<div>Error: submission {$task} of {$login} as {$subtype} with source from {$source_login} exists!</div>";
+				echo "<div>Error: submission {$task} of {$login} as {$subtype} already exists!</div>";
 			}
 			else
 			{
@@ -84,7 +96,9 @@ class SubmitCommand extends Command
 		if($type == "submit")
 		{
 			$std_emails = implode(", ", $emails);
+			$tea_emails = implode(", ", $teacher_emails);
 			echo "<div>Student emails: {$std_emails}</div>";
+			echo "<div>Teacher emails: {$tea_emails}</div>";
 		}		
 	}
 }

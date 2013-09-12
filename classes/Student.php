@@ -117,7 +117,7 @@ class Student
 			$this->has_naostro = true;
 		}
 		
-		if(strstr($sub->summary, "points=6") !== false)
+		if(strstr($sub->summary, "points=9") !== false)
 		{
 			$this->has_full_points = true;
 		}

@@ -1,0 +1,9 @@
+SSLRequireSSL
+
+AuthType Kerberos
+AuthName "Kerberos Login"
+KrbAuthRealm FI.MUNI.CZ
+KrbMethodNegotiate off
+KrbVerifyKDC on
+Krb5Keytab /etc/httpd/kerberos/httpd.keytab
+require valid-user

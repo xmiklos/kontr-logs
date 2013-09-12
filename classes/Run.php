@@ -120,7 +120,16 @@ class Run {
         $files = implode(" ", $files);
         $flags = implode(" ", $flags);
         
-        $command = escapeshellcmd("gcc {$flags} {$files}");
+        $compiler = "gcc";
+        
+        $subject = $this->request->getProperty('subject');
+        
+        if($subject == "pb161")
+        {
+            $compiler = "g++";
+        }
+        
+        $command = escapeshellcmd("{$compiler} {$flags} {$files}");
         
         $this->exec("cd {$this->folder_path}; ".$command);
     }

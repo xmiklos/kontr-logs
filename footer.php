@@ -3,7 +3,7 @@
 <table class="stat_table">
 <tr><td ><strong>Number of students:</strong></td><td class='std_stat' style='text-align: right'></td></tr>
 <tr><td ><strong>Naostro:</strong></td><td class='naostro_stat' style='text-align: right'></td></tr>
-<tr><td ><strong>Naostro points=6:</strong></td><td class='naostro6_stat' style='text-align: right'></td></tr>
+<tr><td ><strong>Naostro points=9:</strong></td><td class='naostro6_stat' style='text-align: right'></td></tr>
 </table>
 </div>
 <div id="notifbox"></div>

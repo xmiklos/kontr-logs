@@ -31,9 +31,9 @@ $login = Auth::get_username();
 		<select id="studfilter" >
 		  <option  value="">all</option>
 		  <option  value=".nanecisto">nanecisto only submissions</option>
-		  <option  value=".naostroe">naostro submissions points&lt;6</option>
+		  <option  value=".naostroe">naostro submissions points&lt;9</option>
 		  <option  value=".naostro">naostro submissions </option>
-		  <option  value=".naostro6b">naostro submissions points=6</option>
+		  <option  value=".naostro6b">naostro submissions points=9</option>
 		</select>
 		Seminar tutor:
 		<select id="tutorfilter" >

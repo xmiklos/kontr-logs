@@ -151,7 +151,7 @@ class Submission
 				}
 				else
 				{
-				    if($u_test->no_tags)
+				    if($u_test->special_tags)
 				    {
 				        continue;
 				    }

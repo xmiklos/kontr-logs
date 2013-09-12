@@ -207,7 +207,7 @@ class Test
          */
 	function class_type()
 	{
-		$haystack = $this->work_path.$this->master_test.$this->unit_test.implode("", $this->tags);
+		$haystack = $this->work_path.$this->master_test; //.$this->unit_test.implode("", $this->tags);
 		if(strpos($haystack, "bonus") !== false)
 		{
 			return "class='square purple' title='bonus'";
@@ -229,19 +229,31 @@ class Test
          */
 	function class_ok()
 	{
-	    $ok = true;
+	    $ok = false;
 	    
-	    foreach($this->tags as $tag)
+	    if(count($this->tags) == 1 && $this->tags[0] == "ok")
 	    {
-	        if($tag != "ok")
+	        $ok = true;
+	    }
+	    elseif(count($this->tags) != 0)
+	    {
+	        $ok = true;
+	        foreach($this->tags as $tag)
 	        {
-	            $ok = false;
+	            if($tag != "ok")
+	            {
+	                $ok = false;
+	            }
 	        }
 	    }
 	    
-		if(count($this->tags) == 0 || $ok)
+		if($ok)
 		{
 			return "class='square blue' title='ok'";
+		}
+		elseif(count($this->tags) == 1 && ($this->tags[0] == "subtests" || $this->tags[0] == "skipped"))
+		{
+		    return "class='square white' title='{$this->tags[0]}'";
 		}
 		else
 		{

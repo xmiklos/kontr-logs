@@ -758,7 +758,8 @@ show_dialog: function()
 		var t = $('select[name="task"]').val();
 		var s = $('select[name="subject"]').val();
 		var subs = all_subs.split(" ");
-		$('#submission_dialog').html("<p>Following submissions will be resubmitted:</p><div class='resub_list'></div>");
+		var notice = "<p>You may only resubmit one submission at a time.</p><p>Only you will get emails with results.</p>";
+		$('#submission_dialog').html(notice+"<p>Following submissions will be resubmitted:</p><div class='resub_list'></div>");
 		var info='<strong>'+s+': '+t+'</strong>';
 
 		for(var i=0; i < subs.length; i++)
@@ -835,7 +836,7 @@ show_dialog: function()
 		var t = $('select[name="task"]').val();
 		var s = $('select[name="subject"]').val();
 		var subs = all_subs.split(" ");
-		var notice = "<p>You may only submit one submission for each student at a time.</p>";
+		var notice = "<p>You may only submit one submission at a time for each student.</p>";
 		$('#submission_dialog').html(notice+"<p>Following submissions will be submitted:</p><div class='resub_list'></div>");
 		var info='<strong>'+s+': '+t+'</strong>';
 

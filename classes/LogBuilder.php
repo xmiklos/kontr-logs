@@ -131,9 +131,12 @@ function show()
 						
 							echo "<span style='display: none'>";
 							echo "<span>SVN Revision: {$sub->revision}</span><br />";
+							$test_number = 0;
 							foreach($sub->unit_tests as $test)
 							{
-								echo "<span class='{$test->get_classes()}'>{$test->text}</span><br />";
+								echo "<span class='{$test->get_classes()} show_in_details' ";
+								echo "data-timestamp='{$sub->folder}' data-test='{$test_number}' >{$test->text}</span><br />";
+								$test_number++;
 							}
 							echo "</span>";
 						

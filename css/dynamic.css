@@ -309,3 +309,11 @@ table .diff_head {
 .run_file{
     word-wrap: nowrap;
 }
+
+.show_in_details {
+    cursor: pointer;
+}
+
+.show_in_details:hover {
+    color: brown;
+}

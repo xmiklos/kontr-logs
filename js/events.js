@@ -32,6 +32,11 @@ $("body").on("click", ".run_button", KLogs.Run.run);
 $("body").on("click", ".run_file_edit", KLogs.Edit.new_editor);
 $("body").on('click', '.reset_files', KLogs.Run.reset);
 
+$("body").on("click", ".show_in_details", function(event){
+     KLogs.SubDetails.set_load_test($(this).data('test'));
+  	 $("#"+$(this).data('timestamp')+" .open_details").trigger('click');
+});
+
 $(document).on({
     ajaxStart: function(e, h) {
     	KLogs.Loading.show();

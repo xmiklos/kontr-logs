@@ -655,6 +655,8 @@ apply: function()
 // Details
 KLogs.SubDetails = (function() {
 
+var on_load_test = 0;
+
 return {
 show: function(e)
 {
@@ -672,7 +674,8 @@ show: function(e)
 			{
 				KLogs.FSLayer.hide();
 				KLogs.FSLayer.html('');
-                                KLogs.Run.unset();
+                KLogs.Run.unset();
+                on_load_test = 0;
 			});
 			$("#details_tabs").tabs({ heightStyle: "fill", active: 0, activate: KLogs.SubDetails.refresh});
 			$("#details_tests").tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
@@ -683,6 +686,7 @@ show: function(e)
     			$(".details_action").tabs();
     			$(".details_action .ui-tabs-panel").css({float: "none", clear: "both"});
     			//$(".details_action li").removeClass("ui-corner-left");
+    			$("#details_tests").tabs({ active: on_load_test})
 
 	  	}).fail(function(jqXHR, textStatus, errorThrown){
 	  		KLogs.FSLayer.hide();
@@ -730,12 +734,16 @@ show_file: function(e)
 		{
 			$(e.target).parents(".details_sum").find(".details_ajax_data").html(data);
 			var pos = $(e.target).parents(".details_sum").find(".details_ajax_data").position().top;
-			$("#details_tests").scrollTo(pos+15, 400, 'y')
+			$("#details_tests").scrollTo(pos+15, 400, 'y');
 
 	  	}).fail(function(jqXHR, textStatus, errorThrown){
 	  		KLogs.FSLayer.hide();
 	  		KLogs.Message.show(textStatus + " - " + errorThrown, 4);
 	  	});
+},
+set_load_test: function(number)
+{
+    on_load_test = number;
 }
 
 };

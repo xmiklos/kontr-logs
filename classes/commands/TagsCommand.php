@@ -19,7 +19,10 @@ class TagsCommand extends Command
 		
 		foreach($log->parser->parse_as_tags() as $tag)
 		{
-			echo "<option value='{$tag}'>{$tag}</option>";
+		    if($tag != "")
+		    {
+			    echo "<option value='{$tag}'>{$tag}</option>";
+			}
 		}
 		
 		

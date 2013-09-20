@@ -136,6 +136,7 @@ static function nice_diff($diff, $hl_on = true)
 		}
 		$first1 = substr($line, 0, 1);
 		if($hl_on) $line = $hl->highlight($line);
+		else $line = htmlentities($line);
 		//$line = str_replace(" ", '&nbsp;', $line);
 		if($first1 == "-")
 		{

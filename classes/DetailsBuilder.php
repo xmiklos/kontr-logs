@@ -102,6 +102,8 @@ function tests()
 	
 	$scripts = Config::get_setting("scripts_dir");
 	$scripts_path = "{$scripts}{$this->subject}/{$this->task}";
+	$files = Config::get_setting("scripts_dir");
+	$files_path = "{$scripts}{$this->subject}/{$this->task}";
 	
 	foreach($this->details->get_tests() as $test)
 	{
@@ -163,7 +165,9 @@ function tests()
 					{
 						$value = $action['metadata'][$key];
 						if(substr($action['metadata'][$key], 0, 5) == "grind") $value = $this->file_link($action['metadata'][$key], $test->work_path);
-						if($key == "first_file") $value = $this->file_link($action['metadata'][$key], "", true);
+						$metafile = $action['metadata'][$key];
+						if($key == "first_file") $value = $this->file_link($metafile, $this->get_file_path($metafile, $files_path, $test->work_path), true);
+						if($key == "second_file") $value = $this->file_link($metafile, $this->get_file_path($metafile, $files_path, $test->work_path), true);
 						$this->table_row($key, $value);
 					}
 					
@@ -188,6 +192,22 @@ function tests()
 private function table_row($a, $b)
 {
 	echo "<tr><td>{$a}</td><td><div class='wrap' >{$b}</div></td></tr>";
+}
+
+private function get_file_path($filename, $fp, $wp)
+{   
+    $f1 = $fp.$filename;
+    $f2 = $wp."/".$filename;
+    if(file_exists($f1))
+    {
+        return $fp;
+    }
+    if(file_exists($f2))
+    {
+        return $wp;
+    }
+    
+    return "";
 }
 
 /**

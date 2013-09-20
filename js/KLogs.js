@@ -30,6 +30,7 @@ send: function(fn)
 			$('#subfilter').prop("selectedIndex",0);
 			KLogs.Filter.show_all();
 			KLogs.Filter.students();
+			KLogs.SubSelector.reset();
 			if (KLogs.Cookies.check('logs_settings') && KLogs.Cookies.get('logs_settings').split(",")[1] == "true") $(".sort-alpha").trigger('click');
 	  	}).fail(function(jqXHR, textStatus, errorThrown){
 	  		$('#students_wrapper').html('');

@@ -103,7 +103,7 @@ function tests()
 	$scripts = Config::get_setting("scripts_dir");
 	$scripts_path = "{$scripts}{$this->subject}/{$this->task}";
 	$files = Config::get_setting("scripts_dir");
-	$files_path = "{$scripts}{$this->subject}/{$this->task}";
+	$files_path = "{$files}{$this->subject}/{$this->task}";
 	
 	foreach($this->details->get_tests() as $test)
 	{

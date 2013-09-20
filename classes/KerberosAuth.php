@@ -44,11 +44,11 @@ class KerberosAuth extends Auth
 			$userat = $_SERVER['REMOTE_USER'];
 			$pieces = explode("@", $userat);
 			$login = $pieces[0];
+			$this->set_username($login);
 
 			if(in_array($login, $this->get_authorized_users()))
 			{
 				$this->set_logged(true);
-				$this->set_username($login);
 				return;
 			}
 			else

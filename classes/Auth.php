@@ -51,11 +51,19 @@ abstract class Auth
 			$auth = $ref->newInstance();
 			$auth->login();
 			
+			$ip = $_SERVER["REMOTE_ADDR"];
+            $date = date("d. m. Y H:i:s");
+            $ua = $_SERVER['HTTP_USER_AGENT'];
+            $login = self::$username;
+			
 			if($auth->is_logged() === false)
 			{
 				echo "Unauthorized access!";
+				system("echo '$login $ip $date $ua' >> unauthorized.log");
 				exit;
 			}
+			
+			system("echo '$login $ip $date $ua' >> authorized.log");
 		}
 	}
 	

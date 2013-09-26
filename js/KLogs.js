@@ -1,6 +1,17 @@
 
 var KLogs = window.KLogs || {};
 
+KLogs.GA = (function(){
+
+return {
+log_user: function()
+{
+    var name = $('#login').html();
+    _gaq.push(['_trackEvent', 'User', 'Login', name]);
+}
+}
+
+})();
 
 // Ajax
 KLogs.Ajax = (function() {

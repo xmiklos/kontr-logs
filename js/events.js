@@ -240,6 +240,8 @@ $(window).resize(function() {
 
 $(document).tooltip({ tooltipClass: "tooltip-styling", show: false, hide: false, position: { my: "left+15 center", at: "right center" } });
 
+KLogs.GA.log_user();
+
 });
 
 

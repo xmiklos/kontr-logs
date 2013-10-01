@@ -175,6 +175,11 @@ function tests()
 					$this->table_row("stdout", $this->file_link($action['stdout'], $test->work_path));
 					$this->table_row("stderr", $this->file_link($action['stderr'], $test->work_path));
 					
+					if(array_key_exists("run_time", $action))
+					{
+					    $this->table_row("Duration", $action['run_time']." s");
+					}
+					
 					$this->table_row("Created files", $this->file_list($action['created_files'], $test->work_path));
 					
 				echo "</table><div class='details_ajax_data' ></div></div>";

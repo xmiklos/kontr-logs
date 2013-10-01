@@ -72,8 +72,8 @@ class  Text_Highlighter_CPP extends Text_Highlighter
         $this->_options = $options;
         $this->_regs = array (
             -1 => '/((?i)")|((?i)\\\')|((?i)\\{)|((?i)\\()|((?i)\\[)|((?i)[a-z_]\\w*)|((?i)\\b0[xX][\\da-f]+)|((?i)\\b\\d\\d*|\\b0\\b)|((?i)\\b0[0-7]+)|((?i)\\b(\\d*\\.\\d+)|(\\d+\\.\\d*))|((?mi)^[ \\t]*#include)|((?mii)^[ \\t]*#[ \\t]*[a-z]+)|((?i)\\d*\\.?\\d+)|((?i)\\/\\*)|((?i)\\/\\/.+)/',
-            0 => '/((?i)\\\\)/',
-            1 => '/((?i)(\\\\)\')|((?i)(\\\\)")|((?i)\\\\)/',
+            0 => '/((?i)(\\\\)")|((?i)\\\\)/',
+            1 => '/((?i)(\\\\)\')|((?i)\\\\)/',
             2 => '/((?i)")|((?i)\\\')|((?i)\\{)|((?i)\\()|((?i)\\[)|((?i)[a-z_]\\w*)|((?i)\\b0[xX][\\da-f]+)|((?i)\\b\\d\\d*|\\b0\\b)|((?i)\\b0[0-7]+)|((?i)\\b(\\d*\\.\\d+)|(\\d+\\.\\d*))|((?mi)^[ \\t]*#include)|((?mii)^[ \\t]*#[ \\t]*[a-z]+)|((?i)\\d*\\.?\\d+)|((?i)\\/\\*)|((?i)\\/\\/.+)/',
             3 => '/((?i)")|((?i)\\\')|((?i)\\{)|((?i)\\()|((?i)\\[)|((?i)[a-z_]\\w*)|((?i)\\b0[xX][\\da-f]+)|((?i)\\b\\d\\d*|\\b0\\b)|((?i)\\b0[0-7]+)|((?i)\\b(\\d*\\.\\d+)|(\\d+\\.\\d*))|((?mi)^[ \\t]*#include)|((?mii)^[ \\t]*#[ \\t]*[a-z]+)|((?i)\\d*\\.?\\d+)|((?i)\\/\\*)|((?i)\\/\\/.+)/',
             4 => '/((?i)")|((?i)\\\')|((?i)\\{)|((?i)\\()|((?i)\\[)|((?i)[a-z_]\\w*)|((?i)\\b0[xX][\\da-f]+)|((?i)\\b\\d\\d*|\\b0\\b)|((?i)\\b0[0-7]+)|((?i)\\b(\\d*\\.\\d+)|(\\d+\\.\\d*))|((?mi)^[ \\t]*#include)|((?mii)^[ \\t]*#[ \\t]*[a-z]+)|((?i)\\d*\\.?\\d+)|((?i)\\/\\*)|((?i)\\/\\/.+)/',
@@ -104,13 +104,13 @@ class  Text_Highlighter_CPP extends Text_Highlighter
             ),
             0 => 
             array (
-                0 => 0,
+                0 => 1,
+                1 => 0,
             ),
             1 => 
             array (
                 0 => 1,
-                1 => 1,
-                2 => 0,
+                1 => 0,
             ),
             2 => 
             array (
@@ -218,12 +218,12 @@ class  Text_Highlighter_CPP extends Text_Highlighter
             0 => 
             array (
                 0 => '',
+                1 => '',
             ),
             1 => 
             array (
                 0 => '',
                 1 => '',
-                2 => '',
             ),
             2 => 
             array (
@@ -330,13 +330,13 @@ class  Text_Highlighter_CPP extends Text_Highlighter
             ),
             0 => 
             array (
-                0 => 'special',
+                0 => 'string',
+                1 => 'special',
             ),
             1 => 
             array (
                 0 => 'string',
-                1 => 'string',
-                2 => 'special',
+                1 => 'special',
             ),
             2 => 
             array (
@@ -456,12 +456,12 @@ class  Text_Highlighter_CPP extends Text_Highlighter
             0 => 
             array (
                 0 => -1,
+                1 => -1,
             ),
             1 => 
             array (
                 0 => -1,
                 1 => -1,
-                2 => -1,
             ),
             2 => 
             array (
@@ -586,6 +586,9 @@ class  Text_Highlighter_CPP extends Text_Highlighter
                 0 => 
                 array (
                 ),
+                1 => 
+                array (
+                ),
             ),
             1 => 
             array (
@@ -593,9 +596,6 @@ class  Text_Highlighter_CPP extends Text_Highlighter
                 array (
                 ),
                 1 => 
-                array (
-                ),
-                2 => 
                 array (
                 ),
             ),
@@ -748,7 +748,11 @@ class  Text_Highlighter_CPP extends Text_Highlighter
         $this->_parts = array (
             0 => 
             array (
-                0 => NULL,
+                0 => 
+                array (
+                    1 => 'special',
+                ),
+                1 => NULL,
             ),
             1 => 
             array (
@@ -756,11 +760,7 @@ class  Text_Highlighter_CPP extends Text_Highlighter
                 array (
                     1 => 'special',
                 ),
-                1 => 
-                array (
-                    1 => 'special',
-                ),
-                2 => NULL,
+                1 => NULL,
             ),
             2 => 
             array (
@@ -868,12 +868,12 @@ class  Text_Highlighter_CPP extends Text_Highlighter
             0 => 
             array (
                 0 => false,
+                1 => false,
             ),
             1 => 
             array (
                 0 => false,
                 1 => false,
-                2 => false,
             ),
             2 => 
             array (

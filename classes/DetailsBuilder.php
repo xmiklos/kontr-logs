@@ -118,9 +118,20 @@ function tests()
 			
 			echo "<ul >";
 			echo "<li ><a href='#{$id}_summary'>summary</a></li>";
+			$existing_actions=array();
 			foreach($test->actions as $action)
 			{
-				echo "<li ><a href='#{$id}_{$action['name']}'>{$action['name']}</a></li>";
+			    $aname = $action['name'];
+			    if(array_key_exists($aname, $existing_actions))
+			    {
+			        $existing_actions[$aname]++;
+			    }
+			    else
+			    {
+			        $existing_actions[$aname]=1;
+			    }
+			    
+				echo "<li ><a href='#{$id}_{$action['name']}_{$existing_actions[$aname]}'>{$action['name']}</a></li>";
 			}
 			echo "</ul>";
 			
@@ -138,7 +149,15 @@ function tests()
 						$path_parts = pathinfo($entry['filename']);
 						$base = $path_parts['basename'];
 						$dir = $path_parts['dirname']."/";
-						$link = "Logged file: ".$this->file_link($base, $dir, true);
+						$filesize = "Filesize: ".$entry['filesize']." B";
+						$file_type = "Logged file: ";
+						$new_line="";
+						if($entry['attached'] == 1)
+						{
+						    $file_type = "Attached file: ";
+						    $new_line="\n";
+						}
+						$link = $file_type.$this->file_link($base, $dir, true, $filesize).$new_line;
 						$test->log_teacher = substr_replace($test->log_teacher, $link, ($offset+$inserted), 0);
 						$inserted += strlen($link);
 					}
@@ -152,9 +171,20 @@ function tests()
 				$this->table_row("Student files", $this->file_list($test->staged_student_files, $test->work_path));
 				$this->table_row("Student compiled files", $this->file_list($test->compiled_student_files, $test->work_path));
 			echo "</table><div class='details_ajax_data' ></div></div>";
+			$existing_actions=array();
 			foreach($test->actions as $action)
 			{
-				echo "<div id='{$id}_{$action['name']}' class='details_sum' data-path='{$test->work_path}' data-sub='{$this->sub_folder}' ><table class='details_summary_table'>";
+			    $aname = $action['name'];
+			    if(array_key_exists($aname, $existing_actions))
+			    {
+			        $existing_actions[$aname]++;
+			    }
+			    else
+			    {
+			        $existing_actions[$aname]=1;
+			    }
+			    
+				echo "<div id='{$id}_{$action['name']}_{$existing_actions[$aname]}' class='details_sum' data-path='{$test->work_path}' data-sub='{$this->sub_folder}' ><table class='details_summary_table'>";
 					$this->table_row("Action name", $action['name']);
 					$this->table_row("Exit type", $action['exit_type']);
 					$this->table_row("Exit value", $action['exit_value']);
@@ -244,7 +274,7 @@ private function file_list($files, $path)
  * @param boolean $explicit_dp whether path is explicit in data attribute
  * @return string
  */
-private function file_link($name, $path, $explicit_dp = false)
+private function file_link($name, $path, $explicit_dp = false, $tooltip = "")
 {
 	$link = "?what=Details&path={$path}&file={$name}&download=true";
 	$datapath="";
@@ -252,7 +282,7 @@ private function file_link($name, $path, $explicit_dp = false)
 	{
 		$datapath = "data-path='{$path}'";
 	}
-	return "[<span class='details_show_file cp' {$datapath} >{$name}</span>][<a href='{$link}' >download</a>]";
+	return "[<span class='details_show_file cp' title='{$tooltip}' {$datapath} >{$name}</span>][<a href='{$link}' >download</a>]";
 }
 
 /**

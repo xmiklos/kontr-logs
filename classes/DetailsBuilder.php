@@ -464,7 +464,9 @@ function show_file($dir, $file)
 
 	if(substr($file, 0, 10) == "difference")
 	{
+	    echo "<div class='details_file_wrapper'><div class='details_file_heading' >{$file}</div>";
 		DiffBuilder::nice_diff($contents, false);
+		echo "</div>";
 		return;
 	}
 

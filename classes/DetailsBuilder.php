@@ -60,12 +60,17 @@ function __construct(Request $request)
 	$this->details = new Details($request);
 }
 
+function get_details()
+{
+	return $this->details;
+}
+
 /**
  * echoes information about displayed submission details
  */
 function details_info()
 {
-	echo "Subbmission: {$this->subject} - {$this->task} - {$this->parse_sub_str($this->sub_folder)}";
+	echo "Submission: {$this->subject} - {$this->task} - {$this->parse_sub_str($this->sub_folder)}";
 }
 
 /**
@@ -346,6 +351,12 @@ private function sources_tabs(&$student_files, &$teacher_files)
 		echo "No files found!";
 		return;
 	}
+	
+	$dlink = "?what=Details&subject={$this->subject}&task={$this->task}&sub_folder={$this->sub_folder}&download_student_files=true";
+	
+	echo "<span class='ui-state-highlight ui-corner-all details_info'>";
+		echo "[<a href='{$dlink}' >download all student files</a>]";
+	echo "</span>";
 	
 	echo "<ul class='details_sources_list' >";
 	foreach($keys as $key)

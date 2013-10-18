@@ -132,6 +132,29 @@ class File
                     die("File is not in kontr working directory or does not exist!");
                 }
 	}
+
+	public static function download_student_files(Request $request, $builder)
+	{
+		$sub_folder = $request->getProperty('sub_folder');
+		$a_filename = "tmp/{$sub_folder}.tar";
+		$archive = new Archive_Tar($a_filename);
+		
+		$details = $builder->get_details();
+		$files = $details->get_student_files();
+		
+		foreach($files as $file)
+		{
+			$dir = dirname($file);
+			$archive->addModify(array($file), '', $dir);
+		}
+		
+		$filesize = filesize($a_filename); 
+                $basename = basename($a_filename);
+                header("Content-Type: text/plain");
+                header("Content-Disposition: attachment; filename={$basename}");
+                header("Content-Length: $filesize");
+                echo File::load_file($a_filename);
+	}
 	
         /**
          * Method checks whether file is in kontr working directory

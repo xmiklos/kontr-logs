@@ -267,6 +267,15 @@ show_all: function()
 	$(".user").data("student_tag_filter", true);
 	
 },
+reset: function()
+{
+	$('#studfilter').prop("selectedIndex", 0);
+	$('#subfilter').prop("selectedIndex", 0);
+	$('#tutorfilter').prop("selectedIndex", 0);
+	$('#tagfilter').prop("selectedIndex", 0);
+
+	KLogs.Filter.show_all();
+},
 bind: function()
 {
 	$(tutor_filter+','+student_filter).change(KLogs.Filter.students);
@@ -309,11 +318,15 @@ update: function()
 				$('.test_stats').remove();
 				$('#students_wrapper').append(data);
 			}
+
+			KLogs.Filter.reset();
+			KLogs.Filter.refresh();
 			$(id+" .open_std").parent().find(".odes").show();
 			$(id+" .std").promise().done(function()
 			{
 				$(document).scrollTo(id, 300);
 				KLogs.Stats.update();
+				
 			});
 	  	});
 	

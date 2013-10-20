@@ -354,7 +354,7 @@ private function sources_tabs(&$student_files, &$teacher_files)
 	
 	$dlink = "?what=Details&subject={$this->subject}&task={$this->task}&sub_folder={$this->sub_folder}&download_student_files=true";
 	
-	echo "<span class='ui-state-highlight ui-corner-all details_info'>";
+	echo "<span class='ui-state-highlight ui-corner-all details_info' style='margin-left: 50px;' >";
 		echo "[<a href='{$dlink}' >download all student files</a>]";
 	echo "</span>";
 	

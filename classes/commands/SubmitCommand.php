@@ -44,6 +44,7 @@ class SubmitCommand extends Command
 			$source_login = $exp[0];
 			$revision = $exp[1];
 			$subtype = $exp[2];
+			$data = "";
 
 			if($type == "submit")
 			{
@@ -68,9 +69,15 @@ class SubmitCommand extends Command
 				        $teacher_emails[$teacher_email] = $teacher_email;
 				    }
 				}
+				
+				
+			}
+			else
+			{
+				$data = "[SVN]\nrevision={$revision}\nsource={$source_login}";
 			}
 			
-			$data = "[SVN]\nrevision={$revision}\nsource={$source_login}";
+			
 			$filename = "{$filepath}/{$subject}_{$subtype}_{$login}_{$task}";
 			
 			if(file_exists($filename))

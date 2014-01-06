@@ -480,6 +480,15 @@ function show_file($dir, $file)
 		echo "</div>";
 		return;
 	}
+	
+	if($ext == "svg")
+	{
+	    echo "<div class='details_file_wrapper'><div class='details_file_heading' >{$file}</div>";
+	    echo '<svg xmlns="http://www.w3.org/2000/svg" version="1.1">';
+		echo $contents;
+		echo "</svg></div>";
+		return;
+	}
 
 	if($hl != null)
 	{

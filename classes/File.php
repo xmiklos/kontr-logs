@@ -132,28 +132,61 @@ class File
                     die("File is not in kontr working directory or does not exist!");
                 }
 	}
+	
+	static function safe_args(&$item, $key)
+	{
+		if(trim($item) != "")
+		{
+			$item = escapeshellarg($item);
+		}
+		else
+		{
+			$item = "";
+		}
+	}
 
-	public static function download_student_files(Request $request, $builder)
+	public static function download_student_files(Request $request, $builder, $type = "tar")
 	{
 		$sub_folder = $request->getProperty('sub_folder');
-		$a_filename = "tmp/{$sub_folder}.tar";
-		$archive = new Archive_Tar($a_filename);
-		
+		$a_filename = "tmp/{$sub_folder}";
 		$details = $builder->get_details();
 		$files = $details->get_student_files();
 		
-		foreach($files as $file)
-		{
-			$dir = dirname($file);
-			$archive->addModify(array($file), '', $dir);
+		if($type == "zip") {
+			$a_filename .= ".zip";
+			
+			array_walk($files, 'File::safe_args');
+			
+			$files = implode(' ', $files);
+			
+			$esc_filename = escapeshellarg($a_filename);
+			
+			$command = "zip -j {$esc_filename} {$files}";
+			
+			`$command`;
 		}
+		else {
+			$a_filename .= ".tar";
+			$archive = new Archive_Tar($a_filename);
+			
+			
 		
+			foreach($files as $file)
+			{
+				$dir = dirname($file);
+				$archive->addModify(array($file), '', $dir);
+			}
+		}
+			
 		$filesize = filesize($a_filename); 
                 $basename = basename($a_filename);
                 header("Content-Type: text/plain");
                 header("Content-Disposition: attachment; filename={$basename}");
                 header("Content-Length: $filesize");
+                
                 echo File::load_file($a_filename);
+                
+                unlink($a_filename);
 	}
 	
         /**
@@ -167,7 +200,7 @@ class File
 	{
 		$kontr = realpath(Config::get_setting("kontr_path"));
                 
-                $real_file = realpath($file);
+                $real_file = $file; //realpath($file);
                 
                 if($real_file === false)
                 {

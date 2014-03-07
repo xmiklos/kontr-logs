@@ -18,7 +18,7 @@ class DetailsCommand extends Command
 		
 		if($down_student_files !== false)
 		{
-			File::download_student_files($request, $details);
+			File::download_student_files($request, $details, $request->getProperty('as'));
 		}
 		else if($dir !== false && $file !== false && $download !== false)
 		{

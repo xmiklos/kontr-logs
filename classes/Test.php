@@ -235,14 +235,14 @@ class Test
 	    {
 	        $ok = true;
 	    }
-	    elseif(count($this->tags) != 0)
+	    elseif(count($this->tags) > 1)
 	    {
-	        $ok = true;
 	        foreach($this->tags as $tag)
 	        {
-	            if($tag != "ok")
+	            if($tag == "ok")
 	            {
-	                $ok = false;
+	                $ok = true;
+	                break;
 	            }
 	        }
 	    }

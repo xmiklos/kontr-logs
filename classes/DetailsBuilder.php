@@ -170,7 +170,9 @@ function tests()
 				$test->log_teacher = str_replace("\n", "<br />", trim($test->log_teacher));
 				$this->table_row("Teacher log", $test->log_teacher);
 				$this->table_row("Tags", implode(" ", $test->tags));
-				$this->table_row("Points", implode(" ", $test->points));
+				foreach ($test->points as $pname => $pvalue) {
+					$this->table_row(ucfirst($pname), $pvalue);
+				}
 				$this->table_row("Test files", $this->file_list($test->staged_files, $test->work_path));
 				$this->table_row("Test compiled files", $this->file_list($test->compiled_files, $test->work_path));
 				$this->table_row("Student files", $this->file_list($test->staged_student_files, $test->work_path));

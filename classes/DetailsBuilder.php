@@ -87,6 +87,8 @@ function tests()
 
 	echo "<ul class='details_tests_list' >";
 	
+	
+	$existing_ids = array();
 	foreach($this->details->get_tests() as $test)
 	{
 		$text = "{$test->unit_test}";
@@ -97,6 +99,14 @@ function tests()
 			if($test->sub_test != "") $text .= "/{$test->sub_test}";
 			$id .= "_{$test->sub_test}";
 		}
+
+		$id = preg_replace("/[\[\].:\t ]/", "_", $id);
+		if (array_key_exists($id, $existing_ids)) {
+			$num = $existing_ids[$id];
+			$existing_ids[$id]++;
+			$id = $id."_".$num;
+		}
+		$existing_ids[$id] = 1;
 		
 		echo "<li class='test_li' >";
 		echo "<div class='signals'><div {$test->class_type()} ></div><div {$test->class_ok()} ></div></div>";
@@ -110,6 +120,7 @@ function tests()
 	$files = Config::get_setting("scripts_dir");
 	$files_path = "{$files}{$this->subject}/{$this->task}";
 	
+	$existing_ids = array();
 	foreach($this->details->get_tests() as $test)
 	{
 		$id = "{$test->master_test}_{$test->unit_test}";
@@ -118,6 +129,14 @@ function tests()
 		{
 			$id .= "_{$test->sub_test}";
 		}
+
+		$id = preg_replace("/[\[\].:\t ]/", "_", $id);
+		if (array_key_exists($id, $existing_ids)) {
+			$num = $existing_ids[$id];
+			$existing_ids[$id]++;
+			$id = $id."_".$num;
+		}
+		$existing_ids[$id] = 1;
 		
 		echo "<div id='{$id}' class='test_content details_action' >";
 			
